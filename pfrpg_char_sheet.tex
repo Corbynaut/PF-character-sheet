@@ -1,0 +1,397 @@
+\documentclass{rpgcharsheet}
+\begin{document}
+\input{player.tex}
+\unitlength\textwidth
+\divide\unitlength 420
+
+%\begin{picture}(0,0)
+%\put(-12,-55){\hbox{\includegraphics[scale=0.11]{Pathfinder-Logo}}}
+%\end{picture}
+
+\noindent\begin{picture}(420,594)
+  % \put(0,0){\framebox(420,594)}
+
+  \put(140,530){\renewcommand{\arraystretch}{1.5}
+    \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
+      \multicolumn{3}{D{69}}{\charname} & \charalignment & \multicolumn{4}{D{92}}{\charplayername} \\\cmidrule(rl){1-3}\cmidrule(rl){4-4}\cmidrule(rl){5-8}
+      \multicolumn{4}{D{92}}{\classlist} &\multicolumn{2}{D{46}}{\chardiety} & \multicolumn{2}{D{46}}{\charhomeland} \\\cmidrule(rl){1-4}\cmidrule(rl){5-6}\cmidrule(rl){7-8}
+      \charrace & \charsize & \chargender & \charage & \charheight & \charweight & \charhair & \chareyes \\\cmidrule(rl){1-1}\cmidrule(rl){2-2}\cmidrule(rl){3-3}\cmidrule(rl){4-4}\cmidrule(rl){5-5}\cmidrule(rl){6-6}\cmidrule(rl){7-7}\cmidrule(rl){8-8}
+    \end{tabular}}
+  \put(140,529){\renewcommand{\arraystretch}{1.9}
+    \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
+      \multicolumn{3}{D{69}}{\lfont character name} & \lfont alignment & \multicolumn{4}{D{92}}{\lfont player name} \\
+      \multicolumn{4}{D{92}}{\lfont character level} &\multicolumn{2}{D{46}}{\lfont deity} & \multicolumn{2}{D{46}}{\lfont homeland} \\
+      \lfont race & \lfont size & \lfont gender & \lfont age & \lfont height & \lfont weight & \lfont hair & \lfont eyes \\
+    \end{tabular}}
+
+  \singletitlebox{0}{570}{135}{10}{Languages}
+  \put(1,530){\parbox[b][38\unitlength][t]{133.7\unitlength}{\itshape \tfont \languagelist }}
+  \put(0.2,530){\framebox(134.7,40){}}
+
+%\renewcommand{\charrefmod}{\charintmodcount}
+%\newcommand{\characmod}{\charintmodcount}
+
+
+  %% Labels
+  \put(0,512){\makebox(28,3){\tiny\scshape attribute}}
+  \stretchlabels{33}{512}{102}{ability score,  ability modifier, Temp Adjustment, Temp Modifier}
+  %% STR
+  \titlebox{0}{500}{28}{STR}{strength}
+\stretchattributes{33}{500}{102}{\arabic{charstrcount},\plusminus{charstrmodcount},\plusminus{charstrtmpadjcount},\plusminus{charstrtmpmodcount}}
+
+  %% DEX
+  \titlebox{0}{488}{28}{DEX}{dexterity}
+  \stretchattributes{33}{488}{102}{\arabic{chardexcount},\plusminus{chardexmodcount},\plusminus{chardextmpadjcount},\plusminus{chardextmpmodcount}}
+  
+  %% CON
+  \titlebox{0}{476}{28}{CON}{constitution}
+  \stretchattributes{33}{476}{102}{\arabic{charconcount},\plusminus{charconmodcount},\plusminus{charcontmpadjcount},\plusminus{charcontmpmodcount}}
+  
+  %% INT
+  \titlebox{0}{464}{28}{INT}{intelligence}
+  \stretchattributes{33}{464}{102}{\arabic{charintcount},\plusminus{charintmodcount},\plusminus{charinttmpadjcount},\plusminus{charinttmpmodcount}}
+
+  %% WIS
+  \titlebox{0}{452}{28}{WIS}{wisdom}
+  \stretchattributes{33}{452}{102}{\arabic{charwiscount},\plusminus{charwismodcount},\plusminus{charwistmpadjcount},\plusminus{charwistmpmodcount}}
+
+  %% CHA
+  \titlebox{0}{440}{28}{CHA}{charisma}
+  \stretchattributes{33}{440}{102}{\arabic{charchacount},\plusminus{charchamodcount},\plusminus{charchatmpadjcount},\plusminus{charchatmpmodcount}}
+
+
+  %% HP
+  \singletitlebox{107}{505}{26}{12}{HP}
+  % \put(107,505){\framebox(26,12){}}
+  % \put(107,508){\makebox(26,9){HP}}
+  % \put(107,506){\makebox(26,3){\tiny\scshape hit points}}
+  \put(137,505){\framebox(38,12){}}
+  \put(137,512){\makebox(14,4){\tiny\scshape Total}}
+  \put(137,505){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \chartotalhp}}
+  \put(177,505){\framebox(28,12){}}
+  \put(177,512){\makebox(8,4){\tiny\scshape DR}}
+
+  %% little boxes
+  \put(107,500){\makebox(36,4){\tiny\scshape wounds/current hp}}
+  \put(107,480){\framebox(98,20){}}
+  \put(109,480){\parbox[b][18\unitlength][t]{82\unitlength}{\tiny \textwoundscurrenthp}}
+  \put(107,475){\makebox(36,4){\tiny\scshape nonleathal damage}}
+  \put(107,455){\framebox(98,20){}}
+  
+  %% INIT
+  \titlebox{107}{440}{43}{INITIATIVE}{modifier}
+  \stretchequalattributes{152}{440}{206}{\arabic{\charinitmod},0}
+  \stretchlabels{152}{434}{206}{TOTAL, dex modifier, misc modifier}
+  
+  %% AC
+  \titlebox{0}{420}{27}{AC}{armour class}
+ % \attributes{34}{420}{0}
+ % \put(50,420){\makebox(3,10){\tiny =}}
+%  \put(53,420){\makebox(13,10){10}}
+%  \plusattributes{65}{420}{0,0,0,0,0,0,0}{20}
+  \equalattributes{25}{420}{10,\arabic{totalarmorbonuscount},\arabic{totalshieldbonuscount},\arabic{totaldexbonuscount},\arabic{charsizemodcount},\arabic{totalnaturalbonuscount},0,\arabic{totalmiscbonuscount}}{20}
+  \scaleattributelabels{25}{410}{TOTAL,default, armor bonus,shield bonus,dex \mbox{modifier},size \mbox{modifier},natural armour,\mbox{deflection} \mbox{modifier},misc \mbox{modifier}}{20}
+
+  %% Touch, Flat footed
+  \titlebox{0}{400}{35}{TOUCH}{armour class}
+  \attributes{40}{400}{\calculatetouchac}
+  \titlebox{60}{400}{55}{FLAT-FOOTED}{armour class}
+  \attributes{120}{400}{\calculateflatfootedac} 
+  \put(140,400){\framebox(65,9){}}
+  \put(140,400){\parbox[b][8\unitlength][t]{65\unitlength}{\raggedleft \lfont modifiers}}
+
+  %% fort, reflex and will
+  \stretchlabels{60}{392}{205}{TOTAL, base save, ability modifier, magic modifier, misc modifier, temporary modifier}
+  \titlebox{0}{380}{53}{fortitude}{(constitution)}
+  \stretchequalattributes{60}{380}{205}{\arabic{charfortcount},\arabic{charconmodcount},0,0,0}
+  \titlebox{0}{365}{53}{reflex}{(dexterity)}
+  \stretchequalattributes{60}{365}{205}{\arabic{charrefcount},\arabic{\charrefmod},0,0,0}
+  \titlebox{0}{350}{53}{will}{(wisdom)}  
+  \stretchequalattributes{60}{350}{205}{\arabic{charwillcount},\arabic{charwismodcount},0,0,0}
+
+  %%Base attack bonus, spell resistance
+  \singletitlebox{0}{329}{90}{11}{base attack bonus}
+  \attributes{94}{330}{\arabic{charbabcount}}
+  \singletitlebox{113}{329}{74}{11}{spell resistance}
+  \attributes{190}{330}{0}
+  
+
+  \singletitlebox{0}{309}{21}{11}{cmb}
+  \stretchequalattributes{25}{310}{130}{\arabic{charbabcount},\arabic{charstrmodcount},\arabic{charspecialsizemodcount}}
+  \stretchlabels{25}{304}{130}{TOTAL, BAB,str mod., size mod.}
+  \singletitlebox{0}{289}{21}{11}{cmd}
+  \stretchequalattributes{25}{290}{130}{\arabic{charbabcount},\arabic{charstrmodcount},\arabic{chardexmodcount},\arabic{charspecialsizemodcount} ,10}
+  \stretchlabels{25}{284}{130}{TOTAL, BAB,str mod.,dex mod., size mod.,default}
+
+  \singletitlebox{135}{284}{25}{35}{speed}
+  % \put(135,284){\framebox(25,35){\uppercase{Speed}}}
+  \put(165,310){\framebox(40,\boxheight){}}
+  \put(165,311){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\arabic{charbasespeedcount} &ft. & \charbasespeedsquares& sq.\end{tabular}}
+  \put(165,307){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont base speed}}
+  \put(165,297){\framebox(40,\boxheight){}}
+  \put(165,298){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\chararmorspeed &ft. & \chararmorspeedsquares& sq.\end{tabular}}
+  \put(165,294){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont with armour}}
+  \put(165,284){\framebox(40,\boxheight){}}
+  \put(165,285){\begin{tabular}[b]{F{17}E{2}@{\hspace{1ex}/\hspace{-1.6ex}}F{16}E{2}}0 &ft. & 0& \end{tabular}}
+  \put(165,281){\parbox[b][3\unitlength][b]{40\unitlength}{\lfont\centering fly/manoeuvrability}}
+  \put(135,271){\framebox(20,\boxheight){}}
+  \put(135,272){\begin{tabular}[b]{F{16}E{2}}0 &ft.\end{tabular}}
+  \put(135,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont swim}}
+  \put(160,271){\framebox(20,\boxheight){}}
+  \put(160,272){\begin{tabular}[b]{F{16}E{2}}0 &ft.\end{tabular}}
+  \put(160,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont climb}}
+  \put(185,271){\framebox(20,\boxheight){}}
+  \put(185,272){\begin{tabular}[b]{F{16}E{2}}0 &ft.\end{tabular}}
+  \put(185,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont burrow}}
+  \titlebox{0}{271}{50}{favoured}{Class}
+  \put(55,271){\framebox(75,\boxheight){\footnotesize \charfavouredclass}}
+ 
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+
+
+\noindent\begin{picture}(0,0)
+%%AC-items
+  \put(-2,187){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{23\unitlength} >{\centering}p{17\unitlength} } \printacitems \end{tabular}}
+  
+  \put(-2,80){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{totalacitemsbonus} &\tfont\plusminus{maxdexbonuscount} &\tfont \plusminus{totalacitemscheckpenalty} &\tfont \arabic{totalacitemsspellfailure}\% &&\tfont \arabic{totalacitemsweight}~lbs.  \end{tabular}}
+%%Weapons
+ \put(-2,60){\begin{tabular}[t]{>{\centering}p{100\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
+\rowcolor{black}\leavevmode\color{white} \uppercase{Weapons} & \leavevmode\color{white}\lfont Attack modifiers & \leavevmode\color{white}\lfont damage & \leavevmode\color{white}\lfont critical &\leavevmode\color{white} \lfont range & \leavevmode\color{white}\lfont type &\leavevmode\color{white} \lfont weight &\leavevmode\color{white} \lfont ammo \tabularnewline\hline
+\weaponlist
+\end{tabular}}
+
+\end{picture}
+
+  \put(215,508.89){
+  \begin{tabular}[t]{A{2}A{10}B{80}A{21}B{7}A{21}A{7}A{21}A{7}A{21}}
+    \rowcolor{black}& &\leavevmode\color{white}\footnotesize \scshape Skill Names&\leavevmode\color{white}\lfont Total\\ Bonus&&\leavevmode\color{white}\lfont Ability\\ Mod.&&\leavevmode\color{white}\lfont Ranks\\&&\leavevmode\color{white}\lfont Misc.\\ Mod.\ \tabularnewline
+ \skilllist 
+&\lfont\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}&\lfont Class Skill\hspace{2ex}  * trained only
+\end{tabular}}
+
+  \singletitlebox{-2}{255}{205}{10}{Conditional Modifiers}
+\put(-1.7,200){\framebox(204.4,55){}}
+ \put(0,210){\parbox[b][43\unitlength][t]{200\unitlength}{\itshape \conditionalmodlist}}
+  %\put(0,200){\parbox[b][10\unitlength][c]{200\unitlength}{\small\scshape Languages Spoken:}}
+
+\end{picture}
+
+\newpage
+
+\noindent\begin{picture}(420,594)
+
+  \singletitlebox{0}{594}{205}{10}{WORN MAGIC ITEM EQUIPMENT}
+  \put(0,589){\begin{tabular}[t]{@{}p{30\unitlength} @{\hspace{1\unitlength}}>{\centering}p{164\unitlength}}
+\\
+  \hline
+  \tfont Belt: & \\
+  \tfont Body: & \\
+  \tfont Chest: & \\
+  \tfont Eyes: &  \\
+  \tfont Feet: & \\
+  \tfont Hands: & \\
+  \tfont Head: & \\
+  \tfont Headband: & \\
+  \tfont Neck: & \\
+  \tfont Ring: & \\
+  \tfont Ring: & \\
+  \tfont Shoulders: & \\ 
+  \tfont Wrist: & \\
+ \end{tabular}}
+
+ \singletitlebox{215}{594}{205}{10}{gear}
+  \put(215,589){\begin{tabular}[t]{@{}p{150\unitlength} @{\hspace{1\unitlength}}>{\centering}p{29\unitlength}>{\centering}p{15\unitlength}@{}}\printgearitems \end{tabular}}
+
+
+\put(-2,450){
+  \begin{tabular}[t]{>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}}
+\rowcolor{black} \leavevmode\color{white} \uppercase{Currency}& \leavevmode\lfont\color{white}Carried& \leavevmode\lfont\color{white}Carried weight&\leavevmode\lfont\color{white}Stored\tabularnewline
+\currencylist
+\end{tabular}}
+
+\singletitlebox{0}{380}{205}{10}{Carried Weight}
+  \put(-2,375){ \begin{tabular}[t]{>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{34\unitlength}}
+  \lfont Armor \& Weapons &\lfont Currency & \lfont Equipment &\lfont Misc & \tfont\uppercase{Total} \tabularnewline\hline\\
+  \printweight
+\end{tabular}}
+
+\singletitlebox{0}{330}{205}{10}{Loads \& Lift}
+  \put(-2,325){ \begin{tabular}[t]{>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}}
+  \lfont Light load&\lfont medium load & \lfont heavy load &\lfont & \lfont lift above head&\lfont lift of ground & \lfont drag \& push\tabularnewline\hline\\
+ \printloadsandlift
+\end{tabular}}
+
+\singletitlebox{0}{30}{205}{10}{Experience Points}
+  \put(-2,25){ \begin{tabular}[t]{|B{102}|B{102}|}
+  \tfont\uppercase{Current} &  \tfont\uppercase{Next Level}\tabularnewline\hline
+ & \\
+ & \\
+\hline
+\end{tabular}}
+
+\end{picture}  
+  %% TODO change this bit so that it can take much more than triple digits for money. Also, hook up the money to a weight.
+%  \stretchlabels{65}{10}{300}{CP, SP, GP, PP}
+
+ 
+
+  %\singletitlebox{0}{0}{30}{9}{Money}  \stretchMoney{35}{0}{400}{CP: \arabic{charcoppercount},SP: \arabic{charsilvercount},GP: \arabic{chargoldcount},PP: \arabic{charplatinumcount}}
+
+
+
+\ifthenelse{\equal{\value{boolfeatures}}{0}}{}{
+ \newpage
+\begin{longtable}{| p{.25\textwidth} | p{.666\textwidth} |p{.015\textwidth}| } 
+\multicolumn{3}{c}{\singletitlebox{-210}{0}{420}{10}{features}}\endhead
+\ifx\featureclasslist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{class features}}\\
+\hline
+\featureclasslist
+\fi
+\ifx\featureracelist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{race features}}\\
+\hline
+\featureracelist
+\fi
+\ifx\featuretraitlist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{traits}}\\
+\hline
+\featuretraitlist
+\fi
+\ifx\featureflawlist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{flaws}}\\
+\hline
+\featureflawlist
+\fi
+\ifx\featuremisclist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{misc features}}\\
+\hline
+\featuremisclist
+\fi
+\end{longtable}
+}
+
+\ifthenelse{\equal{\value{boolfeats}}{0}}{}{
+ \newpage
+\begin{longtable}{| p{.25\textwidth} | p{.704\textwidth} |} 
+\multicolumn{2}{c}{\singletitlebox{-210}{0}{420}{10}{feats}}\endhead
+\hline
+\featlist
+\end{longtable}
+}
+
+\ifthenelse{\equal{\value{boolspells}}{0}}{}{
+ \newpage
+\begin{longtable}{| p{.015\textwidth}| p{.015\textwidth} | p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.05\textwidth} | p{.03\textwidth}| p{.015\textwidth} |} 
+\multicolumn{8}{c}{\singletitlebox{-210}{0}{420}{10}{spells}}\endhead 
+
+\ifx\zerospelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{cantrips}}\\
+\hline
+\zerospelllist
+\fi
+
+\ifx\firstspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{first tier}}\\
+\hline
+\firstspelllist
+\fi
+
+\ifx\secondspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{second tier}}\\
+\hline
+\secondspelllist
+\fi
+
+\ifx\thirdspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{third tier}}\\
+\hline
+\thirdspelllist
+\fi
+
+\ifx\fourthspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{fourth tier}}\\
+\hline
+\fourthspelllist
+\fi
+
+\ifx\fifthspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{fifth tier}}\\
+\hline
+\fifthspelllist
+\fi
+
+\ifx\sixthspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{sixth tier}}\\
+\hline
+\sixthspelllist
+\fi
+
+\ifx\seventhspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{seventh tier}}\\
+\hline
+\seventhspelllist
+\fi
+
+\ifx\eighthspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{eighth tier}}\\
+\hline
+\eighthspelllist
+\fi
+
+\ifx\ninthspelllist\emptylist
+\else
+\hline
+\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{ninth tier}}\\
+\hline
+\ninthspelllist
+\fi
+\end{longtable}
+}
+
+\ifx \notelist\emptylist
+	\else
+	 \newpage
+	\begin{longtable}{| p{.25\textwidth} | p{.704\textwidth} |} 
+	\multicolumn{2}{c}{\singletitlebox{-210}{0}{420}{10}{notes}}\endhead
+	\hline
+	\notelist
+	\end{longtable}
+\fi
+
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
+
+
+
