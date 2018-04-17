@@ -554,9 +554,12 @@
 \newcommand{\gearlist}{}
 \newcommand\printgearitems{ \lfont item& \lfont Qty&\lfont wt.\tabularnewline\hline \gearlist \totalitem}
 
+%Name, Quantity, Weight
 \newcommand\addgear[3]{
+  \newcounter{#1itemtotalweight}
+  \addtocounter{#1itemtotalweight}{#2* #3}
   \addtocounter{totalitemweightcount}{#2* #3}
-  \apptocmd{\gearlist}{\tfont{#1} &\tfont #2&\tfont#3~lbs.\tabularnewline}{}{}
+  \apptocmd{\gearlist}{\tfont{#1} &\tfont #2&\tfont \arabic{#1itemtotalweight}~lbs.\tabularnewline}{}{}
 }
 
 \newcommand\totalitem{
@@ -765,6 +768,12 @@
 \newcounter{totalacitemsweight}
 \newcounter{totalflatfootedaccount}
 \newcounter{totaltouchaccount}
+\newcounter{totaldodgecount}
+
+\newcommand\adddodgebonus[1]{
+	\addtocounter{totaldodgecount}{#1}
+	\addtocounter{totalmiscbonuscount}{#1}
+}
 
 \newcounter{totaldexbonuscount}
 \newcounter {totalarmorbonuscount}
@@ -815,7 +824,7 @@
 }
 
 \newcommand{\calculateflatfootedac}{
-  \addtocounter{totalflatfootedaccount}{10+\value{totalarmorbonuscount}+\value{totalshieldbonuscount}+\value{totalnaturalbonuscount}+\value{totalmiscbonuscount}+\value{charsizemodcount}}
+  \addtocounter{totalflatfootedaccount}{10+\value{totalarmorbonuscount}+\value{totalshieldbonuscount}+\value{totalnaturalbonuscount}+\value{totalmiscbonuscount}+\value{charsizemodcount}-\value{totaldodgecount}}
   \arabic{totalflatfootedaccount}
 }
 \newcommand{\calculatetouchac}{

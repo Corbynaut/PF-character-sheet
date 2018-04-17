@@ -1,13 +1,13 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Classes
 %\addclass	Name, 	level,	 BAB,	 Fort,	 Ref, 	Will
-\addclass	{Name}	{1}	{1}	{0}	{0}	{0}
+\addclass	{Name}	{10}	{1}	{0}	{0}	{0}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Player and character info 
 \name{Name}
 \playername{Player}
-\alignment{Alignment}
+\alignment{Lawful Neutral}
 \diety{Diety}
 \race{Race}
 \homeland{Homeland}
@@ -53,9 +53,8 @@
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %% items
-%\addgear{Name}{Quantity}{Weight}
-\addgear{Test}{1}{1}
-
+%\addgear{Name (no duplicates)}{Quantity}{Weight}
+\addgear{Test}{10}{1}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%AC-Items
@@ -135,13 +134,10 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Spells
 %\addspell{Level}{Name}{Text}{School}{Duration}{Range}{Save}{SR}
-%Use \range{Range (close, medium, long)} {Caster (Must be a class name, that was added via \addclass)} {Caster level adjustment (e.g. +3 or leave empty for 0)} to calculate the range per caster level
-\addspell{0}{Test}{Text}{School}{Duration}{\range{Touch}{Name}{0}}{Reflex negates}{No}
-\addspell{0}{Test}{Text}{School}{Duration}{Touch}{Reflex negates}{No}
-\addspell{1}{Test1}{Text}{School}{Duration}{\range{close}{Name}{0}}{Reflex negates}{No}
-\addspell{1}{Test1 +3 caster levels}{Text}{School}{Duration}{\range{close}{Name}{3}}{Reflex negates}{No}
-\addspell{1}{Test2}{Text}{School}{Duration}{\range{medium}{Name}{0}}{Reflex negates}{No}
-\addspell{9}{Test3}{Text}{School}{Duration}{\range{long}{Name}{0}}{Reflex negates}{No}
+%Use \range{Range (close, medium, long)} {Caster (Must be a class name that was added via \addclass)} {Caster level adjustment (e.g. +3 or leave empty for 0)} to calculate the range per caster level
+
+%\addspell{1}{Test1}{Text}{School}{Duration}{\range{close}{Name}{0}}{Reflex negates}{No}
+%\addspell{1}{Test1 +3 caster levels}{Text}{School}{Duration}{\range{close}{Name}{3}}{Reflex negates}{No}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Notes
