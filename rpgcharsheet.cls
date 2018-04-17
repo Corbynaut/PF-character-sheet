@@ -565,13 +565,99 @@
 }
 
 %%Magic items
-\newcommand{\magicitemlist}{}
-%Name, Type (headband, ring), additional commands
-\newcommand\addmagicitem[2]{
-#2
-\apptocmd{\magicitemlist}{\tfont#1}{}{}
+\newcommand\magicitembelt{}
+\newcommand\magicitembody{}
+\newcommand\magicitemchest{}
+\newcommand\magicitemeyes{}
+\newcommand\magicitemfeet{}
+\newcommand\magicitemhands{}
+\newcommand\magicitemhead{}
+\newcommand\magicitemheadband{}
+\newcommand\magicitemneck{}
+\newcommand\magicitemringone{}
+\newcommand\magicitemringtwo{}
+\newcommand\magicitemshoulders{}
+\newcommand\magicitemwrist{}
+%Name, Type (belt, body, chest, eyes, feet, hands, head, headband, neck, ring, shoulders, wrist), additional commands
+\newcommand\addmagicitem[3]{
+	\ifthenelse{\equal{#2}{belt}}{
+	\ifx \magicitembelt\emptylist
+		#3
+	\apptocmd{\magicitembelt}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{body}}{
+	\ifx \magicitembody\emptylist
+		#3
+	\apptocmd{\magicitembody}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{chest}}{
+	\ifx \magicitemchest\emptylist
+		#3
+	\apptocmd{\magicitemchest}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{eyes}}{
+	\ifx \magicitemeyes\emptylist
+		#3
+	\apptocmd{\magicitemeyes}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{feet}}{
+	\ifx \magicitemfeet\emptylist
+		#3
+	\apptocmd{\magicitemfeet}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{hands}}{
+	\ifx \magicitemhands\emptylist
+		#3
+	\apptocmd{\magicitemhands}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{head}}{
+	\ifx \magicitemhead\emptylist
+		#3
+	\apptocmd{\magicitemhead}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{headband}}{
+	\ifx \magicitemheadband\emptylist
+		#3
+	\apptocmd{\magicitemheadband}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{neck}}{
+	\ifx \magicitemneck\emptylist
+		#3
+	\apptocmd{\magicitemneck}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{ring}}{
+		\ifx \magicitemringone\emptylist
+		#3
+		\apptocmd{\magicitemringone}{\tfont #1}{}{}
+		\else	
+		#3
+		\ifx \magicitemringtwo\emptylist
+		\apptocmd{\magicitemringtwo}{\tfont #1}{}{}
+		\fi
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{shoulders}}{
+	\ifx \magicitemshoulders\emptylist
+		#3
+	\apptocmd{\magicitemshoulders}{\tfont #1}{}{}
+		\fi
+	}{}
+	\ifthenelse{\equal{#2}{wrist}}{
+	\ifx \magicitemwrist\emptylist
+		#3
+	\apptocmd{\magicitemwrist}{\tfont #1}{}{}
+		\fi
+	}{}
 }
-
 %%Feats
 \newcounter{boolfeats}
 \newcommand\charfeats{None}
@@ -804,12 +890,14 @@
 \newcounter{charrefcount}
 \newcounter{charwillcount}
 \newcounter{sizemodcount}
+\newcounter{totalcasterlevelcount}
 %Name, level, BAB, Fort, Ref, Will
 \newcommand\addclass[6]{
 	\ifthenelse{\equal{\classlist}{}}{\apptocmd{\classlist}{\fontsize{7}{7}\selectfont}{}{}}{\apptocmd{\classlist}{, }{}{}}
 	\apptocmd{\classlist}{Lvl #2 #1}{}{}
 	\newcounter{#1casterlevelcount}
 	\addtocounter{#1casterlevelcount}{#2}
+	\addtocounter{totalcasterlevelcount}{#2}
 	\newcounter{#1rangeclosecount}
 	\newcounter{#1rangemediumcount}
 	\newcounter{#1rangelongcount}

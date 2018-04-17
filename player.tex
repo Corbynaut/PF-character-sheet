@@ -71,6 +71,13 @@
 \addweapon{Weapon}{+8}{2d6+4}{18-20/x2}{-}{S}{12}{-}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%%Worn magic items
+%\addmagicitem{Name}{Type  (belt, body, chest, eyes, feet, hands, head, headband, neck, ring, shoulders, wrist)}{Additional commands}
+\addmagicitem{Test belt}{belt}{}
+\addmagicitem{Test ring}{ring}{}
+\addmagicitem{Test ring 2}{ring}{}
+\addmagicitem{Test wrist}{wrist}{}
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Skills
 %		Name, 				trained only	 classskill	 Abillity mod  ranks	misc
 \addskill	{acrobatics}				{0}		{1}		{dex}		{0}	{0}
@@ -128,8 +135,9 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Spells
 %\addspell{Level}{Name}{Text}{School}{Duration}{Range}{Save}{SR}
-%Use \range{Range (close, medium, long)} {Caster (Must be a class name, that was added via \addclass)} {Caster level adjustment (e.g +3 or leave empty for 0)} to calculate the range per caster level
-\addspell{0}{Test}{Text}{School}{Duration}{\range{20 ft.}{Name}{0}}{Reflex negates}{No}
+%Use \range{Range (close, medium, long)} {Caster (Must be a class name, that was added via \addclass)} {Caster level adjustment (e.g. +3 or leave empty for 0)} to calculate the range per caster level
+\addspell{0}{Test}{Text}{School}{Duration}{\range{Touch}{Name}{0}}{Reflex negates}{No}
+\addspell{0}{Test}{Text}{School}{Duration}{Touch}{Reflex negates}{No}
 \addspell{1}{Test1}{Text}{School}{Duration}{\range{close}{Name}{0}}{Reflex negates}{No}
 \addspell{1}{Test1 +3 caster levels}{Text}{School}{Duration}{\range{close}{Name}{3}}{Reflex negates}{No}
 \addspell{1}{Test2}{Text}{School}{Duration}{\range{medium}{Name}{0}}{Reflex negates}{No}
