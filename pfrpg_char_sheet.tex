@@ -13,13 +13,13 @@
 
   \put(140,530){\renewcommand{\arraystretch}{1.5}
     \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
-      \multicolumn{3}{D{69}}{\charname} &\multicolumn{2}{l}{ \charalignment} & \multicolumn{3}{D{92}}{\charplayername} \\\cmidrule(rl){1-3}\cmidrule(rl){4-5}\cmidrule(rl){6-8}
+      \multicolumn{3}{D{69}}{\charname} &\multicolumn{3}{D{69}}{ \charalignment} & \multicolumn{2}{D{46}}{\charplayername} \\\cmidrule(rl){1-3}\cmidrule(rl){4-6}\cmidrule(rl){7-8}
       \multicolumn{4}{D{92}}{\classlist} &\multicolumn{2}{D{46}}{\chardiety} & \multicolumn{2}{D{46}}{\charhomeland} \\\cmidrule(rl){1-4}\cmidrule(rl){5-6}\cmidrule(rl){7-8}
       \charrace & \charsize & \chargender & \charage & \charheight & \charweight & \charhair & \chareyes \\\cmidrule(rl){1-1}\cmidrule(rl){2-2}\cmidrule(rl){3-3}\cmidrule(rl){4-4}\cmidrule(rl){5-5}\cmidrule(rl){6-6}\cmidrule(rl){7-7}\cmidrule(rl){8-8}
     \end{tabular}}
   \put(140,529){\renewcommand{\arraystretch}{1.9}
     \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
-      \multicolumn{3}{D{69}}{\lfont character name} & \lfont alignment & & \multicolumn{3}{D{92}}{\lfont player name} \\
+      \multicolumn{3}{D{69}}{\lfont character name} &  \multicolumn{3}{D{69}}{ \lfont alignment } & \multicolumn{2}{D{46}}{\lfont player name} \\
       \multicolumn{4}{D{92}}{\lfont character level} &\multicolumn{2}{D{46}}{\lfont deity} & \multicolumn{2}{D{46}}{\lfont homeland} \\
       \lfont race & \lfont size & \lfont gender & \lfont age & \lfont height & \lfont weight & \lfont hair & \lfont eyes \\
     \end{tabular}}
@@ -89,7 +89,7 @@
  % \put(50,420){\makebox(3,10){\tiny =}}
 %  \put(53,420){\makebox(13,10){10}}
 %  \plusattributes{65}{420}{0,0,0,0,0,0,0}{20}
-  \equalattributes{25}{420}{10,\arabic{totalarmorbonuscount},\arabic{totalshieldbonuscount},\arabic{totaldexbonuscount},\arabic{charsizemodcount},\arabic{totalnaturalbonuscount},0,\arabic{totalmiscbonuscount}}{20}
+  \equalattributes{25}{420}{10,\arabic{totalarmorbonuscount},\arabic{totalshieldbonuscount},\arabic{totaldexbonuscount},\arabic{charsizemodcount},\arabic{totalnaturalbonuscount},\arabic{totaldeflectionbonuscount},\arabic{totalmiscbonuscount}}{20}
   \scaleattributelabels{25}{410}{TOTAL,default, armor bonus,shield bonus,dex \mbox{modifier},size \mbox{modifier},natural armour,\mbox{deflection} \mbox{modifier},misc \mbox{modifier}}{20}
 
   %% Touch, Flat footed
@@ -132,16 +132,16 @@
   \put(165,298){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\chararmorspeed &ft. & \chararmorspeedsquares& sq.\end{tabular}}
   \put(165,294){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont with armour}}
   \put(165,284){\framebox(40,\boxheight){}}
-  \put(165,285){\begin{tabular}[b]{F{17}E{2}@{\hspace{1ex}/\hspace{-1.6ex}}F{16}E{2}}0 &ft. & 0& \end{tabular}}
+  \put(165,285){\begin{tabular}[b]{F{17}E{2}@{\hspace{1ex}/\hspace{-1.6ex}}F{16}E{2}}\arabic{flyspeedcount} &ft. & 0& \end{tabular}}
   \put(165,281){\parbox[b][3\unitlength][b]{40\unitlength}{\lfont\centering fly/manoeuvrability}}
   \put(135,271){\framebox(20,\boxheight){}}
-  \put(135,272){\begin{tabular}[b]{F{16}E{2}}0 &ft.\end{tabular}}
+  \put(135,272){\begin{tabular}[b]{F{16}E{2}}\arabic{swimspeedcount} &ft.\end{tabular}}
   \put(135,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont swim}}
   \put(160,271){\framebox(20,\boxheight){}}
-  \put(160,272){\begin{tabular}[b]{F{16}E{2}}0 &ft.\end{tabular}}
+  \put(160,272){\begin{tabular}[b]{F{16}E{2}}\arabic{climbspeedcount} &ft.\end{tabular}}
   \put(160,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont climb}}
   \put(185,271){\framebox(20,\boxheight){}}
-  \put(185,272){\begin{tabular}[b]{F{16}E{2}}0 &ft.\end{tabular}}
+  \put(185,272){\begin{tabular}[b]{F{16}E{2}}\arabic{burrowspeedcount} &ft.\end{tabular}}
   \put(185,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont burrow}}
   \titlebox{0}{271}{50}{favoured}{Class}
   \put(55,271){\framebox(75,\boxheight){\footnotesize \charfavouredclass}}
@@ -153,7 +153,7 @@
 %%AC-items
   \put(-2,187){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{23\unitlength} >{\centering}p{17\unitlength} } \printacitems \end{tabular}}
   
-  \put(-2,80){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{totalacitemsbonus} &\tfont\plusminus{maxdexbonuscount} &\tfont \plusminus{totalacitemscheckpenalty} &\tfont \arabic{totalacitemsspellfailure}\% &&\tfont \arabic{totalacitemsweight}~lbs.  \end{tabular}}
+  \put(-2,80){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{totalacitemsbonus} &\tfont\ifthenelse{\value{maxdexbonuscount}<9999}{\plusminus{maxdexbonuscount}}{-} &\tfont \plusminus{totalacitemscheckpenalty} &\tfont \arabic{totalacitemsspellfailure}\% &&\tfont \arabic{totalacitemsweight}~lbs.  \end{tabular}}
 %%Weapons
  \put(-2,60){\begin{tabular}[t]{>{\centering}p{100\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
 \rowcolor{black}\leavevmode\color{white} \uppercase{Weapons} & \leavevmode\color{white}\lfont Attack modifiers & \leavevmode\color{white}\lfont damage & \leavevmode\color{white}\lfont critical &\leavevmode\color{white} \lfont range & \leavevmode\color{white}\lfont type &\leavevmode\color{white} \lfont weight &\leavevmode\color{white} \lfont ammo \tabularnewline\hline
@@ -203,20 +203,23 @@
   \put(215,589){\begin{tabular}[t]{@{}p{150\unitlength} @{\hspace{1\unitlength}}>{\centering}p{29\unitlength}>{\centering}p{15\unitlength}@{}}\printgearitems \end{tabular}}
 
 
-\put(-2,450){
+\singletitlebox{-2}{300}{205}{10}{Bags \& Containers}
+  \put(-2,295){\begin{tabular}[t]{@{}p{129\unitlength} @{\hspace{1\unitlength}}>{\centering}p{40\unitlength}>{\centering}p{25\unitlength}@{}}\printcontainers \end{tabular}}
+
+\put(-2,210){
   \begin{tabular}[t]{>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}}
 \rowcolor{black} \leavevmode\color{white} \uppercase{Currency}& \leavevmode\lfont\color{white}Carried& \leavevmode\lfont\color{white}Carried weight&\leavevmode\lfont\color{white}Stored\tabularnewline
 \currencylist
 \end{tabular}}
 
-\singletitlebox{0}{380}{205}{10}{Carried Weight}
-  \put(-2,375){ \begin{tabular}[t]{>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{34\unitlength}}
+\singletitlebox{0}{140}{205}{10}{Carried Weight}
+  \put(-2,135){ \begin{tabular}[t]{>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{34\unitlength}}
   \lfont Armor \& Weapons &\lfont Currency & \lfont Equipment &\lfont Misc & \tfont\uppercase{Total} \tabularnewline\hline\\
   \printweight
 \end{tabular}}
 
-\singletitlebox{0}{330}{205}{10}{Loads \& Lift}
-  \put(-2,325){ \begin{tabular}[t]{>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}}
+\singletitlebox{0}{90}{205}{10}{Loads \& Lift}
+  \put(-2,85){ \begin{tabular}[t]{>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}}
   \lfont Light load&\lfont medium load & \lfont heavy load &\lfont & \lfont lift above head&\lfont lift of ground & \lfont drag \& push\tabularnewline\hline\\
  \printloadsandlift
 \end{tabular}}
@@ -293,7 +296,10 @@
 \ifthenelse{\equal{\value{boolspells}}{0}}{}{
  \newpage
 \begin{longtable}{| p{.015\textwidth}| p{.015\textwidth} | p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.05\textwidth} | p{.03\textwidth}| p{.015\textwidth} |} 
-\multicolumn{8}{c}{\singletitlebox{-210}{0}{420}{10}{spells}}\endhead 
+\multicolumn{8}{c}{\singletitlebox{-210}{0}{420}{10}{spells}}\tabularnewline
+%\lfont \multicolumn{1}{c}{Prep}&\lfont \multicolumn{1}{c}{Used}&\lfont \multicolumn{1}{c}{Text}&\lfont \multicolumn{1}{c}{School}&\lfont \multicolumn{1}{c}{Duration}&\lfont \multicolumn{1}{c}{Range}&\lfont \multicolumn{1}{c}{Save}&\lfont \multicolumn{1}{c}{SR} \hline
+%\lfont Prep&\lfont Used&\lfont Text&\lfont School&\lfont Duration&\lfont Range&\lfont Save&\lfont SR \tabularnewline\hline
+\endhead 
 
 \ifx\zerospelllist\emptylist
 \else

@@ -187,7 +187,7 @@
 \newcommand{\textconditionalmodifiers}{}
 %Total HP
 \newcounter{favouredclasshpbonus}
-\newcommand{\chartotalhp}{\addtocounter{charhpcount}{\value{favouredclasshpbonus}+\value{charconmodcount}*\value{charlevelcount}}\arabic{charhpcount}}
+\newcommand{\chartotalhp}{\addtocounter{charhpcount}{\maxof{\value{favouredclasshpbonus}+\value{charconmodcount}*\value{charlevelcount}}{0}}\arabic{charhpcount}}
 %Text for Wounds/currentHP
 \newcommand{\textwoundscurrenthp}{} %0/\arabic{charhpcount}
 %Base speed
@@ -207,7 +207,15 @@
 \newcounter{chararmorspeedsquarecount}
 \newcommand{\chararmorspeedsquares}{
 	\setcounter{chararmorspeedsquarecount}{\value{chararmorspeedcount}/5} \arabic{chararmorspeedsquarecount}}
-%Swim Speed
+%Swim, climb, fly speed
+\newcounter{swimspeedcount}
+\newcounter{climbspeedcount}
+\newcounter{flyspeedcount}
+\newcounter{burrowspeedcount}
+%Name (swim, climb, fly, burrow), Value
+\newcommand\setspeed[2]{
+	\setcounter{#1speedcount}{#2}
+}
 
 \newcommand\charstr[1]{
   \setcounter{charstrcount}{0}
@@ -567,6 +575,23 @@
   \textsc{Total} & & \arabic{totalitemweightcount}~lbs. \tabularnewline\hline
 }
 
+%%Containers
+\newcounter{totalcontainerweightcount}
+\newcommand\containerlist{}
+\newcommand\printcontainers{ \lfont Container& \lfont Volume&\lfont wt.\tabularnewline\hline \containerlist \totacontainer}
+%Name, Volume, weight
+\newcommand\addcontainer[3]{
+  \newcounter{#1containertotalweight}
+  \addtocounter{#1containertotalweight}{#3}
+  \addtocounter{totalcontainerweightcount}{#3}
+  \apptocmd{\containerlist}{\tfont{#1} &\tfont #2&\tfont \arabic{#1containertotalweight}~lbs.\tabularnewline}{}{}
+}
+
+\newcommand\totacontainer{
+  \relax & & \relax \tabularnewline
+  \textsc{Total} & & \arabic{totalcontainerweightcount}~lbs. \tabularnewline\hline
+}
+
 %%Magic items
 \newcommand\magicitembelt{}
 \newcommand\magicitembody{}
@@ -768,19 +793,40 @@
 \newcounter{totalacitemsweight}
 \newcounter{totalflatfootedaccount}
 \newcounter{totaltouchaccount}
-\newcounter{totaldodgecount}
 
-\newcommand\adddodgebonus[1]{
-	\addtocounter{totaldodgecount}{#1}
-	\addtocounter{totalmiscbonuscount}{#1}
+\newcounter{tmpacbonus}
+%Source ,bonus type, Value
+\newcommand\addacbonus[3]{
+	\ifcsname c@total#1#2bonuscount\endcsname
+		\setcounter{tmpacbonus}{\value{total#1#2bonuscount}}
+		\ifthenelse{\equal{#2}{untyped}\OR\equal{#1}{dodge}}
+		{
+			\addtocounter{total#1#2bonuscount}{#3}
+		}
+		{
+			\setcounter{total#1#2bonuscount}{\maxof{\value{total#1#2bonuscount}}{#3}}
+		}	
+	\else
+		\newcounter{total#1#2bonuscount}
+		\setcounter{tmpacbonus}{\value{total#1#2bonuscount}}
+		\setcounter{total#1#2bonuscount}{#3}
+	\fi
+	
+		\addtocounter{total#1bonuscount}{\value{total#1#2bonuscount}-\value{tmpacbonus}}
+	\ifthenelse{\equal{#1}{armor}\OR\equal{#1}{shield}\OR\equal{#1}{natural}\OR\equal{#1}{deflection}}{}
+	{
+		\addtocounter{totalmiscbonuscount}{\value{total#1#2bonuscount}-\value{tmpacbonus}}
+	}
 }
 
+\newcounter{totaldodgebonuscount}
+\newcounter{totaldeflectionbonuscount}
 \newcounter{totaldexbonuscount}
 \newcounter {totalarmorbonuscount}
 \newcounter {totalshieldbonuscount}
 \newcounter {totalnaturalbonuscount}
 \newcounter {totalmiscbonuscount}
-\newcounter {maxdexbonuscount} \setcounter{maxdexbonuscount}{99}
+\newcounter {maxdexbonuscount} \setcounter{maxdexbonuscount}{9999}
 \newcommand{\tmparmorcounter}{totalarmorbonuscount}
 
 \makeatletter
@@ -808,11 +854,12 @@
 \ifthenelse{\equal{\detokenize{#6}}{\detokenize{light}}\OR\equal{\detokenize{#6}}{\detokenize{medium}}\OR\equal{\detokenize{#6}}{\detokenize{heavy}}}
 	{\addtocounter{totalarmorbonuscount}{#2}}
 	{\ifthenelse{\equal{\detokenize{#6}}{\detokenize{shield}}}
-		{\addtocounter{totalshieldbonuscount}{#2}}
+		{\setcounter{totalshieldbonuscount}{\maxof{\value{totalshieldbonuscount}}{#2}}}
 		{\ifthenelse{\equal{\detokenize{#6}}{\detokenize{natural}}}
 			{\addtocounter{totalnaturalbonuscount}{#2}}
 			{\addtocounter{totalmiscbonuscount}{#2}}}}
- \IsInteger{#3}{\ifthenelse{\value{maxdexbonuscount}>#3}{\setcounter{maxdexbonuscount}{#3}}{ }} {}
+ %\IsInteger{#3}{\ifthenelse{\value{maxdexbonuscount}>#3}{\setcounter{maxdexbonuscount}{#3}}{ }} {}
+ \IsInteger{#3}{\setcounter{maxdexbonuscount}{\minof{\value{maxdexbonuscount}}{#3}}}{}
   \ifthenelse {\value{\characmod}>\value{maxdexbonuscount}}{\setcounter{totaldexbonuscount}{\value{maxdexbonuscount}}}{\setcounter{totaldexbonuscount}{\value{\characmod}}}
   \addtocounter{totalacitemsbonus}{#2}
   \addtocounter{totalacitemscheckpenalty}{#4}
@@ -824,11 +871,11 @@
 }
 
 \newcommand{\calculateflatfootedac}{
-  \addtocounter{totalflatfootedaccount}{10+\value{totalarmorbonuscount}+\value{totalshieldbonuscount}+\value{totalnaturalbonuscount}+\value{totalmiscbonuscount}+\value{charsizemodcount}-\value{totaldodgecount}}
+  \addtocounter{totalflatfootedaccount}{10+\value{totalarmorbonuscount}+\value{totaldeflectionbonuscount}+\value{totalshieldbonuscount}+\value{totalnaturalbonuscount}+\value{totalmiscbonuscount}+\value{charsizemodcount}-\value{totaldodgebonuscount}}
   \arabic{totalflatfootedaccount}
 }
 \newcommand{\calculatetouchac}{
-  \addtocounter{totaltouchaccount}{10+\value{charsizemodcount}+\value{totalmiscbonuscount}+\value{totaldexbonuscount}}
+  \addtocounter{totaltouchaccount}{10+\value{charsizemodcount}+\value{totaldeflectionbonuscount}+\value{totalmiscbonuscount}+\value{totaldexbonuscount}}
   \arabic{totaltouchaccount}
 }
 
@@ -878,7 +925,28 @@
  \apptocmd{\skilllist}{\ifthenelse{\equal{#2}{}\OR\equal{#2}{0}}{}{*}&\classskillbox{#3}&\tfont{#1}&\plusminus{#1skilltotalcount} & $=$ &\color{lightgray}\uppercase{#4}\color{black}\indent\llap{\arabic{char#4modcount}} & $+$ & $\arabic{#1skillrankcount}$ &  $+$ & $\arabic{#1skillmisccount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}{}{}
 }
 
-\newcommand\addskillmisc[2]{\addtocounter{#1skillmisccount}{#2}\addtocounter{#1skilltotalcount}{#2}}
+%\newcommand\addskillmisc[3]{\addtocounter{#1skillmisccount}{#2}\addtocounter{#1skilltotalcount}{#2}}
+
+\newcounter{tmpmiscbonus}
+%Source ,bonus type, Value
+\newcommand\addskillmisc[3]{
+	\ifcsname c@total#1#2bonuscount\endcsname
+		\setcounter{tmpmiscbonus}{\value{total#1#2bonuscount}}
+		\ifthenelse{\equal{#2}{untyped}}
+		{
+			\addtocounter{total#1#2bonuscount}{#3}
+		}
+		{
+			\setcounter{total#1#2bonuscount}{\maxof{\value{total#1#2bonuscount}}{#3}}
+		}	
+	\else
+		\newcounter{total#1#2bonuscount}
+		\setcounter{tmpmiscbonus}{\value{total#1#2bonuscount}}
+		\setcounter{total#1#2bonuscount}{#3}
+	\fi
+		\addtocounter{#1skillmisccount}{\value{total#1#2bonuscount}-\value{tmpmiscbonus}}
+		\addtocounter{#1skilltotalcount}{\value{total#1#2bonuscount}-\value{tmpmiscbonus}}
+}
 
 \newcommand\classskillbox[1]{
   \ifthenelse{\equal{#1}{}\OR\equal{#1}{0}}{$\square$}{\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}}
@@ -1042,7 +1110,8 @@
 \newcounter{totalweightcount}
 \newcounter{totalmiscweightcount}
 \newcommand{\printweight}{
-	\setcounter{totalweightcount}{\value{totalacitemsweight}+\value{totalweaponweightcount}+\value{totalcurrencyweightcount}+\value{totalitemweightcount}+\value{totalmiscweightcount}}
+	\addtocounter{totalitemweightcount}{\value{totalcontainerweightcount}}
+	\setcounter{totalweightcount}{\value{totalacitemsweight}+\value{totalweaponweightcount}+\value{totalcurrencyweightcount}+\value{totalitemweightcount}+\value{totalmiscweightcount}+\value{totalcontainerweightcount}}
 	\arabic{totalacitemsweight} + \arabic{totalweaponweightcount} & \arabic{totalcurrencyweightcount} & \arabic{totalitemweightcount}& \arabic{totalmiscweightcount}& \arabic{totalweightcount}
 }
 
