@@ -4,10 +4,6 @@
 \unitlength\textwidth
 \divide\unitlength 420
 
-%\begin{picture}(0,0)
-%\put(-12,-55){\hbox{\includegraphics[scale=0.11]{Pathfinder-Logo}}}
-%\end{picture}
-
 \noindent\begin{picture}(420,594)
   % \put(0,0){\framebox(420,594)}
 
@@ -23,10 +19,6 @@
       \multicolumn{4}{D{92}}{\lfont character level} &\multicolumn{2}{D{46}}{\lfont deity} & \multicolumn{2}{D{46}}{\lfont homeland} \\
       \lfont race & \lfont size & \lfont gender & \lfont age & \lfont height & \lfont weight & \lfont hair & \lfont eyes \\
     \end{tabular}}
-
-  \singletitlebox{0}{570}{135}{10}{Languages}
-  \put(1,530){\parbox[b][38\unitlength][t]{133.7\unitlength}{\itshape \tfont \languagelist }}
-  \put(0.2,530){\framebox(134.7,40){}}
 
 %\renewcommand{\charrefmod}{\charintmodcount}
 %\newcommand{\characmod}{\charintmodcount}
@@ -115,7 +107,7 @@
   \singletitlebox{113}{329}{74}{11}{spell resistance}
   \attributes{190}{330}{0}
   
-
+%%CMB and CMD
   \singletitlebox{0}{309}{21}{11}{cmb}
   \stretchequalattributes{25}{310}{130}{\arabic{charbabcount},\arabic{charstrmodcount},\arabic{charspecialsizemodcount}}
   \stretchlabels{25}{304}{130}{TOTAL, BAB,str mod., size mod.}
@@ -150,10 +142,6 @@
 
 
 \noindent\begin{picture}(0,0)
-%%AC-items
-  \put(-2,187){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{23\unitlength} >{\centering}p{17\unitlength} } \printacitems \end{tabular}}
-  
-  \put(-2,80){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{totalacitemsbonus} &\tfont\ifthenelse{\value{maxdexbonuscount}<9999}{\plusminus{maxdexbonuscount}}{-} &\tfont \plusminus{totalacitemscheckpenalty} &\tfont \arabic{totalacitemsspellfailure}\% &&\tfont \arabic{totalacitemsweight}~lbs.  \end{tabular}}
 %%Weapons
  \put(-2,60){\begin{tabular}[t]{>{\centering}p{100\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
 \rowcolor{black}\leavevmode\color{white} \uppercase{Weapons} & \leavevmode\color{white}\lfont Attack modifiers & \leavevmode\color{white}\lfont damage & \leavevmode\color{white}\lfont critical &\leavevmode\color{white} \lfont range & \leavevmode\color{white}\lfont type &\leavevmode\color{white} \lfont weight &\leavevmode\color{white} \lfont ammo \tabularnewline\hline
@@ -170,9 +158,13 @@
 \end{tabular}}
 
   \singletitlebox{-2}{255}{205}{10}{Conditional Modifiers}
-\put(-1.7,200){\framebox(204.4,55){}}
- \put(0,210){\parbox[b][43\unitlength][t]{200\unitlength}{\itshape \conditionalmodlist}}
+  \put(-1.7,170){\framebox(204.4,85){}}
+  \put(0,210){\parbox[b][43\unitlength][t]{200\unitlength}{\itshape \conditionalmodlist}}
   %\put(0,200){\parbox[b][10\unitlength][c]{200\unitlength}{\small\scshape Languages Spoken:}}
+
+  \singletitlebox{-2}{150}{205}{10}{Languages}
+  \put(-1.7,85){\framebox(204.4,65){}}
+  \put(0,110){\parbox[b][38\unitlength][t]{200\unitlength}{\itshape \tfont \languagelist }}
 
 \end{picture}
 
@@ -181,7 +173,7 @@
 \noindent\begin{picture}(420,594)
 
   \singletitlebox{0}{594}{205}{10}{WORN MAGIC ITEM EQUIPMENT}
-  \put(0,589){\begin{tabular}[t]{@{}p{30\unitlength} @{\hspace{1\unitlength}}>{\centering}p{164\unitlength}}
+  \put(0,589){\begin{tabular}[t]{@{}p{30\unitlength} @{\hspace{1\unitlength}}>{\centering}p{169\unitlength}}
 \\
   \hline
   \tfont Belt: & \magicitembelt \tabularnewline
@@ -202,9 +194,14 @@
  \singletitlebox{215}{594}{205}{10}{gear}
   \put(215,589){\begin{tabular}[t]{@{}p{150\unitlength} @{\hspace{1\unitlength}}>{\centering}p{29\unitlength}>{\centering}p{15\unitlength}@{}}\printgearitems \end{tabular}}
 
+%%AC-items
+  \put(0,449){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{23\unitlength} >{\centering}p{17\unitlength} } \printacitems \end{tabular}}
+  
+  \put(0,325){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{totalacitemsbonus} &\tfont\ifthenelse{\value{maxdexbonuscount}<9999}{\plusminus{maxdexbonuscount}}{-} &\tfont \plusminus{totalacitemscheckpenalty} &\tfont \arabic{totalacitemsspellfailure}\% &&\tfont \arabic{totalacitemsweight}~lbs.  \end{tabular}}
 
-\singletitlebox{-2}{300}{205}{10}{Bags \& Containers}
-  \put(-2,295){\begin{tabular}[t]{@{}p{129\unitlength} @{\hspace{1\unitlength}}>{\centering}p{40\unitlength}>{\centering}p{25\unitlength}@{}}\printcontainers \end{tabular}}
+
+\singletitlebox{0}{300}{205}{10}{Bags \& Containers}
+  \put(0,295){\begin{tabular}[t]{@{}p{129\unitlength} @{\hspace{1\unitlength}}>{\centering}p{40\unitlength}>{\centering}p{25\unitlength}@{}}\printcontainers \end{tabular}}
 
 \put(-2,210){
   \begin{tabular}[t]{>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}}
@@ -382,6 +379,8 @@
 \fi
 \end{longtable}
 }
+
+\printlists
 
 \ifx \notelist\emptylist
 	\else

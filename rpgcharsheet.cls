@@ -667,8 +667,8 @@
 		#3
 		\apptocmd{\magicitemringone}{\tfont #1}{}{}
 		\else	
-		#3
 		\ifx \magicitemringtwo\emptylist
+		#3
 		\apptocmd{\magicitemringtwo}{\tfont #1}{}{}
 		\fi
 		\fi
@@ -729,7 +729,7 @@
 %%Spells
 \newcounter{tmpcasterlevelbonus}
 %Range (close, medium, long) , Caster, Caster level adjustment
-\newcommand\range[3]{
+\newcommand\spellrange[3]{
 	\IsInteger{#3}{\setcounter{tmpcasterlevelbonus}{#3}}{\setcounter{tmpcasterlevelbonus}{0}}
 	
 	\ifthenelse{\equal{#1}{close}}{
@@ -903,6 +903,20 @@
     \end{tabular}}
 }
 
+\newcounter{tmpattackmodcount}
+% Abillity (str, dex), other bonus
+\newcommand\attackmodifier[2]{
+	\addtocounter{tmpattackmodcount}{\value{charbabcount}+\value{char#1modcount}+\value{charsizemodcount}+#2}
+	\plusminus{tmpattackmodcount}
+}
+
+\newcounter{tmpweapondamagecount}
+%Weapon die,Abillity (str, dex), other bonus
+\newcommand\weapondamage[3]{
+	\addtocounter{tmpweapondamagecount}{\value{char#2modcount}+#3}
+	#1\plusminus{tmpweapondamagecount}	
+}
+
 %% Skill commands
 \newcounter{tmpClassRanks}
 \newcounter{tmpArmorPenalty}
@@ -922,7 +936,7 @@
 \ifthenelse{\equal{#4}{str}\OR\equal{#4}{dex}}{\setcounter{tmpArmorPenalty}{\value{totalacitemscheckpenalty}}}{\setcounter{tmpArmorPenalty}{0}}
  \ifthenelse{\equal{#3}{}\OR\equal{#3}{0}}{\setcounter{tmpClassRanks}{0}}{\ifthenelse{\value{#1skillrankcount}>0}{\setcounter{tmpClassRanks}{3}}{\setcounter{tmpClassRanks}{0}}}
  \setcounter{#1skilltotalcount}{\value{#1skillrankcount}+\value{#1skillmisccount}+\value{char#4modcount}+\value{tmpClassRanks}+\value{tmpArmorPenalty}}
- \apptocmd{\skilllist}{\ifthenelse{\equal{#2}{}\OR\equal{#2}{0}}{}{*}&\classskillbox{#3}&\tfont{#1}&\plusminus{#1skilltotalcount} & $=$ &\color{lightgray}\uppercase{#4}\color{black}\indent\llap{\arabic{char#4modcount}} & $+$ & $\arabic{#1skillrankcount}$ &  $+$ & $\arabic{#1skillmisccount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}{}{}
+ \apptocmd{\skilllist}{\ifthenelse{\equal{#2}{}\OR\equal{#2}{0}}{}{*}&\classskillbox{#3}&\tfont{#1}&\plusminus{#1skilltotalcount} & $=$ &\color{lightgray}\uppercase{#4}\color{black}\noindent\llap{\arabic{char#4modcount}} & $+$ & $\arabic{#1skillrankcount}$ &  $+$ & $\arabic{#1skillmisccount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}{}{}
 }
 
 %\newcommand\addskillmisc[3]{\addtocounter{#1skillmisccount}{#2}\addtocounter{#1skilltotalcount}{#2}}
@@ -1208,4 +1222,34 @@
 \newcommand{\notelist}{}
 \newcommand\addnote[2]{
 	 \apptocmd{\notelist}{\uppercase{#1}&\tfont#2\tabularnewline \hline}{}{}
+}
+
+%%Lists
+%\expandafter\newcommand\csname #2spellrange \endcsname{#6}{}{}
+\newcommand{\printlists}{}
+%Name,Column ,Column definition
+\newcommand\addcustomlist[3]{	
+	\newboolean{bool#1list}
+	\expandafter\newcommand\csname #1list\endcsname{}
+	\expandafter\newcommand\csname #1listhead\endcsname{}
+	\apptocmd{\printlists}{
+	\ifthenelse{\boolean{bool#1list}}
+	{
+		\newpage
+		\begin{longtable}{#3} 
+			\multicolumn{#2}{c}{\singletitlebox{-210}{0}{420}{10}{#1}}
+			\csname #1listhead\endcsname \endhead
+			\hline
+			\csname #1list\endcsname
+		\end{longtable}
+	}{}
+}{}{}
+}
+%List name, row content
+\newcommand\addtocustomlist[2]{
+	\setboolean{bool#1list}{true}
+	\expandafter\apptocmd\expandafter{\csname #1list\endcsname}{#2\tabularnewline\hline}{}{}
+}
+\newcommand\addheadtocustomlist[2]{
+	\expandafter\apptocmd\expandafter{\csname #1listhead\endcsname}{#2\tabularnewline\hline}{}{}
 }
