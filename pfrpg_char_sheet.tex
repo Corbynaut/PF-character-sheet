@@ -290,6 +290,8 @@
 \end{longtable}
 }
 
+\printcasters
+
 \ifthenelse{\equal{\value{boolspells}}{0}}{}{
  \newpage
 \begin{longtable}{| p{.015\textwidth}| p{.015\textwidth} | p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.05\textwidth} | p{.03\textwidth}| p{.015\textwidth} |} 
@@ -297,86 +299,17 @@
 %\lfont \multicolumn{1}{c}{Prep}&\lfont \multicolumn{1}{c}{Used}&\lfont \multicolumn{1}{c}{Text}&\lfont \multicolumn{1}{c}{School}&\lfont \multicolumn{1}{c}{Duration}&\lfont \multicolumn{1}{c}{Range}&\lfont \multicolumn{1}{c}{Save}&\lfont \multicolumn{1}{c}{SR} \hline
 %\lfont Prep&\lfont Used&\lfont Text&\lfont School&\lfont Duration&\lfont Range&\lfont Save&\lfont SR \tabularnewline\hline
 \endhead 
-
-\ifx\zerospelllist\emptylist
-\else
 \hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{cantrips}}\\
-\hline
-\zerospelllist
-\fi
-
-\ifx\firstspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{first tier}}\\
-\hline
-\firstspelllist
-\fi
-
-\ifx\secondspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{second tier}}\\
-\hline
-\secondspelllist
-\fi
-
-\ifx\thirdspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{third tier}}\\
-\hline
-\thirdspelllist
-\fi
-
-\ifx\fourthspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{fourth tier}}\\
-\hline
-\fourthspelllist
-\fi
-
-\ifx\fifthspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{fifth tier}}\\
-\hline
-\fifthspelllist
-\fi
-
-\ifx\sixthspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{sixth tier}}\\
-\hline
-\sixthspelllist
-\fi
-
-\ifx\seventhspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{seventh tier}}\\
-\hline
-\seventhspelllist
-\fi
-
-\ifx\eighthspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{eighth tier}}\\
-\hline
-\eighthspelllist
-\fi
-
-\ifx\ninthspelllist\emptylist
-\else
-\hline
-\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{ninth tier}}\\
-\hline
-\ninthspelllist
-\fi
+\csname0spelllist\endcsname
+\csname1spelllist\endcsname
+\csname2spelllist\endcsname
+\csname3spelllist\endcsname
+\csname4spelllist\endcsname
+\csname5spelllist\endcsname
+\csname6spelllist\endcsname
+\csname7spelllist\endcsname
+\csname8spelllist\endcsname
+\csname9spelllist\endcsname
 \end{longtable}
 }
 

@@ -26,6 +26,7 @@
 \RequirePackage{colortbl}
 \RequirePackage{calculator}
 \RequirePackage{tabto}
+\RequirePackage{forloop}
 \ProcessOptions\relax
 %\DeclareOption* {\PassOptionsToClass{\CurrentOption}{article}}
 \RequirePackage{graphicx}
@@ -748,42 +749,62 @@
 }
 
 \newcounter{boolspells}
-\newcommand{\zerospelllist}{}
-\newcommand{\firstspelllist}{}
-\newcommand{\secondspelllist}{}
-\newcommand{\thirdspelllist}{}
-\newcommand{\fourthspelllist}{}
-\newcommand{\fifthspelllist}{}
-\newcommand{\sixthspelllist}{}
-\newcommand{\seventhspelllist}{}
-\newcommand{\eighthspelllist}{}
-\newcommand{\ninthspelllist}{}
-%Level, Name, Text, School, Duration, Range, Save, SR
-\DeclareRobustCommand\addspell[8]{
+\newcounter{tmpspelllistloop}
+\expandafter\newcommand\csname 0spelllist\endcsname{}
+\expandafter\newcommand\csname1spelllist\endcsname{}
+\expandafter\newcommand\csname2spelllist\endcsname{}
+\expandafter\newcommand\csname3spelllist\endcsname{}
+\expandafter\newcommand\csname4spelllist\endcsname{}
+\expandafter\newcommand\csname5spelllist\endcsname{}
+\expandafter\newcommand\csname6spelllist\endcsname{}
+\expandafter\newcommand\csname7spelllist\endcsname{}
+\expandafter\newcommand\csname8spelllist\endcsname{}
+\expandafter\newcommand\csname9spelllist\endcsname{}
+\newboolean{0spelllistbool}
+\newboolean{1spelllistbool}
+\newboolean{2spelllistbool}
+\newboolean{3spelllistbool}
+\newboolean{4spelllistbool}
+\newboolean{5spelllistbool}
+\newboolean{6spelllistbool}
+\newboolean{7spelllistbool}
+\newboolean{8spelllistbool}
+\newboolean{9spelllistbool}
+%Caster, Level, Name, Text, School, Duration, Range, Save, SR
+\DeclareRobustCommand\addspell[9]{
 
 %\expandafter\newcommand\csname #2spellrange \endcsname{#6}{}{}
+	\ifcsdef{#1#2spelllist}
+	{
+		\ifthenelse{\boolean{#1#2spelllistbool}}{}{\setboolean{#1#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname #1#2spelllist\endcsname}{\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{#2}}\\\hline}{}{}}
+		\expandafter\apptocmd\expandafter{\csname #1#2spelllist\endcsname}{\multicolumn{8}{|c|}{\selectfont\scshape#3}\\\hline & &\tfont#4&\tfont#5&\tfont#6&\tfont #7 &\tfont#8&\tfont#9\tabularnewline\hline}{}{}
+		\addtocounter{#1#2knownspells}{1}
+	}{		
+		\ifthenelse{\boolean{#2spelllistbool}}{}{\setboolean{#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname #2spelllist\endcsname}{\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{#2}}\\\hline}{}{}}
+		\expandafter\apptocmd\expandafter{\csname #2spelllist\endcsname}{\multicolumn{8}{|c|}{\selectfont\scshape#3}\\\hline & &\tfont#4&\tfont#5&\tfont#6&\tfont #7 &\tfont#8&\tfont#9\tabularnewline\hline}{}{}		
+		\setcounter{boolspells}{1}		
+	}
 
-	\ifthenelse{\equal{#1}{0}}{\apptocmd{\zerospelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{1}}{\apptocmd{\firstspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{2}}{\apptocmd{\secondspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-& &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{3}}{\apptocmd{\thirdspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{4}}{\apptocmd{\fourthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{5}}{\apptocmd{\fifthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{6}}{\apptocmd{\sixthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{7}}{\apptocmd{\seventhspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{8}}{\apptocmd{\eighthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\ifthenelse{\equal{#1}{9}}{\apptocmd{\ninthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
- & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-	\setcounter{boolspells}{1}
+%	\ifthenelse{\equal{#2}{0}}{\apptocmd{\zerospelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{1}}{\apptocmd{\firstspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{2}}{\apptocmd{\secondspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+%& &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{3}}{\apptocmd{\thirdspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{4}}{\apptocmd{\fourthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{5}}{\apptocmd{\fifthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{6}}{\apptocmd{\sixthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{7}}{\apptocmd{\seventhspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{8}}{\apptocmd{\eighthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
+%	\ifthenelse{\equal{#1}{9}}{\apptocmd{\ninthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
+% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
 
 }
 
@@ -1031,6 +1052,7 @@
 \newcounter{charstealthsizemodcount}
 \newcounter{charflysizemodcount}
 \newcounter{charcarrysizemod}
+\setcounter{charcarrysizemod}{1}
 \newcommand\size[1]{
 	\renewcommand\charsize{#1}
 	\ifthenelse{\equal{\detokenize{#1}}{\detokenize{Fine}}}{
@@ -1254,3 +1276,290 @@
 \newcommand\addheadtocustomlist[2]{
 	\expandafter\apptocmd\expandafter{\csname #1listhead\endcsname}{#2\tabularnewline\hline}{}{}
 }
+
+%%Caster
+\newcommand\printcasters{}
+\newcounter{tmpcasterloop}
+\newcounter{tmpspellabillityloop}
+\newcounter{tmpspellabillityinnerloop}
+\newcounter{tmpspellabillityinnerloopcondition}
+%Name (must be a class name that was added via \addclass), Caster offset, Attribute
+\newcommand\addcaster[3]{
+	%Spell- lists
+	\expandafter\newcommand\csname #10spelllist\endcsname{}
+	\expandafter\newcommand\csname #11spelllist\endcsname{}	
+	\expandafter\newcommand\csname #12spelllist\endcsname{}	
+	\expandafter\newcommand\csname #13spelllist\endcsname{}	
+	\expandafter\newcommand\csname #14spelllist\endcsname{}	
+	\expandafter\newcommand\csname #15spelllist\endcsname{}	
+	\expandafter\newcommand\csname #16spelllist\endcsname{}	
+	\expandafter\newcommand\csname #17spelllist\endcsname{}	
+	\expandafter\newcommand\csname #18spelllist\endcsname{}	
+	\expandafter\newcommand\csname #19spelllist\endcsname{}
+	\newboolean{#10spelllistbool}
+	\newboolean{#11spelllistbool}
+	\newboolean{#12spelllistbool}
+	\newboolean{#13spelllistbool}
+	\newboolean{#14spelllistbool}
+	\newboolean{#15spelllistbool}
+	\newboolean{#16spelllistbool}
+	\newboolean{#17spelllistbool}
+	\newboolean{#18spelllistbool}
+	\newboolean{#19spelllistbool}
+	%Domains, School, Bloodlines
+	\expandafter\newcommand\csname #1domainlist\endcsname{}	
+	\expandafter\newcommand\csname #1bloodlinelist\endcsname{}
+	\expandafter\newcommand\csname #1schoollist\endcsname{}
+	
+	\newboolean{#1domainbool}
+	\newboolean{#1bloodlinebool}
+	\newboolean{#1schoolbool}
+	\setboolean{#1domainbool}{false}
+	\setboolean{#1bloodlinebool}{false}
+	\setboolean{#1schoolbool}{false}
+
+	\addtocounter{#1casterlevelcount}{#2}
+	\newcounter{#1spelldc}
+	%known spells
+	\newcounter{#1known0spells}
+	\newcounter{#1known1spells}
+	\newcounter{#1known2spells}
+	\newcounter{#1known3spells}
+	\newcounter{#1known4spells}
+	\newcounter{#1known5spells}
+	\newcounter{#1known6spells}
+	\newcounter{#1known7spells}
+	\newcounter{#1known8spells}
+	\newcounter{#1known9spells}
+	%%spellslots
+	%Class
+	\newcounter{#10classspellslots}
+	\newcounter{#11classspellslots}
+	\newcounter{#12classspellslots}
+	\newcounter{#13classspellslots}
+	\newcounter{#14classspellslots}
+	\newcounter{#15classspellslots}
+	\newcounter{#16classspellslots}
+	\newcounter{#17classspellslots}
+	\newcounter{#18classspellslots}
+	\newcounter{#19classspellslots}
+
+	%Ability
+	\newcounter{#11abillityspellslots}
+	\newcounter{#12abillityspellslots}
+	\newcounter{#13abillityspellslots}
+	\newcounter{#14abillityspellslots}
+	\newcounter{#15abillityspellslots}
+	\newcounter{#16abillityspellslots}
+	\newcounter{#17abillityspellslots}
+	\newcounter{#18abillityspellslots}
+	\newcounter{#19abillityspellslots}
+
+	%Misc
+	\newcounter{#10miscspellslots}
+	\newcounter{#11miscspellslots}
+	\newcounter{#12miscspellslots}
+	\newcounter{#13miscspellslots}
+	\newcounter{#14miscspellslots}
+	\newcounter{#15miscspellslots}
+	\newcounter{#16miscspellslots}
+	\newcounter{#17miscspellslots}
+	\newcounter{#18miscspellslots}
+	\newcounter{#19miscspellslots}
+	%Save
+	\newcounter{#10savebonus}
+	\newcounter{#11savebonus}
+	\newcounter{#12savebonus}
+	\newcounter{#13savebonus}
+	\newcounter{#14savebonus}
+	\newcounter{#15savebonus}
+	\newcounter{#16savebonus}
+	\newcounter{#17savebonus}
+	\newcounter{#18savebonus}
+	\newcounter{#19savebonus}
+	
+	%Known
+	\newcounter{#10knownspells}
+	\newcounter{#11knownspells}
+	\newcounter{#12knownspells}
+	\newcounter{#13knownspells}
+	\newcounter{#14knownspells}
+	\newcounter{#15knownspells}
+	\newcounter{#16knownspells}
+	\newcounter{#17knownspells}
+	\newcounter{#18knownspells}
+	\newcounter{#19knownspells}
+
+	\apptocmd{\printcasters}{
+		\newpage
+					
+		\forloop{tmpspellabillityloop}{0}{\value{tmpspellabillityloop}<10}
+		{
+			\addtocounter{#1\arabic{tmpspellabillityloop}savebonus}{10+\value{tmpspellabillityloop}+\value{char#3modcount}}	
+		}
+		
+		\forloop{tmpspellabillityloop}{1}{\value{tmpspellabillityloop}<10}
+		{
+			\setcounter{tmpspellabillityinnerloopcondition}{\value{tmpspellabillityloop}-1}
+			\forloop[-4]{tmpspellabillityinnerloop}{\value{char#3modcount}}{\value{tmpspellabillityinnerloop}>\value{tmpspellabillityinnerloopcondition}}{			
+				\ifthenelse{\value{#1\arabic{tmpspellabillityloop}classspellslots}>0}{
+					\addtocounter{#1\arabic{tmpspellabillityloop}abillityspellslots}{1}
+			}{}
+			}
+		}
+
+		\begin{picture}(420,200)
+		\singletitlebox{-11.5}{200}{420}{10}{#1}
+		%\titlebox{0}{150}{28}{DEX}{dexterity}
+		%\stretchattributes{33}{150}{102}{\arabic{chardexcount},\plusminus{chardexmodcount},\plusminus{chardextmpadjcount},\plusminus{chardextmpmodcount}}
+		\singletitlebox{-11.5}{180}{205}{10}{spells per day}
+		%Spells per day
+		\stretchlabels{85}{170}{180}{TOTAL, class, abillity mod., misc}
+		\stretchequalattributes{85}{155}{180}{\arabic{#10classspellslots},0,\arabic{#10miscspellslots}}
+		\stretchequalattributes{85}{140}{180}{\arabic{#11classspellslots},\arabic{#11abillityspellslots},\arabic{#11miscspellslots}}
+		\stretchequalattributes{85}{125}{180}{\arabic{#12classspellslots},\arabic{#12abillityspellslots},\arabic{#12miscspellslots}}
+		\stretchequalattributes{85}{110}{180}{\arabic{#13classspellslots},\arabic{#13abillityspellslots},\arabic{#13miscspellslots}}
+		\stretchequalattributes{85}{95}{180}{\arabic{#14classspellslots},\arabic{#14abillityspellslots},\arabic{#14miscspellslots}}
+		\stretchequalattributes{85}{80}{180}{\arabic{#15classspellslots},\arabic{#15abillityspellslots},\arabic{#15miscspellslots}}
+		\stretchequalattributes{85}{65}{180}{\arabic{#16classspellslots},\arabic{#16abillityspellslots},\arabic{#16miscspellslots}}
+		\stretchequalattributes{85}{50}{180}{\arabic{#17classspellslots},\arabic{#17abillityspellslots},\arabic{#17miscspellslots}}
+		\stretchequalattributes{85}{35}{180}{\arabic{#18classspellslots},\arabic{#18abillityspellslots},\arabic{#18miscspellslots}}
+		\stretchequalattributes{85}{20}{180}{\arabic{#19classspellslots},\arabic{#19abillityspellslots},\arabic{#19miscspellslots}}
+		%Spell level
+		\put(54,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \uppercase{Level}}}
+		\put(60,125){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 0}}
+		\put(60,109){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 1st}}
+		\put(60,94){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 2nd}}
+		\put(60,79){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 3rd}}
+		\put(60,64){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 4th}}
+		\put(60,49){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 5th}}
+		\put(60,34){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 6th}}
+		\put(60,19){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 7th}}
+		\put(60,4){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 8th}}
+		\put(60,-11){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 9th}}
+		%Spell DC
+		\put(32,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\uppercase{Save DC}}}
+		\put(30,155){\framebox(15,\boxheight){}}
+		\put(27.5,157){\parbox[b][3\unitlength][b]{20\unitlength}{\centering  \arabic{#10savebonus}}}
+		\put(30,140){\framebox(15,\boxheight){}}
+		\put(27.5,142){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#11savebonus}}}
+		\put(30,125){\framebox(15,\boxheight){}}
+		\put(27.5,127){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#12savebonus}}}
+		\put(30,110){\framebox(15,\boxheight){}}		
+		\put(27.5,112){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#13savebonus}}}
+		\put(30,95){\framebox(15,\boxheight){}}
+		\put(27.5,97){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#14savebonus}}}
+		\put(30,80){\framebox(15,\boxheight){}}
+		\put(27.5,82){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#15savebonus}}}
+		\put(30,65){\framebox(15,\boxheight){}}
+		\put(27.5,67){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#16savebonus}}}
+		\put(30,50){\framebox(15,\boxheight){}}
+		\put(27.5,52){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#17savebonus}}}
+		\put(30,35){\framebox(15,\boxheight){}}
+		\put(27.5,37){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#18savebonus}}}
+		\put(30,20){\framebox(15,\boxheight){}}		
+		\put(27.5,22){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#19savebonus}}}
+		%Spells known
+		\put(3,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\uppercase{Spells known}}}	
+		\put(3,155){\framebox(15,\boxheight){}}
+		\put(0.5,157){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#10knownspells}}}
+		\put(3,140){\framebox(15,\boxheight){}}
+		\put(0.5,142){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#11knownspells}}}
+		\put(3,125){\framebox(15,\boxheight){}}
+		\put(0.5,127){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#12knownspells}}}
+		\put(3,110){\framebox(15,\boxheight){}}
+		\put(0.5,112){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#13knownspells}}}
+		\put(3,95){\framebox(15,\boxheight){}}
+		\put(0.5,97){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#14knownspells}}}
+		\put(3,80){\framebox(15,\boxheight){}}
+		\put(0.5,82){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#15knownspells}}}
+		\put(3,65){\framebox(15,\boxheight){}}
+		\put(0.5,67){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#16knownspells}}}
+		\put(3,50){\framebox(15,\boxheight){}}
+		\put(0.5,52){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#17knownspells}}}
+		\put(3,35){\framebox(15,\boxheight){}}
+		\put(0.5,37){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#18knownspells}}}
+		\put(3,20){\framebox(15,\boxheight){}}
+		\put(0.5,22){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#19knownspells}}}
+		%Domains, Bloodlines, Schools
+		\put(203,183){\begin{tabular}[t]{>{\centering}p{195\unitlength}@{}}
+		
+		\csname #1bloodlinelist\endcsname
+
+		\csname #1domainlist\endcsname
+		
+		\csname #1schoollist\endcsname
+
+		%\printgearitems 
+		\end{tabular}
+		}
+
+		\end{picture}
+		\begin{longtable}{| p{.015\textwidth}| p{.015\textwidth} | p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.05\textwidth} | p{.03\textwidth}| p{.015\textwidth} |} 
+			\multicolumn{8}{c}{\singletitlebox{-210}{0}{420}{10}{#1 spells}}\tabularnewline
+			%\csname #1listhead\endcsname \endhead
+			\hline			
+			\csname #10spelllist\endcsname
+			\csname #11spelllist\endcsname
+			\csname #12spelllist\endcsname
+			\csname #13spelllist\endcsname
+			\csname #14spelllist\endcsname
+			\csname #15spelllist\endcsname
+			\csname #16spelllist\endcsname
+			\csname #17spelllist\endcsname
+			\csname #18spelllist\endcsname
+			\csname #19spelllist\endcsname
+		\end{longtable}}{}{}
+}
+%Caster, Level, Value
+\newcommand\setclassspellslot[3]{
+	\IsInteger{#2}{
+	\ifthenelse{#2>-1 \AND #2<10}{
+	\setcounter{#1#2classspellslots}{#3}}{}
+	}{}
+}
+%Caster, Level, Value
+\newcommand\addspellsavebonus[3]
+{
+	\addtocounter{#1#2savebonus}{#3}
+}
+
+%Caster, Name
+\newcommand\adddomain[3]{
+	#3
+	\ifthenelse{\boolean{#1domainbool}}{}{\setboolean{#1domainbool}{true}\expandafter\apptocmd\expandafter{\csname #1domainlist\endcsname}{\rowcolor{black} \leavevmode\color{white} \uppercase{Domains}\tabularnewline}{}{}}
+	\expandafter\apptocmd\expandafter{\csname #1domainlist\endcsname}{#2\tabularnewline}{}{}
+}
+%Caster, Name
+\newcommand\addbloodline[3]{
+	#3
+	\ifthenelse{\boolean{#1bloodlinebool}}{}{\setboolean{#1bloodlinebool}{true}\expandafter\apptocmd\expandafter{\csname #1bloodlinelist\endcsname}{\rowcolor{black} \leavevmode\color{white} \uppercase{Bloodlines \& Patrons} \tabularnewline}{}{}}
+	\expandafter\apptocmd\expandafter{\csname #1bloodlinelist\endcsname}{#2\tabularnewline}{}{}
+}
+%Caster, Name
+\newcommand\addschool[3]{
+	#3
+	\ifthenelse{\boolean{#1schoolbool}}{}{\setboolean{#1schoolbool}{true}\expandafter\apptocmd\expandafter{\csname #1schoollist\endcsname}{\rowcolor{black} \leavevmode\color{white} \uppercase{Wizard speciality school}\tabularnewline}{}{}}
+	\expandafter\apptocmd\expandafter{\csname #1schoollist\endcsname}{#2\tabularnewline}{}{}
+}
+\newcounter{tmpspellmisc}
+%Caster, Level, Type, Value
+\newcommand\addspellmisc[4]{
+	\ifcsname c@#1#2#3miscspellslots\endcsname
+		\setcounter{tmpspellmisc}{\value{#1#2#3miscspellslots}}
+		\ifthenelse{\equal{#3}{untyped}}
+		{
+			\addtocounter{#1#2#3miscspellslots}{#4}
+		}
+		{
+			\setcounter{#1#2#3miscspellslots}{\maxof{\value{#1#2#3miscspellslots}}{#4}}
+		}	
+	\else
+		\newcounter{#1#2#3miscspellslots}
+		\setcounter{tmpspellmisc}{\value{#1#2#3miscspellslots}}
+		\setcounter{#1#2#3miscspellslots}{#4}
+	\fi
+	
+		\addtocounter{#1#2miscspellslots}{\value{#1#2#3miscspellslots}-\value{tmpspellmisc}}
+}
+
