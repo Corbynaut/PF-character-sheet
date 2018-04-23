@@ -27,6 +27,7 @@
 \RequirePackage{calculator}
 \RequirePackage{tabto}
 \RequirePackage{forloop}
+\RequirePackage{fmtcount}
 \ProcessOptions\relax
 %\DeclareOption* {\PassOptionsToClass{\CurrentOption}{article}}
 \RequirePackage{graphicx}
@@ -776,36 +777,14 @@
 %\expandafter\newcommand\csname #2spellrange \endcsname{#6}{}{}
 	\ifcsdef{#1#2spelllist}
 	{
-		\ifthenelse{\boolean{#1#2spelllistbool}}{}{\setboolean{#1#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname #1#2spelllist\endcsname}{\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{#2}}\\\hline}{}{}}
+		\ifthenelse{\boolean{#1#2spelllistbool}}{}{\setboolean{#1#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname #1#2spelllist\endcsname}{\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\\hline}{}{}}
 		\expandafter\apptocmd\expandafter{\csname #1#2spelllist\endcsname}{\multicolumn{8}{|c|}{\selectfont\scshape#3}\\\hline & &\tfont#4&\tfont#5&\tfont#6&\tfont #7 &\tfont#8&\tfont#9\tabularnewline\hline}{}{}
 		\addtocounter{#1#2knownspells}{1}
 	}{		
-		\ifthenelse{\boolean{#2spelllistbool}}{}{\setboolean{#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname #2spelllist\endcsname}{\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\uppercase{#2}}\\\hline}{}{}}
+		\ifthenelse{\boolean{#2spelllistbool}}{}{\setboolean{#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname #2spelllist\endcsname}{\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\\hline}{}{}}
 		\expandafter\apptocmd\expandafter{\csname #2spelllist\endcsname}{\multicolumn{8}{|c|}{\selectfont\scshape#3}\\\hline & &\tfont#4&\tfont#5&\tfont#6&\tfont #7 &\tfont#8&\tfont#9\tabularnewline\hline}{}{}		
 		\setcounter{boolspells}{1}		
 	}
-
-%	\ifthenelse{\equal{#2}{0}}{\apptocmd{\zerospelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{1}}{\apptocmd{\firstspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{2}}{\apptocmd{\secondspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-%& &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{3}}{\apptocmd{\thirdspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{4}}{\apptocmd{\fourthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{5}}{\apptocmd{\fifthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{6}}{\apptocmd{\sixthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{7}}{\apptocmd{\seventhspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{8}}{\apptocmd{\eighthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-%	\ifthenelse{\equal{#1}{9}}{\apptocmd{\ninthspelllist}{\multicolumn{8}{|c|}{\selectfont\scshape#2}\\\hline
-% & &\tfont#3&\tfont#4&\tfont#5&\tfont #6 &\tfont#7&\tfont#8\tabularnewline\hline}{}{}}{}
-
 }
 
 %%AC
@@ -1286,26 +1265,19 @@
 %Name (must be a class name that was added via \addclass), Caster offset, Attribute
 \newcommand\addcaster[3]{
 	%Spell- lists
-	\expandafter\newcommand\csname #10spelllist\endcsname{}
-	\expandafter\newcommand\csname #11spelllist\endcsname{}	
-	\expandafter\newcommand\csname #12spelllist\endcsname{}	
-	\expandafter\newcommand\csname #13spelllist\endcsname{}	
-	\expandafter\newcommand\csname #14spelllist\endcsname{}	
-	\expandafter\newcommand\csname #15spelllist\endcsname{}	
-	\expandafter\newcommand\csname #16spelllist\endcsname{}	
-	\expandafter\newcommand\csname #17spelllist\endcsname{}	
-	\expandafter\newcommand\csname #18spelllist\endcsname{}	
-	\expandafter\newcommand\csname #19spelllist\endcsname{}
-	\newboolean{#10spelllistbool}
-	\newboolean{#11spelllistbool}
-	\newboolean{#12spelllistbool}
-	\newboolean{#13spelllistbool}
-	\newboolean{#14spelllistbool}
-	\newboolean{#15spelllistbool}
-	\newboolean{#16spelllistbool}
-	\newboolean{#17spelllistbool}
-	\newboolean{#18spelllistbool}
-	\newboolean{#19spelllistbool}
+	
+	\forloop{tmpcasterloop}{0}{\value{tmpcasterloop}<10}
+	{
+		\expandafter\newcommand\csname #1\arabic{tmpcasterloop}spelllist\endcsname{}
+		\newboolean{#1\arabic{tmpcasterloop}spelllistbool}
+		\newcounter{#1known\arabic{tmpcasterloop}spells}
+		\newcounter{#1\arabic{tmpcasterloop}classspellslots}
+		\newcounter{#1\arabic{tmpcasterloop}miscspellslots}
+		\newcounter{#1\arabic{tmpcasterloop}savebonus}
+		\newcounter{#1\arabic{tmpcasterloop}knownspells}
+		\ifthenelse{\value{tmpcasterloop}>0}{\newcounter{#1\arabic{tmpcasterloop}abillityspellslots}}{}
+	}
+
 	%Domains, School, Bloodlines
 	\expandafter\newcommand\csname #1domainlist\endcsname{}	
 	\expandafter\newcommand\csname #1bloodlinelist\endcsname{}
@@ -1320,76 +1292,7 @@
 
 	\addtocounter{#1casterlevelcount}{#2}
 	\newcounter{#1spelldc}
-	%known spells
-	\newcounter{#1known0spells}
-	\newcounter{#1known1spells}
-	\newcounter{#1known2spells}
-	\newcounter{#1known3spells}
-	\newcounter{#1known4spells}
-	\newcounter{#1known5spells}
-	\newcounter{#1known6spells}
-	\newcounter{#1known7spells}
-	\newcounter{#1known8spells}
-	\newcounter{#1known9spells}
-	%%spellslots
-	%Class
-	\newcounter{#10classspellslots}
-	\newcounter{#11classspellslots}
-	\newcounter{#12classspellslots}
-	\newcounter{#13classspellslots}
-	\newcounter{#14classspellslots}
-	\newcounter{#15classspellslots}
-	\newcounter{#16classspellslots}
-	\newcounter{#17classspellslots}
-	\newcounter{#18classspellslots}
-	\newcounter{#19classspellslots}
-
-	%Ability
-	\newcounter{#11abillityspellslots}
-	\newcounter{#12abillityspellslots}
-	\newcounter{#13abillityspellslots}
-	\newcounter{#14abillityspellslots}
-	\newcounter{#15abillityspellslots}
-	\newcounter{#16abillityspellslots}
-	\newcounter{#17abillityspellslots}
-	\newcounter{#18abillityspellslots}
-	\newcounter{#19abillityspellslots}
-
-	%Misc
-	\newcounter{#10miscspellslots}
-	\newcounter{#11miscspellslots}
-	\newcounter{#12miscspellslots}
-	\newcounter{#13miscspellslots}
-	\newcounter{#14miscspellslots}
-	\newcounter{#15miscspellslots}
-	\newcounter{#16miscspellslots}
-	\newcounter{#17miscspellslots}
-	\newcounter{#18miscspellslots}
-	\newcounter{#19miscspellslots}
-	%Save
-	\newcounter{#10savebonus}
-	\newcounter{#11savebonus}
-	\newcounter{#12savebonus}
-	\newcounter{#13savebonus}
-	\newcounter{#14savebonus}
-	\newcounter{#15savebonus}
-	\newcounter{#16savebonus}
-	\newcounter{#17savebonus}
-	\newcounter{#18savebonus}
-	\newcounter{#19savebonus}
 	
-	%Known
-	\newcounter{#10knownspells}
-	\newcounter{#11knownspells}
-	\newcounter{#12knownspells}
-	\newcounter{#13knownspells}
-	\newcounter{#14knownspells}
-	\newcounter{#15knownspells}
-	\newcounter{#16knownspells}
-	\newcounter{#17knownspells}
-	\newcounter{#18knownspells}
-	\newcounter{#19knownspells}
-
 	\apptocmd{\printcasters}{
 		\newpage
 					
@@ -1482,14 +1385,15 @@
 		\put(3,20){\framebox(15,\boxheight){}}
 		\put(0.5,22){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#19knownspells}}}
 		%Domains, Bloodlines, Schools
-		\put(203,183){\begin{tabular}[t]{>{\centering}p{195\unitlength}@{}}
-		
+
+		\singletitlebox{203}{180}{65}{10}{Caster Level}
+		\put(273,180.5){\framebox(15,\boxheight){}}
+		\put(270,182.5){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#1casterlevelcount}}}
+	
+		\put(203,163){\begin{tabular}[t]{>{\centering}p{195\unitlength}@{}}		
 		\csname #1bloodlinelist\endcsname
-
-		\csname #1domainlist\endcsname
-		
+		\csname #1domainlist\endcsname		
 		\csname #1schoollist\endcsname
-
 		%\printgearitems 
 		\end{tabular}
 		}
@@ -1561,5 +1465,106 @@
 	\fi
 	
 		\addtocounter{#1#2miscspellslots}{\value{#1#2#3miscspellslots}-\value{tmpspellmisc}}
+}
+
+%%Companion
+
+\newcommand\printcompanions{}
+%Name, 
+\newcommand\addcompanion[1]{
+
+	\expandafter\newcommand\csname #1skilllist\endcsname{}
+	\expandafter\newcommand\csname #1featlist\endcsname{}
+	\expandafter\newcommand\csname #1featurelist\endcsname{}
+	\expandafter\newcommand\csname #1notelist\endcsname{}
+
+	\newcounter{companion#1str}
+	\newcounter{companion#1strmod}
+	\newcounter{companion#1dex}
+	\newcounter{companion#1dexmod}
+	\newcounter{companion#1con}
+	\newcounter{companion#1conmod}
+	\newcounter{companion#1int}
+	\newcounter{companion#1intmod}
+	\newcounter{companion#1wis}
+	\newcounter{companion#1wismod}
+	\newcounter{companion#1cha}
+	\newcounter{companion#1chamod}
+
+	\newcounter{companion#1ac}
+	\newcounter{companion#1acdexbonus}
+	\newcounter{companion#1naturalarmor}
+	\newcounter{companion#1miscac}
+	
+	\newcounter{companion#1touchac}
+	\newcounter{companion#1flatfootedac}
+	\newcounter{companion#1bab}
+	\newcounter{companion#1cmd}
+	\newcounter{companion#1cmb}
+
+	\newcounter{companion#1fort}
+	\newcounter{companion#1ref}
+	\newcounter{companion#1will}
+	
+	\newcounter{companion#1init}
+	\newcounter{companion#1initmisc}
+
+	\newcounter{companion#1speed}
+
+	\newcounter{companion#1HP}
+
+	
+	\apptocmd{\printcompanions}{
+		\newpage
+		\begin{picture}(420,200)
+		\singletitlebox{-11.5}{200}{420}{10}{Companion: #1}
+		\put(-11.5,142){\makebox(28,3){\tiny\scshape attribute}}
+ 		 \stretchlabels{21}{142}{54}{ability score,  ability modifier}
+		%STR
+		\titlebox{-11.5}{130}{28}{STR}{strength}
+		\stretchattributes{21}{130}{54}{\arabic{companion#1str},\plusminus{companion#1strmod}}
+		%DEX
+		\titlebox{-11.5}{117}{28}{DEX}{dexterity}
+		\stretchattributes{21}{117}{54}{\arabic{companion#1dex},\plusminus{companion#1dexmod}}
+		%CON
+		\titlebox{-11.5}{104}{28}{CON}{constitution}
+		\stretchattributes{21}{104}{54}{\arabic{companion#1con},\plusminus{companion#1conmod}}
+		%INT
+		\titlebox{-11.5}{91}{28}{INT}{intelligence}
+		\stretchattributes{21}{91}{54}{\arabic{companion#1int},\plusminus{companion#1intmod}}
+		%WIS
+		\titlebox{-11.5}{78}{28}{WIS}{wisdom}
+		\stretchattributes{21}{78}{54}{\arabic{companion#1wis},\plusminus{companion#1wismod}}
+		%CHA
+		\titlebox{-11.5}{65}{28}{CHA}{charisma}
+		\stretchattributes{21}{65}{54}{\arabic{companion#1cha},\plusminus{companion#1chamod}}
+
+		  %% HP
+  		\singletitlebox{58}{136}{26}{12}{HP}
+  		\put(88,136){\framebox(38,12){}}
+ 		\put(88,141){\makebox(14,4){\tiny\scshape Total}}
+  		\put(88,136){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \arabic{companion#1HP}}}
+ 		\put(128,136){\framebox(28,12){}}
+ 		\put(128,141){\makebox(8,4){\tiny\scshape DR}}
+		\put(58,131){\makebox(36,4){\tiny\scshape wounds/current hp}}
+		\put(58,111){\framebox(98,20){}}
+  		\put(60,111){\parbox[b][18\unitlength][t]{82\unitlength}{\tiny \textwoundscurrenthp}}
+  		\put(58,106){\makebox(36,4){\tiny\scshape nonleathal damage}}
+  		\put(58,86){\framebox(98,20){}}
+
+		 %% INIT
+ 		\titlebox{58}{71}{43}{INITIATIVE}{modifier}
+ 		\stretchequalattributes{103}{71}{157}{\arabic{companion#1dexmod},\arabic{companion#1initmisc}}
+ 		\stretchlabels{103}{65}{157}{TOTAL, dex modifier, misc modifier}
+
+		  %% AC
+ 		 \titlebox{-11.5}{51}{27}{AC}{armour class}
+  		\equalattributes{16}{51}{10,\arabic{companion#1ac},\arabic{companion#1acdexbonus},\arabic{charsizemodcount},\arabic{companion#1naturalarmor},\arabic{companion#1miscac}}{20}
+ 		 \scaleattributelabels{16}{41}{TOTAL,default, armor bonus,dex \mbox{modifier},size \mbox{modifier},natural armour,misc \mbox{modifier}}{20}
+
+		\end{picture}
+
+	}{}{}
+
 }
 
