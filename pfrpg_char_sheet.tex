@@ -29,27 +29,27 @@
   \stretchlabels{33}{512}{102}{ability score,  ability modifier, Temp Adjustment, Temp Modifier}
   %% STR
   \titlebox{0}{500}{28}{STR}{strength}
-\stretchattributes{33}{500}{102}{\arabic{charstrcount},\plusminus{charstrmodcount},\plusminus{charstrtmpadjcount},\plusminus{charstrtmpmodcount}}
+\stretchattributes{33}{500}{102}{\arabic{strcount},\plusminus{strmodcount},\plusminus{strtmpadjcount},\plusminus{strtmpmodcount}}
 
   %% DEX
   \titlebox{0}{488}{28}{DEX}{dexterity}
-  \stretchattributes{33}{488}{102}{\arabic{chardexcount},\plusminus{chardexmodcount},\plusminus{chardextmpadjcount},\plusminus{chardextmpmodcount}}
+  \stretchattributes{33}{488}{102}{\arabic{dexcount},\plusminus{dexmodcount},\plusminus{dextmpadjcount},\plusminus{dextmpmodcount}}
   
   %% CON
   \titlebox{0}{476}{28}{CON}{constitution}
-  \stretchattributes{33}{476}{102}{\arabic{charconcount},\plusminus{charconmodcount},\plusminus{charcontmpadjcount},\plusminus{charcontmpmodcount}}
+  \stretchattributes{33}{476}{102}{\arabic{concount},\plusminus{conmodcount},\plusminus{contmpadjcount},\plusminus{contmpmodcount}}
   
   %% INT
   \titlebox{0}{464}{28}{INT}{intelligence}
-  \stretchattributes{33}{464}{102}{\arabic{charintcount},\plusminus{charintmodcount},\plusminus{charinttmpadjcount},\plusminus{charinttmpmodcount}}
+  \stretchattributes{33}{464}{102}{\arabic{intcount},\plusminus{intmodcount},\plusminus{inttmpadjcount},\plusminus{inttmpmodcount}}
 
   %% WIS
   \titlebox{0}{452}{28}{WIS}{wisdom}
-  \stretchattributes{33}{452}{102}{\arabic{charwiscount},\plusminus{charwismodcount},\plusminus{charwistmpadjcount},\plusminus{charwistmpmodcount}}
+  \stretchattributes{33}{452}{102}{\arabic{wiscount},\plusminus{wismodcount},\plusminus{wistmpadjcount},\plusminus{wistmpmodcount}}
 
   %% CHA
   \titlebox{0}{440}{28}{CHA}{charisma}
-  \stretchattributes{33}{440}{102}{\arabic{charchacount},\plusminus{charchamodcount},\plusminus{charchatmpadjcount},\plusminus{charchatmpmodcount}}
+  \stretchattributes{33}{440}{102}{\arabic{chacount},\plusminus{chamodcount},\plusminus{chatmpadjcount},\plusminus{chatmpmodcount}}
 
 
   %% HP
@@ -81,7 +81,7 @@
  % \put(50,420){\makebox(3,10){\tiny =}}
 %  \put(53,420){\makebox(13,10){10}}
 %  \plusattributes{65}{420}{0,0,0,0,0,0,0}{20}
-  \equalattributes{25}{420}{10,\arabic{totalarmorbonuscount},\arabic{totalshieldbonuscount},\arabic{totaldexbonuscount},\arabic{charsizemodcount},\arabic{totalnaturalbonuscount},\arabic{totaldeflectionbonuscount},\arabic{totalmiscbonuscount}}{20}
+  \equalattributes{25}{420}{10,\arabic{totalarmorbonuscount},\arabic{totalshieldbonuscount},\arabic{totaldexbonuscount},\arabic{sizemodcount},\arabic{totalnaturalbonuscount},\arabic{totaldeflectionbonuscount},\arabic{totalmiscbonuscount}}{20}
   \scaleattributelabels{25}{410}{TOTAL,default, armor bonus,shield bonus,dex \mbox{modifier},size \mbox{modifier},natural armour,\mbox{deflection} \mbox{modifier},misc \mbox{modifier}}{20}
 
   %% Touch, Flat footed
@@ -95,45 +95,45 @@
   %% fort, reflex and will
   \stretchlabels{60}{392}{205}{TOTAL, base save, ability modifier, magic modifier, misc modifier, temporary modifier}
   \titlebox{0}{380}{53}{fortitude}{(constitution)}
-  \stretchequalattributes{60}{380}{205}{\arabic{charfortcount},\arabic{charconmodcount},0,0,0}
+  \stretchequalattributes{60}{380}{205}{\arabic{fortcount},\arabic{conmodcount},0,0,0}
   \titlebox{0}{365}{53}{reflex}{(dexterity)}
-  \stretchequalattributes{60}{365}{205}{\arabic{charrefcount},\arabic{\charrefmod},0,0,0}
+  \stretchequalattributes{60}{365}{205}{\arabic{refcount},\arabic{\charrefmod},0,0,0}
   \titlebox{0}{350}{53}{will}{(wisdom)}  
-  \stretchequalattributes{60}{350}{205}{\arabic{charwillcount},\arabic{charwismodcount},0,0,0}
+  \stretchequalattributes{60}{350}{205}{\arabic{willcount},\arabic{wismodcount},0,0,0}
 
   %%Base attack bonus, spell resistance
   \singletitlebox{0}{329}{90}{11}{base attack bonus}
-  \attributes{94}{330}{\arabic{charbabcount}}
+  \attributes{94}{330}{\arabic{babcount}}
   \singletitlebox{113}{329}{74}{11}{spell resistance}
   \attributes{190}{330}{0}
   
 %%CMB and CMD
   \singletitlebox{0}{309}{21}{11}{cmb}
-  \stretchequalattributes{25}{310}{130}{\arabic{charbabcount},\arabic{charstrmodcount},\arabic{charspecialsizemodcount}}
+  \stretchequalattributes{25}{310}{130}{\arabic{babcount},\arabic{strmodcount},\arabic{specialsizemodcount}}
   \stretchlabels{25}{304}{130}{TOTAL, BAB,str mod., size mod.}
   \singletitlebox{0}{289}{21}{11}{cmd}
-  \stretchequalattributes{25}{290}{130}{\arabic{charbabcount},\arabic{charstrmodcount},\arabic{chardexmodcount},\arabic{charspecialsizemodcount} ,10}
+  \stretchequalattributes{25}{290}{130}{\arabic{babcount},\arabic{strmodcount},\arabic{dexmodcount},\arabic{specialsizemodcount} ,10}
   \stretchlabels{25}{284}{130}{TOTAL, BAB,str mod.,dex mod., size mod.,default}
 
   \singletitlebox{135}{284}{25}{35}{speed}
   % \put(135,284){\framebox(25,35){\uppercase{Speed}}}
   \put(165,310){\framebox(40,\boxheight){}}
-  \put(164,311){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\arabic{charbasespeedcount} &ft. & \charbasespeedsquares& sq.\end{tabular}}
+  \put(164,311){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\arabic{base speedcount} &ft. & \charbasespeedsquares& sq.\end{tabular}}
   \put(165,307){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont base speed}}
   \put(165,297){\framebox(40,\boxheight){}}
   \put(164,298){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\chararmorspeed &ft. & \chararmorspeedsquares& sq.\end{tabular}}
   \put(165,294){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont with armour}}
   \put(165,284){\framebox(40,\boxheight){}}
-  \put(164,285){\begin{tabular}[b]{F{17}E{2}@{\hspace{1ex}/\hspace{-1.6ex}}F{16}E{2}}\arabic{flyspeedcount} &ft. & 0& \end{tabular}}
+  \put(164,285){\begin{tabular}[b]{F{17}E{2}@{\hspace{1ex}/\hspace{-1.6ex}}F{16}E{2}}\arabic{fly speedcount} &ft. & 0& \end{tabular}}
   \put(165,281){\parbox[b][3\unitlength][b]{40\unitlength}{\lfont\centering fly/manoeuvrability}}
   \put(135,271){\framebox(20,\boxheight){}}
-  \put(134,272){\begin{tabular}[b]{F{16}E{2}}\arabic{swimspeedcount} &ft.\end{tabular}}
+  \put(134,272){\begin{tabular}[b]{F{16}E{2}}\arabic{swim speedcount} &ft.\end{tabular}}
   \put(135,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont swim}}
   \put(160,271){\framebox(20,\boxheight){}}
-  \put(159,272){\begin{tabular}[b]{F{16}E{2}}\arabic{climbspeedcount} &ft.\end{tabular}}
+  \put(159,272){\begin{tabular}[b]{F{16}E{2}}\arabic{climb speedcount} &ft.\end{tabular}}
   \put(160,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont climb}}
   \put(185,271){\framebox(20,\boxheight){}}
-  \put(184,272){\begin{tabular}[b]{F{16}E{2}}\arabic{burrowspeedcount} &ft.\end{tabular}}
+  \put(184,272){\begin{tabular}[b]{F{16}E{2}}\arabic{burrow speedcount} &ft.\end{tabular}}
   \put(185,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont burrow}}
   \titlebox{0}{271}{50}{favoured}{Class}
   \put(55,271){\framebox(75,\boxheight){\footnotesize \charfavouredclass}}
@@ -154,7 +154,7 @@
   \begin{tabular}[t]{A{2}A{10}B{80}A{21}B{7}A{21}A{7}A{21}A{7}A{21}}
     \rowcolor{black}& &\leavevmode\color{white}\footnotesize \scshape Skill Names&\leavevmode\color{white}\lfont Total\\ Bonus&&\leavevmode\color{white}\lfont Ability\\ Mod.&&\leavevmode\color{white}\lfont Ranks\\&&\leavevmode\color{white}\lfont Misc.\\ Mod.\ \tabularnewline
  \skilllist 
-&\lfont\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}&\lfont Class Skill\hspace{2ex}  * trained only
+&\lfont\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}&\lfont Class Skill\hspace{2ex}  * trained only & & &\lfont Total & & \arabic{totalskillranks}
 \end{tabular}}
 
   \singletitlebox{-2}{255}{205.4}{10}{Conditional Modifiers}
@@ -300,16 +300,16 @@
 %\lfont Prep&\lfont Used&\lfont Text&\lfont School&\lfont Duration&\lfont Range&\lfont Save&\lfont SR \tabularnewline\hline
 \endhead 
 \hline
-\csname0spelllist\endcsname
-\csname1spelllist\endcsname
-\csname2spelllist\endcsname
-\csname3spelllist\endcsname
-\csname4spelllist\endcsname
-\csname5spelllist\endcsname
-\csname6spelllist\endcsname
-\csname7spelllist\endcsname
-\csname8spelllist\endcsname
-\csname9spelllist\endcsname
+\csname default0spelllist\endcsname
+\csname default1spelllist\endcsname
+\csname default2spelllist\endcsname
+\csname default3spelllist\endcsname
+\csname default4spelllist\endcsname
+\csname default5spelllist\endcsname
+\csname default6spelllist\endcsname
+\csname default7spelllist\endcsname
+\csname default8spelllist\endcsname
+\csname default9spelllist\endcsname
 \end{longtable}
 }
 
