@@ -205,12 +205,27 @@
 
 \define@key{addgear}{type}{\def\gear@type{#1}}
 \define@key{addgear}{companion}{\def\gear@companion{#1}}
+
+\define@key{addacitem}{companion}{\def\acitem@companion{#1}}
+\define@key{addacitem}{basespeed-30}{\def\acitem@basespeedthirty{#1}}
+\define@key{addacitem}{basespeed-20}{\def\acitem@basespeedtwenty{#1}}
+
+\define@key{addpower}{parent}{\def\power@parent{#1}}
+\define@key{addpower}{additional commands}{\def\power@commands{#1}}
+
+\define@key{addclass}{calculate bab}{\def\class@calculatebab{#1}}
+\define@key{addclass}{calculate fort}{\def\class@calculatefort{#1}}
+\define@key{addclass}{calculate ref}{\def\class@calculateref{#1}}
+\define@key{addclass}{calculate will}{\def\class@calculatewill{#1}}
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
 	\setkeys{addcaster}{offset=0,zeroth=0,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
 	\setkeys{addweapon}{enhancement = 0, attack attribute = str, attack bonus = 0, damage attribute = str, damage bonus = 0, companion =}%
 	\setkeys{addspell}{caster level bonus = 0, caster =}%
 	\setkeys{addgear}{type = item, companion =}%
+	\setkeys{addacitem}{basespeed-30 =-, basespeed-20 =-, companion =}%
+	\setkeys{addpower}{parent =, additional commands =}%
+	\setkeys{addclass}{calculate bab =,calculate fort =,calculate ref =,calculate will =}%
 }
 \resetkeys
 
@@ -704,33 +719,33 @@
 
 \newcommand\printacitems{\rowcolor{black} \leavevmode\color{white} \uppercase{AC Items} & \leavevmode\color{white} \lfont ac bonus & \leavevmode\color{white} \lfont max dex & \leavevmode\color{white} \lfont penalty &\leavevmode\color{white}  \lfont spell failure & \leavevmode\color{white} \lfont type & \leavevmode\color{white} \lfont weight \tabularnewline\hline \acitemlist}
 
-\newcommand{\addacitem}[9]{
-\ifthenelse{\equal{\detokenize{#6}}{\detokenize{light}}\OR\equal{\detokenize{#6}}{\detokenize{medium}}\OR\equal{\detokenize{#6}}{\detokenize{heavy}}}
-	{\addtocounter{totalarmorbonuscount}{#2}}
-	{\ifthenelse{\equal{\detokenize{#6}}{\detokenize{shield}}}
-		{\setcounter{totalshieldbonuscount}{\maxof{\value{totalshieldbonuscount}}{#2}}}
-		{\ifthenelse{\equal{\detokenize{#6}}{\detokenize{natural}}}
-			{\addtocounter{totalnaturalbonuscount}{#2}}
-			{\addtocounter{totalmiscbonuscount}{#2}}}}
- %\IsInteger{#3}{\ifthenelse{\value{maxdexbonuscount}>#3}{\setcounter{maxdexbonuscount}{#3}}{ }} {}
- \IsInteger{#3}{\setcounter{maxdexbonuscount}{\minof{\value{maxdexbonuscount}}{#3}}}{}
-  \ifthenelse {\value{\characmod}>\value{maxdexbonuscount}}{\setcounter{totaldexbonuscount}{\value{maxdexbonuscount}}}{\setcounter{totaldexbonuscount}{\value{\characmod}}}
-  \addtocounter{totalacitemsbonus}{#2}
-  \addtocounter{totalacitemscheckpenalty}{#4}
-  \addtocounter{totalacitemsspellfailure}{#5}
-  \addtocounter{totalacitemsweight}{#7}
-  \ifthenelse{\value{racebasespeedcount} = 30}{ \IsInteger{#8}{\addtocounter{armorspeedpenaltycount}{\value{racebasespeedcount}-#8}}{}}{\IsInteger{#9}{\addtocounter{armorspeedpenaltycount}{\value{racebasespeedcount}-#9}}{}}
-  %\ifthenelse{\value{racebasespeedcount} = 30}{\addtocounter{chararmorspeedpenaltycount}{\value{racebasespeedcount}-#8}}{\addtocounter{chararmorspeedpenaltycount}{\value{racebasespeedcount}-#9}}
-  \apptocmd{\acitemlist}{\tfont#1 & \tfont#2 & \tfont#3 &\tfont #4 &\tfont #5\% & \tfont#6 & \tfont#7~lbs.\tabularnewline\hline}{}{}
+\newcommand{\addacitem}[8][]{
+\setkeys{addacitem}{#1}
+\ifthenelse{\equal{\detokenize{#7}}{\detokenize{light}}\OR\equal{\detokenize{#7}}{\detokenize{medium}}\OR\equal{\detokenize{#7}}{\detokenize{heavy}}\OR\equal{\detokenize{#7}}{\detokenize{armor}}}
+	{\addtocounter{\acitem@companion totalarmorbonuscount}{#3}}
+	{\ifthenelse{\equal{\detokenize{#7}}{\detokenize{shield}}}
+		{\setcounter{\acitem@companion totalshieldbonuscount}{\maxof{\value{\acitem@companion totalshieldbonuscount}}{#3}}}
+		{\ifthenelse{\equal{\detokenize{#7}}{\detokenize{natural}}}
+			{\addtocounter{\acitem@companion totalnaturalbonuscount}{#3}}
+			{\addtocounter{\acitem@companion totalmiscbonuscount}{#3}}}}
+ \IsInteger{#4}{\setcounter{\acitem@companion maxdexbonuscount}{\minof{\value{\acitem@companion maxdexbonuscount}}{#4}}}{}
+  \ifthenelse {\value{\characmod}>\value{\acitem@companion maxdexbonuscount}}{\setcounter{\acitem@companion totaldexbonuscount}{\value{\acitem@companion maxdexbonuscount}}}{\setcounter{\acitem@companion totaldexbonuscount}{\value{\characmod}}}
+  \addtocounter{\acitem@companion totalacitemsbonus}{#3}
+  \addtocounter{\acitem@companion totalacitemscheckpenalty}{#5}
+  \addtocounter{\acitem@companion totalacitemsspellfailure}{#6}
+  \addtocounter{\acitem@companion totalacitemsweight}{#8}
+  \ifthenelse{\value{\acitem@companion racebasespeedcount} = 30}{ \IsInteger{\acitem@basespeedthirty}{\addtocounter{\acitem@companion armorspeedpenaltycount}{\value{\acitem@companion racebasespeedcount}- \acitem@basespeedthirty}}{}}{\IsInteger{\acitem@basespeedtwenty}{\addtocounter{\acitem@companion armorspeedpenaltycount}{\value{\acitem@companion racebasespeedcount}-\acitem@basespeedtwenty}}{}}
+ \resetkeys
+  \apptocmd{\acitemlist}{\tfont#2 & \tfont#3 & \tfont#4 &\tfont #5 &\tfont #6\% & \tfont#7 & \tfont#8~lbs.\tabularnewline\hline}{}{}
 }
 
-\newcommand{\calculateflatfootedac}{
-  \addtocounter{totalflatfootedaccount}{10+\value{totalarmorbonuscount}+\value{totaldeflectionbonuscount}+\value{totalshieldbonuscount}+\value{totalnaturalbonuscount}+\value{totalmiscbonuscount}+\value{sizemodcount}-\value{totaldodgebonuscount}}
-  \arabic{totalflatfootedaccount}
+\newcommand\calculateflatfootedac[1][]{
+	\addtocounter{#1totalflatfootedaccount}{10+\value{#1totalarmorbonuscount}+\value{#1totaldeflectionbonuscount}+\value{#1totalshieldbonuscount}+\value{#1totalnaturalbonuscount}+\value{#1totalmiscbonuscount}+\value{#1sizemodcount}-\value{#1totaldodgebonuscount}}
+	\arabic{#1totalflatfootedaccount}
 }
-\newcommand{\calculatetouchac}{
-  \addtocounter{totaltouchaccount}{10+\value{sizemodcount}+\value{totaldeflectionbonuscount}+\value{totalmiscbonuscount}+\value{totaldexbonuscount}}
-  \arabic{totaltouchaccount}
+\newcommand\calculatetouchac[1][]{
+	\addtocounter{#1totaltouchaccount}{10+\value{#1sizemodcount}+\value{#1totaldeflectionbonuscount}+\value{#1totalmiscbonuscount}+\value{#1totaldexbonuscount}}
+	\arabic{#1totaltouchaccount}
 }
 
 %%Weapons
@@ -779,23 +794,41 @@
 }
 
 %%Class stuff
-%Name, level, BAB, Fort, Ref, Will
-\newcommand\addclass[6]{
+%[], Name, level, BAB, Fort, Ref, Will
+\newcommand\addclass[7][]{
+	\setkeys{addclass}{#1}
 	\ifthenelse{\equal{\classlist}{}}{\apptocmd{\classlist}{\fontsize{7}{7}\selectfont}{}{}}{\apptocmd{\classlist}{, }{}{}}
-	\apptocmd{\classlist}{Lvl #2 #1}{}{}
-	\newcounter{#1casterlevelcount}
-	\addtocounter{#1casterlevelcount}{#2}
-	\addtocounter{totalcasterlevelcount}{#2}
-	\newcounter{#1rangeclosecount}
-	\newcounter{#1rangemediumcount}
-	\newcounter{#1rangelongcount}
-	\newcounter{#1levelcount}
-	\addtocounter{#1levelcount}{#2}
-	\addtocounter{babcount}{#3}
-	\addtocounter{fortcount}{#4}	
-	\addtocounter{refcount}{#5}
-	\addtocounter{willcount}{#6}
-	\addtocounter{levelcount}{#2}
+	\apptocmd{\classlist}{Lvl #3 #2}{}{}
+	\newcounter{#2casterlevelcount}
+	\addtocounter{#2casterlevelcount}{#3}
+	\addtocounter{totalcasterlevelcount}{#3}
+	\newcounter{#2rangeclosecount}
+	\newcounter{#2rangemediumcount}
+	\newcounter{#2rangelongcount}
+	\newcounter{#2levelcount}
+	\addtocounter{#2levelcount}{#3}
+	\ifthenelse{\equal{\class@calculatebab}{}}{
+		\addtocounter{babcount}{#4}
+	}{
+		\addtocounter{babcount}{#3*#4}
+	}
+	\ifthenelse{\equal{\class@calculatebab}{}}{
+		\addtocounter{fortcount}{#5}	
+	}{
+		\addtocounter{fortcount}{#3*#5}
+	}
+	\ifthenelse{\equal{\class@calculatebab}{}}{
+		\addtocounter{refcount}{#6}
+	}{
+		\addtocounter{refcount}{#3*#6}
+	}
+	\ifthenelse{\equal{\class@calculatebab}{}}{		
+		\addtocounter{willcount}{#7}
+	}{	
+		\addtocounter{willcount}{#3*#7}
+	}
+	\addtocounter{levelcount}{#3}
+	\resetkeys
 }
 
 \newcommand\lfont{\fontsize{5}{6}\selectfont\scshape}
@@ -915,7 +948,7 @@
 %Weight
 \newcommand{\printweight}{
 	\addtocounter{totalitemweightcount}{\value{totalcontainerweightcount}}
-	\setcounter{totalweightcount}{\value{totalacitemsweight}+\value{totalweaponweightcount}+\value{totalcurrencyweightcount}+\value{totalitemweightcount}+\value{totalmiscweightcount}+\value{totalcontainerweightcount}}
+	\setcounter{totalweightcount}{\value{totalacitemsweight}+\value{totalweaponweightcount}+\value{totalcurrencyweightcount}+\value{totalitemweightcount}+\value{totalmiscweightcount}}
 	\arabic{totalacitemsweight} + \arabic{totalweaponweightcount} & \arabic{totalcurrencyweightcount} & \arabic{totalitemweightcount}& \arabic{totalmiscweightcount}& \arabic{totalweightcount}
 }
 
@@ -1062,16 +1095,7 @@
 	\setcounter{#29classspellslots}{\csname caster@ninth\endcsname}
 
 	%Domains, School, Bloodlines
-	\expandafter\newcommand\csname #2domainlist\endcsname{}	
-	\expandafter\newcommand\csname #2bloodlinelist\endcsname{}
-	\expandafter\newcommand\csname #2schoollist\endcsname{}
-	
-	\newboolean{#2domainbool}
-	\newboolean{#2bloodlinebool}
-	\newboolean{#2schoolbool}
-	\setboolean{#2domainbool}{false}
-	\setboolean{#2bloodlinebool}{false}
-	\setboolean{#2schoolbool}{false}
+	\expandafter\newcommand\csname #2powerlist\endcsname{}	
 
 	\addtocounter{#2casterlevelcount}{\caster@offset}
 	\newcounter{#2spelldc}
@@ -1172,10 +1196,9 @@
 		\put(273,180.5){\framebox(15,\boxheight){}}
 		\put(270,182.5){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{#2casterlevelcount}}}
 	
-		\put(203,163){\begin{tabular}[t]{>{\centering}p{195\unitlength}@{}}		
-		\csname #1bloodlinelist\endcsname
-		\csname #1domainlist\endcsname		
-		\csname #1schoollist\endcsname
+		\put(203,163){\begin{tabular}[t]{p{195\unitlength}}
+		\csname #2powerlist\endcsname	
+		%\csname #2powerlist\endcsname
 		\end{tabular}
 		}
 
@@ -1203,24 +1226,28 @@
 	\addtocounter{#1#2savebonus}{#3}
 }
 
-%Caster, Name
-\newcommand\adddomain[3]{
-	#3
-	\ifthenelse{\boolean{#1domainbool}}{}{\setboolean{#1domainbool}{true}\expandafter\apptocmd\expandafter{\csname #1domainlist\endcsname}{\rowcolor{black} \leavevmode\color{white} \uppercase{Domains}\tabularnewline}{}{}}
-	\expandafter\apptocmd\expandafter{\csname #1domainlist\endcsname}{#2\tabularnewline}{}{}
+%[], category, Caster, Name
+\newcommand\addpower[4][]{
+	\setkeys{addpower}{#1}
+	\ifcsdef{#3#2list}{}{
+	\expandafter\newcommand\csname #3#2list\endcsname{}
+	\expandafter\apptocmd\expandafter{\csname #3#2list\endcsname}{\rowcolor{black} \leavevmode\color{white}\centering\uppercase{#2}\tabularnewline}{}{}
+	\expandafter\apptocmd\expandafter{\csname #3powerlist\endcsname}{\csname #3#2list\endcsname}{}{}
+	}
+	\ifthenelse{\equal{\power@parent}{}}{		
+		\ifcsdef{#3#2#4list}{}{
+			\expandafter\newcommand\csname #3#2#4sublist\endcsname{}
+			\expandafter\newcommand\csname #3#2#4list\endcsname{}	
+		}
+		\expandafter\apptocmd\expandafter{\csname #3#2#4list\endcsname}{#4 \csname #3#2#4sublist\endcsname}{}{}
+	}{
+		\expandafter\apptocmd\expandafter{\csname #3#2\power@parent sublist\endcsname}{\\ \hspace{20pt}\textbullet\, #4}{}{}
+	}
+	\power@commands
+	\expandafter\apptocmd\expandafter{\csname #3#2list\endcsname}{\csname #3#2#4list\endcsname\tabularnewline}{}{}
+	\resetkeys
 }
-%Caster, Name
-\newcommand\addbloodline[3]{
-	#3
-	\ifthenelse{\boolean{#1bloodlinebool}}{}{\setboolean{#1bloodlinebool}{true}\expandafter\apptocmd\expandafter{\csname #1bloodlinelist\endcsname}{\rowcolor{black} \leavevmode\color{white} \uppercase{Bloodlines \& Patrons} \tabularnewline}{}{}}
-	\expandafter\apptocmd\expandafter{\csname #1bloodlinelist\endcsname}{#2\tabularnewline}{}{}
-}
-%Caster, Name
-\newcommand\addschool[3]{
-	#3
-	\ifthenelse{\boolean{#1schoolbool}}{}{\setboolean{#1schoolbool}{true}\expandafter\apptocmd\expandafter{\csname #1schoollist\endcsname}{\rowcolor{black} \leavevmode\color{white} \uppercase{Wizard speciality school}\tabularnewline}{}{}}
-	\expandafter\apptocmd\expandafter{\csname #1schoollist\endcsname}{#2\tabularnewline}{}{}
-}
+
 %Caster, Level, Type, Value
 \newcommand\addspellmisc[4]{
 	\ifcsname c@#1#2#3miscspellslots\endcsname
@@ -1252,40 +1279,40 @@
 	\expandafter\newcommand\csname #1featurelist\endcsname{}
 	\expandafter\newcommand\csname #1notelist\endcsname{}
 
-	\newcounter{companion#1str}
-	\newcounter{companion#1strmod}
-	\newcounter{companion#1dex}
-	\newcounter{companion#1dexmod}
-	\newcounter{companion#1con}
-	\newcounter{companion#1conmod}
-	\newcounter{companion#1int}
-	\newcounter{companion#1intmod}
-	\newcounter{companion#1wis}
-	\newcounter{companion#1wismod}
-	\newcounter{companion#1cha}
-	\newcounter{companion#1chamod}
+	\newcounter{#1strcount}
+	\newcounter{#1strmodcount}
+	\newcounter{#1dexcount}
+	\newcounter{#1dexmodcount}
+	\newcounter{#1concount}
+	\newcounter{#1conmodcount}
+	\newcounter{#1intcount}
+	\newcounter{#1intmodcount}
+	\newcounter{#1wiscount}
+	\newcounter{#1wismodcount}
+	\newcounter{#1chacount}
+	\newcounter{#1chamodcount}
 
-	\newcounter{companion#1ac}
-	\newcounter{companion#1acdexbonus}
-	\newcounter{companion#1naturalarmor}
-	\newcounter{companion#1miscac}
+	\newcounter{#1ac}
+	\newcounter{#1acdexbonus}
+	\newcounter{#1naturalarmor}
+	\newcounter{#1miscac}
 	
-	\newcounter{companion#1touchac}
-	\newcounter{companion#1flatfootedac}
-	\newcounter{companion#1bab}
-	\newcounter{companion#1cmd}
-	\newcounter{companion#1cmb}
+	\newcounter{#1touchac}
+	\newcounter{#1flatfootedac}
+	\newcounter{#1bab}
+	\newcounter{#1cmd}
+	\newcounter{#1cmb}
 
-	\newcounter{companion#1fort}
-	\newcounter{companion#1ref}
-	\newcounter{companion#1will}
+	\newcounter{#1fort}
+	\newcounter{#1ref}
+	\newcounter{#1will}
 	
-	\newcounter{companion#1init}
-	\newcounter{companion#1initmisc}
+	\newcounter{#1init}
+	\newcounter{#1initmisc}
 
-	\newcounter{companion#1speed}
+	\newcounter{#1speed}
 
-	\newcounter{companion#1HP}
+	\newcounter{#1HP}
 
 	
 	\apptocmd{\printcompanions}{
@@ -1297,34 +1324,34 @@
   \stretchlabels{33}{512}{66}{ability score,  ability modifier}
   %% STR
   \titlebox{0}{500}{28}{STR}{strength}
-\stretchattributes{33}{500}{66}{\arabic{companion#1str},\plusminus{companion#1strmod}}
+\stretchattributes{33}{500}{66}{\arabic{#1strcount},\plusminus{#1strmodcount}}
 
   %% DEX
   \titlebox{0}{488}{28}{DEX}{dexterity}
-  \stretchattributes{33}{488}{66}{\arabic{companion#1dex},\plusminus{companion#1dexmod}}
+  \stretchattributes{33}{488}{66}{\arabic{#1dexcount},\plusminus{#1dexmodcount}}
   
   %% CON
   \titlebox{0}{476}{28}{CON}{constitution}
-  \stretchattributes{33}{476}{66}{\arabic{companion#1con},\plusminus{companion#1conmod}}
+  \stretchattributes{33}{476}{66}{\arabic{#1concount},\plusminus{#1conmodcount}}
   
   %% INT
   \titlebox{0}{464}{28}{INT}{intelligence}
-  \stretchattributes{33}{464}{66}{\arabic{companion#1int},\plusminus{companion#1intmod}}
+  \stretchattributes{33}{464}{66}{\arabic{#1intcount},\plusminus{#1intmodcount}}
 
   %% WIS
   \titlebox{0}{452}{28}{WIS}{wisdom}
-  \stretchattributes{33}{452}{66}{\arabic{companion#1wis},\plusminus{companion#1wismod}}
+  \stretchattributes{33}{452}{66}{\arabic{#1wiscount},\plusminus{#1wismodcount}}
 
   %% CHA
   \titlebox{0}{440}{28}{CHA}{charisma}
-  \stretchattributes{33}{440}{66}{\arabic{companion#1cha},\plusminus{companion#1chamod}}
+  \stretchattributes{33}{440}{66}{\arabic{#1chacount},\plusminus{#1chamodcount}}
 
 
   %% HP
   \singletitlebox{71}{505}{26}{12}{HP}
   \put(101,505){\framebox(38,12){}}
   \put(101,512){\makebox(14,4){\tiny\scshape Total}}
-  \put(101,505){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \arabic{companion#1HP}}}
+  \put(101,505){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \arabic{#1HP}}}
   \put(141,505){\framebox(28,12){}}
   \put(141,512){\makebox(8,4){\tiny\scshape DR}}
 
@@ -1337,27 +1364,27 @@
   
   %% INIT
   \titlebox{71}{440}{43}{INITIATIVE}{modifier}
-  \stretchequalattributes{116}{440}{170}{\arabic{companion#1init},0}
+  \stretchequalattributes{116}{440}{170}{\arabic{#1init},0}
   \stretchlabels{116}{434}{170}{TOTAL, dex modifier, misc modifier}
   
   %% AC
   \titlebox{0}{420}{27}{AC}{armour class}
-  \equalattributes{29}{420}{10,\arabic{companion#1ac},\arabic{companion#1acdexbonus},\arabic{sizemodcount},\arabic{companion#1naturalarmor},\arabic{companion#1miscac}}{20}
+  \equalattributes{29}{420}{10,\arabic{#1ac},\arabic{#1acdexbonus},\arabic{sizemodcount},\arabic{#1naturalarmor},\arabic{#1miscac}}{20}
   \scaleattributelabels{29}{410}{TOTAL,default, armor bonus,dex \mbox{modifier},size \mbox{modifier},natural armou,misc \mbox{modifier}}{20}
 
   %% Touch, Flat footed
   \titlebox{0}{400}{35}{TOUCH}{armour class}
-  \attributes{40}{400}{\arabic{companion#1touchac}}
+  \attributes{40}{400}{\arabic{#1touchac}}
   \titlebox{80}{400}{55}{FLAT-FOOTED}{armour class}
-  \attributes{140}{400}{\arabic{companion#1flatfootedac}}
+  \attributes{140}{400}{\arabic{#1flatfootedac}}
 
   %% fort, reflex and will
   \titlebox{180}{507}{53}{fortitude}{(constitution)}
-  \attributes{240}{507}{\arabic{companion#1fort}}
+  \attributes{240}{507}{\arabic{#1fort}}
   \titlebox{180}{492}{53}{reflex}{(dexterity)}
-  \attributes{240}{492}{\arabic{companion#1ref}}
+  \attributes{240}{492}{\arabic{#1ref}}
   \titlebox{180}{477}{53}{will}{(wisdom)} 
-   \attributes{240}{477}{\arabic{companion#1will}}
+   \attributes{240}{477}{\arabic{#1will}}
 
   %%Base attack bonus, spell resistance
   \singletitlebox{180}{439}{90}{11}{base attack bonus}
@@ -1367,10 +1394,10 @@
   
 %%CMB and CMD
   \singletitlebox{180}{419}{21}{11}{cmb}
-  \stretchequalattributes{205}{420}{335}{\arabic{babcount},\arabic{strmodcount},\arabic{specialsizemodcount}}
+  \stretchequalattributes{205}{420}{335}{\arabic{babcount},\arabic{#1strmodcount},\arabic{specialsizemodcount}}
   \stretchlabels{205}{414}{335}{TOTAL, BAB,str mod., size mod.}
   \singletitlebox{180}{399}{21}{11}{cmd}
-  \stretchequalattributes{205}{400}{335}{\arabic{babcount},\arabic{strmodcount},\arabic{dexmodcount},\arabic{specialsizemodcount} ,10}
+  \stretchequalattributes{205}{400}{335}{\arabic{babcount},\arabic{#1strmodcount},\arabic{#1dexmodcount},\arabic{specialsizemodcount} ,10}
   \stretchlabels{205}{394}{335}{TOTAL, BAB,str mod.,dex mod., size mod.,default}
 
   \singletitlebox{265}{483}{25}{35}{speed}

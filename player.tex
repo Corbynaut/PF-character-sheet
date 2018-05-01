@@ -1,23 +1,27 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Classes
-%\addclass	Class name, 	level,	 BAB,	 Fort,	 Ref, 	Will
-\addclass	{Class}	{1}	{1}	{0}	{0}	{0}
-\addclass	{Classs}	{15}	{15}	{0}	{0}	{0}
+%\addclass														Class name, 	level,	 BAB,	 Fort,	 Ref, 	Will
+\addclass	[calculate bab = yes]										{Classs}	{5}	{3/4}	{0}	{0}	{0}
+\addclass	[calculate bab = yes, calculate fort = yes, calculate ref = yes, calculate will = yes]	{Classss}	{6}	{1}	{1/3}	{1/3}	{1/2+2}
+\addclass														{Class}	{5}	{5}	{1}	{2}	{0}
 
-%\addcaster		Class name	Level offset	Attribute
-\addcaster		[offset = -3, zeroth = 1, first = 1, second = 1, third = 1, fourth = 1, fifth = 1, sixth = 1, seventh = 1, eighth = 1, ninth = 1]{Class} {int}
+%\addcaster																				       	Class name	 Attribute
+\addcaster		[offset = 0, zeroth = 1, first = 1, second = 1, third = 1, fourth = 1, fifth = 1, sixth = 1, seventh = 1, eighth = 1, ninth = 1]	{Class}	{int}
 
-%\addspellmisc{Caster name}{Spell level}{Type}{Value}
+%\addspellmisc{Caster}{Spell level}{Type}{Value}
 \addspellmisc{Class}{1}{untyped}{3}
-%\addspellmisc{Class}{1}{enhance}{3}
-%\addspellmisc{Class}{9}{enhance}{9}
 
-%\adddomain{Caster name}{Domain name}{additional commands}
-\adddomain{Class}{Domain}{}
-%\addschool{Caster name}School name}{additional commands}
-\addschool{Class}{School}{}
-%\addbloodline{Caster name}{Bloodline name}{additional commands}
-\addbloodline{Class}{Bloodline}{}
+%addpower[parent =, additional commands=]{Category (Domain, bloodline, etc)}{Caster}{Name}
+\addpower{domain}{Class}{test}
+\addpower{school}{Class}{testsd}
+\addpower[parent = testsd]{school}{Class}{subtestsd}
+\addpower{domain}{Class}{testdf}
+\addpower[parent = test]{domain}{Class}{subtest1}
+\addpower[parent = test]{domain}{Class}{subtest2}
+\addpower{bloodline}{Class}{testb}
+\addpower[parent = testb]{bloodline}{Class}{subtestb}
+\addpower{something else}{Class}{testasd}
+\addpower[parent = testasd]{something else}{Class}{aaaaaaaaa}
 
 \favouredclass{Class}
 
@@ -27,6 +31,7 @@
 \playername{Player}
 \alignment{Alignment}
 \diety{Diety}
+%Race name, race base speed
 \race{Race}{30}
 \homeland{Homeland}
 \size{Size}
@@ -83,11 +88,11 @@
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%AC-Items
-%\addacitem{Name}{AC bonus}{Max dex}{Armor check penalty}{Spell failure}{Type (light, medium, heavy, shield, natural, misc)}{Weight}{Speed at 30ft base}{Speed at 20ft base}
-\addacitem{Test armor}{2}{-}{0}{0}{light}{70}{-}{-}
-\addacitem{Test shield}{1}{-}{-1}{35}{shield}{70}{20}{15}
-\addacitem{Test natural}{2}{-}{0}{0}{natural}{70}{-}{-}
-\addacitem{Test misc}{10}{-}{0}{0}{misc}{70}{-}{-}
+%\addacitem{Name}{AC bonus}{Max dex}{Armor check penalty}{Spell failure}{Type (light, medium, heavy, shield, natural, misc)}{Weight}
+\addacitem[basespeed-30 = 20, basespeed-20 = 15]{Test armor}{2}{-}{0}{0}{light}{70}
+\addacitem{Test shield}{1}{-}{-1}{35}{shield}{70}
+\addacitem{Test natural}{2}{-}{0}{0}{natural}{70}
+\addacitem{Test misc}{10}{-}{0}{0}{misc}{70}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Weapons
@@ -199,3 +204,4 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Companions (UNDER CONSTRUCTION)
 \addcompanion{Name}
+\setattribute[Name]{str}{12}
