@@ -1,12 +1,12 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Classes
 %\addclass														Class name, 	level,	 BAB,	 Fort,	 Ref, 	Will
-\addclass	[calculate bab = yes]										{Classs}	{5}	{3/4}	{0}	{0}	{0}
-\addclass	[calculate bab = yes, calculate fort = yes, calculate ref = yes, calculate will = yes]	{Classss}	{6}	{1}	{1/3}	{1/3}	{1/2+2}
+\addclass	[calculate bab = true]										{Classs}	{5}	{3/4}	{0}	{0}	{0}
+\addclass	[calculate bab = true, calculate fort = true, calculate ref = true, calculate will = true]	{Classss}	{6}	{1}	{1/2+2}	{1/3}	{1/2+2}
 \addclass														{Class}	{5}	{5}	{1}	{2}	{0}
 
-%\addcaster																				       	Class name	 Attribute
-\addcaster		[offset = 0, zeroth = 1, first = 1, second = 1, third = 1, fourth = 1, fifth = 1, sixth = 1, seventh = 1, eighth = 1, ninth = 1]	{Class}	{int}
+%\addcaster																				Class name	 Attribute
+\addcaster	[offset = 0, zeroth = 1, first = 1, second = 1, third = 1, fourth = 1, fifth = 1, sixth = 1, seventh = 1, eighth = 1, ninth = 1]	{Class}	{int}
 
 %\addspellmisc{Caster}{Spell level}{Type}{Value}
 \addspellmisc{Class}{1}{untyped}{3}
@@ -34,7 +34,7 @@
 %Race name, race base speed
 \race{Race}{30}
 \homeland{Homeland}
-\size{Size}
+\size{Large}
 \gender{Gender}
 \age{Age}
 \height{Height}
@@ -63,6 +63,11 @@
 \setattribute{int}{45}
 \setattribute{wis}{10}
 \setattribute{cha}{10}
+
+\addtmpbonus{str}{2}
+
+\addtypedbonus{str}{untyped}{10}
+\addtypedbonus{str}{untyped}{3}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Speed
@@ -100,7 +105,7 @@
 \addweapon[attack attribute = int]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
 \addweapon[damage attribute = int]{Weapon str - int}{2d6}{18-20/x2}{-}{S}{12}{-}
 \addweapon[attack attribute = dex, damage attribute = dex]{Weapon dex-dex}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Worn magic items
@@ -150,7 +155,8 @@
 \addskill	{swim}				{0}		{1}		{str}		{0}	{0}
 \addskill	{use magic device}			{1}		{1}		{cha}		{0}	{0}
 
-
+\addtypedbonus{stealth}{untyped}{\value{stealthsizemodcount}}
+\addtypedbonus{fly}{untyped}{\value{flysizemodcount}}
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Conditional Modifiers
 %\addcondition{Text}{Additional commands}
@@ -165,43 +171,36 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Features
 %\addfeature{Name}{Type (class, race, trait, flaw, leave empty for misc)}{Text}{Uses}{additional commands}
-\addfeature{Blatant}{flaw}{You suffer a -2 penalty to all Bluff, Disguise, and Stealth checks, as you find it difficult to conceal any aspect of your activities. Additionally, you cannot take 10 with these skills.}{-}{\addtypedbonus{bluff}{untyped}{-2}\addtypedbonus{disguise}{untyped}{-2}\addtypedbonus{stealth}{untyped}{-2}}
+\addfeature{Blatant}{flaws}{You suffer a -2 penalty to all Bluff, Disguise, and Stealth checks, as you find it difficult to conceal any aspect of your activities. Additionally, you cannot take 10 with these skills.}{-}{\addtypedbonus{bluff}{untyped}{-2}\addtypedbonus{disguise}{untyped}{-2}\addtypedbonus{stealth}{untyped}{-2}}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Spells
 %\addspell[Caster]{Level}{Name}{Text}{School}{Duration}{Range}{Save}{SR}
 %Use \spellrange{Range (close, medium, long)} {Caster (Must be a class name that was added via \addclass)} {Caster level adjustment (e.g. +3 or leave empty for 0)} to calculate the range per caster level
 
-\addspell[caster = Class, caster level bonus = 0]{2}{Test1 +3 caster levels}{Text}{School}{Duration}{medium}{Reflex negates}{No}
-\addspell[caster = Class, caster level bonus = 1]{6}{Test2 +1 caster levels}{Text}{School}{Duration}{medium}{Reflex negates}{No}
-\addspell[caster = Class, caster level bonus = 2]{2}{Test3 +2 caster levels}{Text}{School}{Duration}{long}{Reflex negates}{No}
-\addspell{5}{Test1 +3 caster levels}{Text}{School}{Duration}{close}{Reflex negates}{No}
+\addspell[caster = Class, caster level bonus = 0]{2}{Test1 +3 caster level}{Text}{School}{Duration}{medium}{Reflex negates}{No}
+\addspell[caster = Class, caster level bonus = 1]{6}{Test2 +1 caster level}{Text}{School}{Duration}{medium}{Reflex negates}{No}
+\addspell[caster = Class, caster level bonus = 2]{2}{Test3 +2 caster level}{Text}{School}{Duration}{long}{Reflex negates}{No}
+\addspell{5}{Test1 +3 caster level}{Text}{School}{Duration}{close}{Reflex negates}{No}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Notes
-%\addnote{Name}{Text}
+\addnote{Name}{Text}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Custom lists
 %Name, Number of Columns, Column definition
-\addcustomlist{maneuvers}{7}{| p{.03\textwidth} | p{.61\textwidth}| p{.04\textwidth} | p{.04\textwidth} | p{.04\textwidth} | p{.04\textwidth} | p{.04\textwidth}|}
-\addtocustomlist{maneuvers}{\multicolumn{7}{|c|}{\selectfont\scshape Warning Roar}\\\hline 2 &\tfont Witnessing a clear and present danger to an ally, the disciple shouts out a well-timed warning and aids his ally in defending against an attack. The initiator makes a Diplomacy check opposing an opponent’s attack roll made on an ally. If successful then the attack is negated.&\tfont 1 immediate action&\tfont 60 ft.&\tfont One allied creature &\tfont instant&\tfont Golden Lion (Counter)}
-\addtocustomlist{maneuvers}{\multicolumn{7}{|c|}{\selectfont\scshape Oath of the Intercessor}\\\hline 2&\tfont You make an unbreakable vow to take the brunt of an attack in place of your ally. You can initiate this counter in response to a melee or ranged attack being made against an ally within your melee reach. You and that ally switch places, and the attack targets you instead. Neither your nor your ally’s movement provokes attacks of opportunity. &\tfont 1 immediate action&\tfont Melee reach&\tfont One ally &\tfont Instant&\tfont Eternal Guardian (Counter)}
-\addtocustomlist{maneuvers}{\multicolumn{7}{|c|}{\selectfont\scshape Intruder’s End}\\\hline 3&\tfont You declare an area to be your protected sanctum, and dare any foe to try their hand at entering your sanctum. With each opportunity, you warp space, teleporting across your domain to attack before returning. After initiating this counter, your threatened area increases to 20 feet for one round. This overlaps with, rather than stacking with, any natural reach you otherwise have; if your natural reach is greater than 20 feet, it is not reduced. In addition, for the duration of this boost, you gain a +2 circumstance bonus on attack rolls while making attacks of opportunity and can make a number of additional attacks of opportunity this round equal to your initiation modifier. This stacks with the Combat Reflexes feat and other effects that increase the number of attacks of opportunity you can make in a round.&\tfont 1 immediate action&\tfont Personal&\tfont Self &\tfont 1 round&\tfont Eternal Guardian (Counter)}
-\addtocustomlist{maneuvers}{\multicolumn{7}{|c|}{\selectfont\scshape Fear the Reaper}\\\hline 2&\tfont You have learned to use the fear you create as a method of defense for both yourself and your allies. You can initiate this counter in response to a melee or ranged attack being made against an ally (including you) within 60 feet. Make an Intimidate check, using your opponent’s attack roll as the DC. If you succeed, the attack is negated, and the attacker becomes shaken for one round, as if you had demoralized them with the Intimidate check. &\tfont 1 immediate action&\tfont 60 ft.&\tfont One ally&\tfont Instant&\tfont Eternal Guardian (Counter)}
-\addtocustomlist{maneuvers}{\multicolumn{7}{|c|}{\selectfont\scshape Taunting Turtle}\\\hline 2&\tfont The initiator singles out an enemy on the field of battlefield and through words, postures, or gestures insults and infuriates the foe to attack him on its next available action with whatever means it possesses. The target makes a Will save (DC 12 + initiation modifier) or it must attack the initiator on its next action in some form or fashion. This maneuver only effects creatures with an Intelligence score of 2 or higher.&\tfont 1 swift action&\tfont 30 ft.&\tfont One creature of Intelligence 2 or higher. &\tfont Will negates&\tfont Iron Tortoise (Boost)}
-\addtocustomlist{maneuvers}{\multicolumn{7}{|c|}{\selectfont\scshape Iron Tortoise Stance}\\\hline 3&\tfont This stance allows the disciple of the Iron Tortoise greater offensive ability while still remaining on the defensive, protecting himself and his allies. By positioning his footwork to allow for fast lunges and withdrawal, the reach of the martial disciple increases to meet his foes as they try to evade him and he stands imposing, impassable. The martial disciple is considered one size larger for the purposes of determining his CMD while in this stance, and he gains +5 ft. reach for making attacks of opportunity and may make one additional attack of opportunity per round.&\tfont 1 swift action&\tfont Personal&\tfont You&\tfont Stance&\tfont  Iron Tortoise (Stance)}
-
+\addcustomlist{custom list}{7}{| p{.03\textwidth} | p{.61\textwidth}| p{.04\textwidth} | p{.04\textwidth} | p{.04\textwidth} | p{.04\textwidth} | p{.04\textwidth}|}
+\addtocustomlist{custom list}{\multicolumn{7}{|c|}{\selectfont\scshape Test1}\\\hline a &\tfont b &\tfont c &\tfont d &\tfont e &\tfont f &\tfont g }
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Currency
 %\addcurrency	{Name}	{Carried}	{Weight}	{Stored}
-%\addcurrency	{Platinum}	{0}		{0.02}	{0}
-%\addcurrency	{Gold}		{65}		{0.02}	{0}
+\addcurrency	{Platinum}	{0}		{0.02}	{0}
+\addcurrency	{Gold}		{65}		{0.02}	{0}
 \addcurrency	{Silver}	{50}		{0.02}	{0}
-%\addcurrency	{Copper}	{9}		{0.02}	{0}
+\addcurrency	{Copper}	{9}		{0.02}	{0}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Companions (UNDER CONSTRUCTION)
-\addcompanion{Name}
-\setattribute[Name]{str}{12}
+\addcompanion[load file = Companion]{Companion}

@@ -1,0 +1,49 @@
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%Companions (UNDER CONSTRUCTION)
+
+\setattribute[Companion]{str}{28}
+\setattribute[Companion]{dex}{12}
+\setattribute[Companion]{con}{12}
+\setattribute[Companion]{int}{22}
+\setattribute[Companion]{wis}{12}
+\setattribute[Companion]{cha}{12}
+
+\setspeed[Companion]{swim}{50}
+
+\addacitem[companion = Companion]{Test misc}{10}{-}{0}{0}{natural}{70}
+\addacitem[companion = Companion]{Test misc}{10}{-}{0}{0}{natural}{70}
+\addacitem[companion = Companion]{Test misc}{10}{-}{0}{0}{natural}{70}
+\addacitem[companion = Companion]{Test misc}{10}{-}{0}{0}{natural}{70}
+
+\addweapon[companion = Companion, attack attribute = int]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[companion = Companion, damage attribute = int]{Weapon str - int}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[companion = Companion, attack attribute = dex, damage attribute = dex]{Weapon dex-dex}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[companion = Companion, enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[companion = Companion, enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[companion = Companion, enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
+
+\addtypedbonus[Companion]{dodge}{untyped}{-2}
+
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%% items/ Containers
+%\addgear{Name (no duplicates)}{Quantity/Volume}{Weight}
+\addgear[companion = Companion]{Test}{10}{1}
+\addgear[type = container, companion = Companion]{Container}{10}{1}
+
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%%Skills
+%					Name, 				trained only	 classskill	 Abillity mod  ranks	misc
+\addskill	[Companion]		{acrobatics}				{0}		{0}		{dex}		{0}	{0}
+\addskill	[Companion]		{appraise}				{0}		{0}		{int}		{0}	{0}
+\addskill	[Companion]		{bluff}				{0}		{1}		{cha}		{0}	{0}
+\addskill	[Companion]		{climb}				{0}		{1}		{str}		{2}	{0}
+\addskill	[Companion]		{craft (armor)}			{0}		{1}		{int}		{0}	{0}
+\addskill	[Companion]		{craft (bows)}			{0}		{1}		{int}		{0}	{0}
+\addskill	[Companion]		{craft (weapons)}			{0}		{1}		{int}		{0}	{0}
+\addskill	[Companion]		{diplomacy}				{0}		{1}		{cha}		{0}	{0}
+\addskill	[Companion]		{disable device}			{1}		{0}		{dex}		{0}	{0}
+\addskill	[Companion]		{disguise}				{0}		{0}		{cha}		{0}	{0}
+\addskill	[Companion]		{escape artist}			{0}		{0}		{dex}		{0}	{0}
+\addskill	[Companion]		{fly}					{0}		{0}		{dex}		{0}	{0}
+\addskill	[Companion]		{handle animal}			{1}		{1}		{cha}		{0}	{0}
+\addskill	[Companion]		{heal}					{0}		{0}		{wis}		{10}	{0}
