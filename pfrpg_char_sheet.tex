@@ -10,18 +10,18 @@
 		\end{picture}
 	}
 
-\noindent\begin{picture}(420,594)
+\noindent\begin{picture}(420,579)
 
-%\begin{picture}(0,0)
-%	\put(-12,-55){\hbox{\includegraphics[scale=0.11]{Pathfinder-Logo}}}
-%\end{picture}
+\begin{picture}(0,0)
+	\put(32,520){\hbox{\includegraphics[scale=0.035]{Images/Logo}}}
+\end{picture}
 
-\ifthenelse{\equal{#1}{}}{
+
   \put(140,530){\renewcommand{\arraystretch}{1.5}
     \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
-      \multicolumn{3}{D{69}}{\charname} &\multicolumn{3}{D{69}}{ \charalignment} & \multicolumn{2}{D{46}}{\charplayername} \\\cmidrule(rl){1-3}\cmidrule(rl){4-6}\cmidrule(rl){7-8}
-      \multicolumn{4}{D{92}}{\classlist} &\multicolumn{2}{D{46}}{\chardiety} & \multicolumn{2}{D{46}}{\charhomeland} \\\cmidrule(rl){1-4}\cmidrule(rl){5-6}\cmidrule(rl){7-8}
-      \charrace & \charsize & \chargender & \charage & \charheight & \charweight & \charhair & \chareyes \\\cmidrule(rl){1-1}\cmidrule(rl){2-2}\cmidrule(rl){3-3}\cmidrule(rl){4-4}\cmidrule(rl){5-5}\cmidrule(rl){6-6}\cmidrule(rl){7-7}\cmidrule(rl){8-8}
+      \multicolumn{3}{D{69}}{\charname} &\multicolumn{3}{D{69}}{ \csname #1charalignment\endcsname} & \multicolumn{2}{D{46}}{\csname #1charplayername\endcsname} \\\cmidrule(rl){1-3}\cmidrule(rl){4-6}\cmidrule(rl){7-8}
+      \multicolumn{4}{D{92}}{\csname #1classlist\endcsname} &\multicolumn{2}{D{46}}{\csname #1chardiety\endcsname} & \multicolumn{2}{D{46}}{\csname #1charhomeland\endcsname} \\\cmidrule(rl){1-4}\cmidrule(rl){5-6}\cmidrule(rl){7-8}
+      \csname #1charrace\endcsname & \csname #1charsize\endcsname & \csname #1chargender\endcsname & \csname #1charage\endcsname & \csname #1charheight\endcsname & \csname #1charweight\endcsname & \csname #1charhair\endcsname & \csname #1chareyes\endcsname \\\cmidrule(rl){1-1}\cmidrule(rl){2-2}\cmidrule(rl){3-3}\cmidrule(rl){4-4}\cmidrule(rl){5-5}\cmidrule(rl){6-6}\cmidrule(rl){7-7}\cmidrule(rl){8-8}
     \end{tabular}}
   \put(140,529){\renewcommand{\arraystretch}{1.9}
     \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
@@ -29,9 +29,9 @@
       \multicolumn{4}{D{92}}{\lfont character level} &\multicolumn{2}{D{46}}{\lfont deity} & \multicolumn{2}{D{46}}{\lfont homeland} \\
       \lfont race & \lfont size & \lfont gender & \lfont age & \lfont height & \lfont weight & \lfont hair & \lfont eyes \\
     \end{tabular}}
-}{}
+
   \put(-0.8,438.5){%
-    \setlength\fboxsep{0pt}\colorbox{black! 25}{%
+    \setlength\fboxsep{0pt}\colorbox{black! 35}{%
       \makebox(68,80){
       }%
     }%
@@ -100,11 +100,11 @@
   %% fort, reflex and will
   \stretchlabels{60}{392}{205}{TOTAL, base save, ability modifier, magic modifier, misc modifier, temporary modifier}
   \titlebox{0}{380}{53}{fortitude}{(constitution)}
-  \stretchequalattributes{60}{380}{205}{\arabic{fortcount},\arabic{#1conmodcount},0,\arabic{#1fortbonuscount},\arabic{#1forttmpcount}}
+  \stretchequalattributes{60}{380}{205}{\arabic{#1fortcount},\arabic{#1conmodcount},0,\arabic{#1fortbonuscount},\arabic{#1forttmpcount}}
   \titlebox{0}{365}{53}{reflex}{(dexterity)}
-  \stretchequalattributes{60}{365}{205}{\arabic{refcount},\arabic{#1dexmodcount},0,\arabic{#1refbonuscount},\arabic{#1reftmpcount}}
+  \stretchequalattributes{60}{365}{205}{\arabic{#1refcount},\arabic{#1dexmodcount},0,\arabic{#1refbonuscount},\arabic{#1reftmpcount}}
   \titlebox{0}{350}{53}{will}{(wisdom)}  
-  \stretchequalattributes{60}{350}{205}{\arabic{willcount},\arabic{#1wismodcount},0,\arabic{#1willbonuscount},\arabic{#1willtmpcount}}
+  \stretchequalattributes{60}{350}{205}{\arabic{#1willcount},\arabic{#1wismodcount},0,\arabic{#1willbonuscount},\arabic{#1willtmpcount}}
 
   %%Base attack bonus, spell resistance
   \singletitlebox{0}{329}{90}{11}{base attack bonus}
@@ -249,30 +249,29 @@
 \csname #1featlist\endcsname
 \end{longtable}
 }
-}
-\printsheet
-\printcasters
+\csname #1printcasters\endcsname
 
-\ifthenelse{\equal{\value{boolspells}}{0}}{}{
- \newpage
+\ifthenelse{\equal{\value{#1boolspells}}{0}}{}{
+\newpagetitlebox[#1]
 \begin{longtable}{| p{.015\textwidth}| p{.015\textwidth} | p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.05\textwidth} | p{.03\textwidth}| p{.015\textwidth} |} 
 \multicolumn{8}{c}{\singletitlebox{-210}{0}{420}{10}{spells}}\tabularnewline
 \endhead 
 \hline
-\csname default0spelllist\endcsname
-\csname default1spelllist\endcsname
-\csname default2spelllist\endcsname
-\csname default3spelllist\endcsname
-\csname default4spelllist\endcsname
-\csname default5spelllist\endcsname
-\csname default6spelllist\endcsname
-\csname default7spelllist\endcsname
-\csname default8spelllist\endcsname
-\csname default9spelllist\endcsname
+\csname #1default0spelllist\endcsname
+\csname #1default1spelllist\endcsname
+\csname #1default2spelllist\endcsname
+\csname #1default3spelllist\endcsname
+\csname #1default4spelllist\endcsname
+\csname #1default5spelllist\endcsname
+\csname #1default6spelllist\endcsname
+\csname #1default7spelllist\endcsname
+\csname #1default8spelllist\endcsname
+\csname #1default9spelllist\endcsname
 \end{longtable}
 }
-
-\printlists
+}
+\printsheet
+\printcustomlists
 
 \ifx \notelist\emptylist
 	\else

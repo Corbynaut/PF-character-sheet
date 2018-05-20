@@ -1,49 +1,69 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Companions (UNDER CONSTRUCTION)
 
-\setattribute[Companion]{str}{28}
-\setattribute[Companion]{dex}{12}
-\setattribute[Companion]{con}{12}
-\setattribute[Companion]{int}{22}
-\setattribute[Companion]{wis}{12}
-\setattribute[Companion]{cha}{12}
+\addclass	[companion = \currcompanion, calculate bab = true, calculate fort = true, calculate ref = true, calculate will = true]	{Class}	{16}	{1}	{1/2+2}	{1/3}	{1/2+2}
 
-\setspeed[Companion]{swim}{50}
+\addcaster	[companion = \currcompanion, offset = 0, zeroth = 1, first = 1, second = 1, third = 1, fourth = 1, fifth = 1, sixth = 1, seventh = 1, eighth = 1, ninth = 1]	{Class}	{int}
 
-\addacitem[companion = Companion]{Test misc}{10}{-}{0}{0}{natural}{70}
-\addacitem[companion = Companion]{Test misc}{10}{-}{0}{0}{natural}{70}
-\addacitem[companion = Companion]{Test misc}{10}{-}{0}{0}{natural}{70}
-\addacitem[companion = Companion]{Test misc}{10}{-}{0}{0}{natural}{70}
+\addpower[companion = \currcompanion]{domain}{Class}{test}
+\addpower[companion = \currcompanion, parent = test]{domain}{Class}{subtest1}
+\addpower[companion = \currcompanion, parent = test]{domain}{Class}{subtest2}
 
-\addweapon[companion = Companion, attack attribute = int]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[companion = Companion, damage attribute = int]{Weapon str - int}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[companion = Companion, attack attribute = dex, damage attribute = dex]{Weapon dex-dex}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[companion = Companion, enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[companion = Companion, enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[companion = Companion, enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\name[\currcompanion]{Name}
+\playername[\currcompanion]{Player}
+\alignment[\currcompanion]{Alignment}
+\diety[\currcompanion]{Diety}
+%Race name, race base speed
+\race[\currcompanion]{Race}{30}
+\homeland[\currcompanion]{Homeland}
+\size[\currcompanion]{Large}
+\gender[\currcompanion]{Gender}
+\age[\currcompanion]{Age}
+\height[\currcompanion]{Height}
+\weight[\currcompanion]{Weight}
+\hair[\currcompanion]{Hair}
+\eyes[\currcompanion]{Eyes}
 
-\addtypedbonus[Companion]{dodge}{untyped}{-2}
+\setattribute[\currcompanion]{str}{28}
+\setattribute[\currcompanion]{dex}{12}
+\setattribute[\currcompanion]{con}{12}
+\setattribute[\currcompanion]{int}{20}
+\setattribute[\currcompanion]{wis}{12}
+\setattribute[\currcompanion]{cha}{12}
+
+\setspeed[\currcompanion]{swim}{50}
+
+\addacitem[companion = \currcompanion]{Test misc}{10}{-}{0}{0}{natural}{70}
+\addacitem[companion = \currcompanion]{Test misc}{10}{-}{0}{0}{natural}{70}
+\addacitem[companion = \currcompanion]{Test misc}{10}{-}{0}{0}{natural}{70}
+\addacitem[companion = \currcompanion]{Test misc}{10}{-}{0}{0}{natural}{70}
+
+\addweapon[companion = \currcompanion, attack attribute = int]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
+
+\addtypedbonus[\currcompanion]{dodge}{untyped}{-2}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %% items/ Containers
 %\addgear{Name (no duplicates)}{Quantity/Volume}{Weight}
-\addgear[companion = Companion]{Test}{10}{1}
-\addgear[type = container, companion = Companion]{Container}{10}{1}
+\addgear[companion = \currcompanion]{Test}{10}{1}
+\addgear[type = container, companion = \currcompanion]{Container}{10}{1}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Skills
-%					Name, 				trained only	 classskill	 Abillity mod  ranks	misc
-\addskill	[Companion]		{acrobatics}				{0}		{0}		{dex}		{0}	{0}
-\addskill	[Companion]		{appraise}				{0}		{0}		{int}		{0}	{0}
-\addskill	[Companion]		{bluff}				{0}		{1}		{cha}		{0}	{0}
-\addskill	[Companion]		{climb}				{0}		{1}		{str}		{2}	{0}
-\addskill	[Companion]		{craft (armor)}			{0}		{1}		{int}		{0}	{0}
-\addskill	[Companion]		{craft (bows)}			{0}		{1}		{int}		{0}	{0}
-\addskill	[Companion]		{craft (weapons)}			{0}		{1}		{int}		{0}	{0}
-\addskill	[Companion]		{diplomacy}				{0}		{1}		{cha}		{0}	{0}
-\addskill	[Companion]		{disable device}			{1}		{0}		{dex}		{0}	{0}
-\addskill	[Companion]		{disguise}				{0}		{0}		{cha}		{0}	{0}
-\addskill	[Companion]		{escape artist}			{0}		{0}		{dex}		{0}	{0}
-\addskill	[Companion]		{fly}					{0}		{0}		{dex}		{0}	{0}
-\addskill	[Companion]		{handle animal}			{1}		{1}		{cha}		{0}	{0}
-\addskill	[Companion]		{heal}					{0}		{0}		{wis}		{10}	{0}
+%						Name, 				trained only	 classskill	 Abillity mod  ranks	misc
+\addskill	[\currcompanion]		{acrobatics}				{0}		{0}		{dex}		{0}	{0}
+\addskill	[\currcompanion]		{appraise}				{0}		{0}		{int}		{0}	{0}
+\addskill	[\currcompanion]		{bluff}				{0}		{1}		{cha}		{0}	{0}
+\addskill	[\currcompanion]		{climb}				{0}		{1}		{str}		{2}	{0}
+\addskill	[\currcompanion]		{craft (armor)}			{0}		{1}		{int}		{0}	{0}
+\addskill	[\currcompanion]		{craft (bows)}			{0}		{1}		{int}		{0}	{0}
+\addskill	[\currcompanion]		{craft (weapons)}			{0}		{1}		{int}		{0}	{0}
+\addskill	[\currcompanion]		{diplomacy}				{0}		{1}		{cha}		{0}	{0}
+\addskill	[\currcompanion]		{disable device}			{1}		{0}		{dex}		{0}	{0}
+\addskill	[\currcompanion]		{disguise}				{0}		{0}		{cha}		{0}	{0}
+\addskill	[\currcompanion]		{escape artist}			{0}		{0}		{dex}		{0}	{0}
+\addskill	[\currcompanion]		{fly}					{0}		{0}		{dex}		{0}	{0}
+\addskill	[\currcompanion]		{handle animal}			{1}		{1}		{cha}		{0}	{0}
+\addskill	[\currcompanion]		{heal}					{0}		{0}		{wis}		{10}	{0}
+
+\addspell[companion = \currcompanion, caster = Class, caster level bonus = 0]{2}{Test1 +3 caster level}{Text}{School}{Duration}{medium}{Reflex negates}{No}

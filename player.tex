@@ -1,9 +1,9 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Classes
 %\addclass														Class name, 	level,	 BAB,	 Fort,	 Ref, 	Will
-\addclass	[calculate bab = true]										{Classs}	{5}	{3/4}	{0}	{0}	{0}
-\addclass	[calculate bab = true, calculate fort = true, calculate ref = true, calculate will = true]	{Classss}	{6}	{1}	{1/2+2}	{1/3}	{1/2+2}
-\addclass														{Class}	{5}	{5}	{1}	{2}	{0}
+\addclass	[calculate bab = true]										{Classs}	{1}	{3/4}	{0}	{0}	{0}
+\addclass	[calculate bab = true, calculate fort = true, calculate ref = true, calculate will = true]	{Classss}	{16}	{1}	{1/2+2}	{1/3}	{1/2+2}
+\addclass														{Class}	{1}	{1}	{1}	{2}	{0}
 
 %\addcaster																				Class name	 Attribute
 \addcaster	[offset = 0, zeroth = 1, first = 1, second = 1, third = 1, fourth = 1, fifth = 1, sixth = 1, seventh = 1, eighth = 1, ninth = 1]	{Class}	{int}
@@ -27,7 +27,7 @@
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Player and character info 
-\name{Name}
+\name{Companion name}
 \playername{Player}
 \alignment{Alignment}
 \diety{Diety}
@@ -103,7 +103,7 @@
 %%Weapons
 %\addweapon{Name}{Damage}{Critical}{Range}{Type}{Weight}{Ammo}
 \addweapon[attack attribute = int]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[damage attribute = int]{Weapon str - int}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[damage attribute = none]{Weapon str - none}{2d6}{18-20/x2}{-}{S}{12}{-}
 \addweapon[attack attribute = dex, damage attribute = dex]{Weapon dex-dex}{2d6}{18-20/x2}{-}{S}{12}{-}
 \addweapon[enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
 
