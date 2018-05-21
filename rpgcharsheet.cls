@@ -382,7 +382,16 @@
 %[Companion], attribute, value
 \newcommand\setattribute[3][]{
 	\setcounter{#1#2count}{#3}
-	\setcounter{#1#2modcount}{(\value{#1#2count}-10)/\real{2}}
+	\calculateattributemod{#1#2modcount}{#1#2count}
+}
+\newcommand\calculateattributemod[2]{
+	\ifthenelse{\value{#2} < 10}
+	{
+		\setcounter{#1}{(\value{#2} -11)/\real{2}}
+	}
+	{
+		\setcounter{#1}{(\value{#2} -10)/\real{2}}
+	}
 }
 
 \def\stretchattributes#1#2#3#4{%
@@ -590,7 +599,7 @@
 	\ifthenelse{\equal{#2}{str} \OR\equal{#2}{dex} \OR\equal{#2}{con} \OR\equal{#2}{int} \OR\equal{#2}{wis} \OR\equal{#2}{cha}}
 	{
 		\addtocounter{#1#2count}{\value{#1#2#3bonuscount}-\value{tmpmiscbonus}}
-		\setcounter{#1#2modcount}{(\value{#1#2count}-10)/\real{2}}
+		\calculateattributemod{#1#2modcount}{#1#2count}
 	}
 	{	
 		\addtocounter{#1#2bonuscount}{\value{#1#2#3bonuscount}-\value{tmpmiscbonus}}
@@ -610,7 +619,7 @@
 	{
 		\setcounter{#1#2tmpmodcount}{(\value{#1#2tmpcount})/\real{2}}
 		\addtocounter{#1#2count}{#3}
-		\setcounter{#1#2modcount}{(\value{#1#2count}-10)/\real{2}}
+		\calculateattributemod{#1#2modcount}{#1#2count}
 	}{}
 }
 
