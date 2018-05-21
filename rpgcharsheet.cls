@@ -871,7 +871,7 @@
 %[], Name, level, BAB, Fort, Ref, Will
 \newcommand\addclass[7][]{
 	\setkeys{addclass}{#1}
-	\ifthenelse{\equal{\classlist}{}}{\apptocmd{\classlist}{\fontsize{7}{7}\selectfont}{}{}}{\apptocmd{\classlist}{, }{}{}}
+	\ifthenelse{\equal{\csname \class@companion classlist\endcsname}{}}{\expandafter\apptocmd\expandafter{\csname \class@companion classlist\endcsname}{\fontsize{7}{7}\selectfont}{}{}}{\expandafter\apptocmd\expandafter{\csname \class@companion classlist\endcsname}{, }{}{}}
 	\expandafter\apptocmd\expandafter{\csname \class@companion classlist\endcsname}{Lvl #3 #2}{}{}
 	\newcounter{\class@companion #2casterlevelcount}
 	\addtocounter{\class@companion #2casterlevelcount}{#3}
