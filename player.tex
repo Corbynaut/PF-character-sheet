@@ -66,8 +66,8 @@
 
 \addtmpbonus{str}{2}
 
-\addtypedbonus{str}{untyped}{10}
-\addtypedbonus{str}{untyped}{3}
+\addtypedbonus{str}{enhancement}{10}
+\addtypedbonus{str}{enhancement}{3}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Speed
@@ -160,6 +160,9 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Conditional Modifiers
 %\addcondition{Text}{Additional commands}
+\addcondition[line break = true, comma = true]{Locate traps: \writevalue{\value{Classsslevelcount}/2}  perception}
+\addcondition[line break = true, comma = true]{Locate traps: \writesignedvalue{\value{Classsslevelcount}/2}  perception}
+\addcondition{Sample condition}
 
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

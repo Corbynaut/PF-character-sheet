@@ -265,6 +265,10 @@
 
 \define@key{addspellmisc}{companion}{\def\spellmisc@companion{#1}}
 
+\define@key{addcondition}{companion}{\def\condition@companion{#1}}
+\define@key{addcondition}{comma}{\def\condition@comma{#1}}
+\define@key{addcondition}{line break}{\def\condition@linebreak{#1}}
+
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
 	\setkeys{addcaster}{companion =, offset=0,zeroth=0,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
@@ -278,6 +282,7 @@
 	\setkeys{printsheet}{type =,companion=}%
 	\setkeys{addspellsavebonus}{companion=}%
 	\setkeys{addspellmisc}{companion=}%
+	\setkeys{addcondition}{companion=, comma =, line break=}%
 }
 \resetkeys
 
@@ -862,9 +867,28 @@
 
 %%Conditional Modifiers
 %Text, additional commands
-\newcommand\addcondition[2]{
-#2
-\apptocmd{\conditionalmodlist}{\tfont#1}{}{}
+\newcommand\addcondition[2][]{
+	\setkeys{addcondition}{#1}%
+	\expandafter\apptocmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{\tfont#2}{}{}
+	\ifthenelse{\equal{\condition@comma}{}\OR\equal{\condition@comma}{no}\OR\equal{\condition@comma}{false}\OR\equal{\condition@comma}{0}}{}
+	{
+		\expandafter\apptocmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{, }{}{}
+	}
+	\ifthenelse{\equal{\condition@linebreak}{}\OR\equal{\condition@linebreak}{no}\OR\equal{\condition@linebreak}{false}\OR\equal{\condition@linebreak}{0}}{}
+	{
+		\expandafter\apptocmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{\\}{}{}
+	}
+	\resetkeys
+}
+
+\newcommand\writevalue[1]{
+	\setcounter{tmpcount}{#1}%
+	\arabic{tmpcount}%
+}
+
+\newcommand\writesignedvalue[1]{
+	\setcounter{tmpcount}{#1}%
+	\plusminus{tmpcount}%
 }
 
 %%Class stuff
@@ -881,6 +905,7 @@
 	\newcounter{\class@companion #2rangelongcount}
 	\newcounter{\class@companion #2levelcount}
 	\addtocounter{\class@companion #2levelcount}{#3}
+	\addtocounter{\class@companion levelcount}{#3}
 	\ifthenelse{\equal{\class@calculatebab}{}\OR\equal{\class@calculatebab}{no}\OR\equal{\class@calculatebab}{false}\OR\equal{\class@calculatebab}{0}}{
 		\addtocounter{\class@companion babcount}{#4}
 	}{
