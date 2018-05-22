@@ -5,6 +5,7 @@
 \LoadClass{article}
 
 \RequirePackage[margin=1cm,footskip=0.25in,a4paper]{geometry}
+\RequirePackage{german}
 \RequirePackage{mathptmx}
 \RequirePackage{anyfontsize}
 \RequirePackage{tabularx}
