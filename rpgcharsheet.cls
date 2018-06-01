@@ -846,7 +846,7 @@
 %Name, Text, additional commands
 \newcommand\addfeat[4][]{
 	#4
-	\expandafter\apptocmd\expandafter{\csname #1featlist\endcsname}{\selectfont\scshape#2 &\tfont  #3\\*\nobreakhline}{}{}
+	\expandafter\apptocmd\expandafter{\csname #1featlist\endcsname}{\selectfont\scshape#2 &\tfont  #3\\\hline}{}{}
 	\setcounter{#1boolfeats}{1}
 }
 
@@ -860,7 +860,7 @@
 		\expandafter\apptocmd\expandafter{\csname #1featurelist\endcsname}{\csname #1feature#3list\endcsname}{}{}
 		
 	\fi
-	\expandafter\apptocmd\expandafter{\csname #1feature#3list\endcsname}{\selectfont\scshape#2 &\tfont  #4&\selectfont\scshape#5\\*\nobreakhline}{}{}
+	\expandafter\apptocmd\expandafter{\csname #1feature#3list\endcsname}{\selectfont\scshape#2 &\tfont  #4&\selectfont\scshape#5\\\hline}{}{}
 	\setcounter{#1boolfeatures}{1}
 }
 
