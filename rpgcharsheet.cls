@@ -1056,7 +1056,6 @@
 	}{	
 		\addtocounter{\class@companion willcount}{#3*#7}
 	}
-	\addtocounter{\class@companion levelcount}{#3}
 	\resetkeys
 }
 
