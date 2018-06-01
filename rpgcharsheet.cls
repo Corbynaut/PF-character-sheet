@@ -33,6 +33,31 @@
 \RequirePackage{currfile}
 \ProcessOptions\relax
 \RequirePackage{graphicx}
+
+\RequirePackage{transparent}
+
+%Settings
+%========== BOX KEYS===========
+\define@key{box}{family}{\def\box@family{#1}}
+\define@key{box}{special family}{\def\box@specialfamily{#1}}
+
+\newcommand\resetboxkeys{
+	\setkeys{box}{family =, special family=}
+}
+\resetboxkeys
+%========== SETTING KEYS===========
+\define@key{setting}{font}{\def\setting@font{#1}}
+\define@key{setting}{default box color}{\def\setting@defaultboxcolor{#1}}
+\define@key{setting}{default font color}{\def\setting@defaultfontcolor{#1}}
+\define@key{setting}{companion box color}{\def\setting@companionboxcolor{#1}}
+\define@key{setting}{companion titlebox x}{\def\setting@ctbx{#1}}
+\define@key{setting}{companion titlebox y}{\def\setting@ctby{#1}}
+\define@key{setting}{companion titlebox height}{\def\setting@ctbheight{#1}}
+\define@key{setting}{companion titlebox width}{\def\setting@ctbwidth{#1}}
+
+
+
+
 %%Variables
 %loop
 \newcounter{loopcount}
@@ -238,6 +263,7 @@
 \define@key{addspell}{companion}{\def\spell@companion{#1}}
 \define@key{addspell}{caster level bonus}{\def\spell@clbonus{#1}}
 \define@key{addspell}{caster}{\def\spell@caster{#1}}
+\define@key{addspell}{prepared}{\def\spell@prepared{#1}}
 
 \define@key{addgear}{type}{\def\gear@type{#1}}
 \define@key{addgear}{companion}{\def\gear@companion{#1}}
@@ -269,12 +295,11 @@
 \define@key{addcondition}{companion}{\def\condition@companion{#1}}
 \define@key{addcondition}{comma}{\def\condition@comma{#1}}
 \define@key{addcondition}{line break}{\def\condition@linebreak{#1}}
-
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
 	\setkeys{addcaster}{companion =, offset=0,zeroth=0,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
 	\setkeys{addweapon}{enhancement = 0, attack attribute = str, attack bonus = 0, damage attribute = str, damage bonus = 0, companion =}%
-	\setkeys{addspell}{companion =, caster level bonus = 0, caster =}%
+	\setkeys{addspell}{companion =, caster level bonus = 0, caster =, prepared =}%
 	\setkeys{addgear}{type = item, companion =}%
 	\setkeys{addacitem}{basespeed-30 =-, basespeed-20 =-, companion =}%
 	\setkeys{addpower}{companion =, parent =, additional commands =}%
@@ -289,8 +314,6 @@
 
 %%Commands
 
-\graphicspath{Images}
-
 \newcommand*{\IsInteger}[3]{%
     \IfStrEq{#1}{ }{%
         #3% is a blank string
@@ -299,9 +322,75 @@
     }%
 }%
 
+\def\nobreakhline{%
+  \noalign{\ifnum0=`}\fi
+    \penalty\@M
+    \futurelet\@let@token\LT@@nobreakhline}
+\def\LT@@nobreakhline{%
+  \ifx\@let@token\hline
+    \global\let\@gtempa\@gobble
+    \gdef\LT@sep{\penalty\@M\vskip\doublerulesep}% <-- change here
+  \else
+    \global\let\@gtempa\@empty
+    \gdef\LT@sep{\penalty\@M\vskip-\arrayrulewidth}% <-- change here
+  \fi
+  \ifnum0=`{\fi}%
+  \multispan\LT@cols
+     \unskip\leaders\hrule\@height\arrayrulewidth\hfill\cr
+  \noalign{\LT@sep}%
+  \multispan\LT@cols
+     \unskip\leaders\hrule\@height\arrayrulewidth\hfill\cr
+  \noalign{\penalty\@M}%
+  \@gtempa}
+
 \newcommand\plusminus[1]{
   \ifthenelse{\value{#1}>0}{$+\arabic{#1}$}{$\arabic{#1}$}
 }
+
+\newif\ifgraphicexist
+
+\catcode`\*=11
+\newcommand\imagetest[1]{%
+ \begingroup
+ \global\graphicexisttrue
+   \let\input@path\Ginput@path
+  \filename@parse{#1}%
+  \ifx\filename@ext\relax
+    \@for\Gin@temp:=\Gin@extensions\do{%
+      \ifx\Gin@ext\relax
+        \Gin@getbase\Gin@temp
+      \fi}%
+  \else
+    \Gin@getbase{\Gin@sepdefault\filename@ext}%
+    \ifx\Gin@ext\relax
+       \global\graphicexistfalse
+       \def\Gin@base{\filename@area\filename@base}%
+       \edef\Gin@ext{\Gin@sepdefault\filename@ext}%
+    \fi
+  \fi
+  \ifx\Gin@ext\relax
+         \global\graphicexistfalse
+    \else
+       \@ifundefined{Gin@rule@\Gin@ext}%
+         {\global\graphicexistfalse}%
+         {}%
+    \fi
+  \ifx\Gin@ext\relax
+   \gdef\imageextension{unknown}%
+  \else
+   \xdef\imageextension{\Gin@ext}%
+  \fi
+ \endgroup
+ \ifgraphicexist
+  \expandafter \@firstoftwo
+ \else
+  \expandafter \@secondoftwo
+ \fi
+ }
+\catcode`\*=12
+
+\newcommand\myincludegraphics[2][]{%
+ \imagetest{#2}{\includegraphics[#1]{#2}}{}}
 
 
 \def\attributes#1#2#3{%
@@ -398,6 +487,39 @@
 	{
 		\setcounter{#1}{(\value{#2} -10)/\real{2}}
 	}
+}
+
+
+%%Draw Box
+\newcommand\selectedboxfamily{default}
+% [family, special family, ], x, y size x, size y, text
+\newcommand\drawbox[6][]{
+	\setkeys{box}{#1}%
+	\ifthenelse{\equal{\box@family}{}}{}{
+		\ifcsname setting@\box@family \endcsname
+			\renewcommand\selectedboxfamily{\csname setting@\box@family\endcsname}
+		%\else	
+			%\expandafter\expandafter\expandafter\define@key\expandafter{setting}\expandafter\expandafter{\csname \box@family box color\endcsname}{\edef\csname setting@\box@family boxcolor\endcsname{#1}}
+			%\renewcommand\selectedboxfamily{\csname setting@\box@family\endcsname}
+		\fi
+	}
+
+	\ifthenelse{\equal{\box@specialfamily}{}}{}{
+		\ifcsname setting@\box@family \endcsname
+			\renewcommand\selectedboxfamily{\csname setting@\box@specialfamily\endcsname}
+		%\else	
+			%\expandafter\expandafter\expandafter\define@key\expandafter{setting}\expandafter\expandafter{\csname \box@specialfamily box color\endcsname}{\edef\csname setting@\box@specialfamily boxcolor\endcsname{#1}}
+		\fi
+	}
+	
+	\put(#2,#3){%
+    	\setlength\fboxsep{0pt}\colorbox{\csname setting@\selectedboxfamily boxcolor\endcsname}{%
+      	\makebox(#4,#5){%
+        	\color{\csname setting@\selectedboxfamily fontcolor\endcsname}{\centering\uppercase{#6}}%
+      }%
+    }%
+  }%
+	\resetboxkeys
 }
 
 \def\stretchattributes#1#2#3#4{%
@@ -567,22 +689,12 @@
   \newcount\downabitcount
   \downabitcount=#2
   \advance\downabitcount-1
-  \put(#1,\downabitcount){\setlength\fboxsep{0pt}\colorbox{black}{\makebox(#3,11){}}}%
+  \put(#1,\downabitcount){\setlength\fboxsep{0pt}\colorbox{\setting@defaultboxcolor}{\makebox(#3,11){}}}%
   \advance\ycount1
-  \put(#1,\ycount){\makebox(#3,\hcount){\color{white}{\uppercase{#4}}}}
+  \put(#1,\ycount){\makebox(#3,\hcount){\color{\setting@defaultfontcolor}{\uppercase{#4}}}}
   \advance\hcount-7
   \advance\ycount-1
-  \put(#1,\ycount){\makebox(#3,\hcount){\color{white}{\tiny\scshape #5}}}
-}
-
-\newcommand\singletitlebox[5]{
-  \put(#1,#2){%
-    \setlength\fboxsep{0pt}\colorbox{black}{%
-      \makebox(#3,#4){%
-        \color{white}{\centering\uppercase{#5}}%
-      }%
-    }%
-  }%
+  \put(#1,\ycount){\makebox(#3,\hcount){\color{\setting@defaultfontcolor}{\tiny\scshape #5}}}
 }
 
 %%typed bonus
@@ -734,7 +846,7 @@
 %Name, Text, additional commands
 \newcommand\addfeat[4][]{
 	#4
-	\expandafter\apptocmd\expandafter{\csname #1featlist\endcsname}{\selectfont\scshape#2 &\tfont  #3\tabularnewline\hline}{}{}
+	\expandafter\apptocmd\expandafter{\csname #1featlist\endcsname}{\selectfont\scshape#2 &\tfont  #3\\*\nobreakhline}{}{}
 	\setcounter{#1boolfeats}{1}
 }
 
@@ -744,11 +856,11 @@
 	#6
 	\ifcsname #1feature#3list\endcsname%		
 	\else
-		\expandafter\newcommand\csname #1feature#3list\endcsname{\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{#3}}\\\hline}
+		\expandafter\newcommand\csname #1feature#3list\endcsname{\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{#3}}\\*\nobreakhline}
 		\expandafter\apptocmd\expandafter{\csname #1featurelist\endcsname}{\csname #1feature#3list\endcsname}{}{}
 		
 	\fi
-	\expandafter\apptocmd\expandafter{\csname #1feature#3list\endcsname}{\selectfont\scshape#2 &\tfont  #4&\selectfont\scshape#5\tabularnewline\hline}{}{}
+	\expandafter\apptocmd\expandafter{\csname #1feature#3list\endcsname}{\selectfont\scshape#2 &\tfont  #4&\selectfont\scshape#5\\*\nobreakhline}{}{}
 	\setcounter{#1boolfeatures}{1}
 }
 
@@ -780,13 +892,13 @@
 	\setkeys{addspell}{#1}
 	\ifcsdef{\spell@companion \spell@caster #2spelllist}
 	{
-		\ifthenelse{\boolean{\spell@companion \spell@caster#2spelllistbool}}{}{\setboolean{\spell@companion \spell@caster#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion  \spell@caster#2spelllist\endcsname}{\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\\hline}{}{}}
+		\ifthenelse{\boolean{\spell@companion \spell@caster#2spelllistbool}}{}{\setboolean{\spell@companion \spell@caster#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion  \spell@caster#2spelllist\endcsname}{\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\*\nobreakhline}{}{}}
 		\expandafter\apptocmd\expandafter{\csname \spell@companion \spell@caster #2spelllist\endcsname}{
-		\multicolumn{8}{|c|}{\selectfont\scshape#3}\\\hline & &\tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}
+		\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}
 		\addtocounter{\spell@companion\spell@caster#2knownspells}{1}
 	}{		
-		\ifthenelse{\boolean{\spell@companion default#2spelllistbool}}{}{\setboolean{\spell@companion default#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion default#2spelllist\endcsname}{\rowcolor{black! 10}\multicolumn{8}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\\hline}{}{}}
-		\expandafter\apptocmd\expandafter{\csname \spell@companion default#2spelllist\endcsname}{\multicolumn{8}{|c|}{\selectfont\scshape#3}\\\hline & &\tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}		
+		\ifthenelse{\boolean{\spell@companion default#2spelllistbool}}{}{\setboolean{\spell@companion default#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion default#2spelllist\endcsname}{\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\*\nobreakhline}{}{}}
+		\expandafter\apptocmd\expandafter{\csname \spell@companion default#2spelllist\endcsname}{\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}		
 		\setcounter{\spell@companion boolspells}{1}		
 	}
 	\resetkeys
@@ -795,7 +907,7 @@
 %%AC
 \newcommand{\tmparmorcounter}{armorbonuscount}
 
-\newcommand{\printacitems}[1][]{\tabularnewline\rowcolor{black}\leavevmode\color{white} \uppercase{AC Items} & \leavevmode\color{white} \lfont ac bonus & \leavevmode\color{white} \lfont max dex & \leavevmode\color{white} \lfont penalty &\leavevmode\color{white}  \lfont spell failure & \leavevmode\color{white} \lfont type & \leavevmode\color{white} \lfont weight \tabularnewline\hline\csname #1acitemlist\endcsname
+\newcommand{\printacitems}[1][]{\tabularnewline\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \uppercase{AC Items} & \leavevmode\color{\setting@defaultfontcolor} \lfont ac bonus & \leavevmode\color{\setting@defaultfontcolor} \lfont max dex & \leavevmode\color{\setting@defaultfontcolor} \lfont penalty &\leavevmode\color{\setting@defaultfontcolor}  \lfont spell failure & \leavevmode\color{\setting@defaultfontcolor} \lfont type & \leavevmode\color{\setting@defaultfontcolor} \lfont weight \tabularnewline\hline\csname #1acitemlist\endcsname
 }
 
 \newcommand{\addacitem}[8][]{
@@ -828,6 +940,14 @@
 }
 
 %%Weapons
+
+\newcommand\printweapons[1][]{
+	\begin{tabular}[t]{>{\centering}p{85\unitlength} >{\centering}p{55\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
+	\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \uppercase{Weapons} & \leavevmode\color{\setting@defaultfontcolor}\lfont Attack modifiers & \leavevmode\color{\setting@defaultfontcolor}\lfont damage & \leavevmode\color{\setting@defaultfontcolor}\lfont critical &\leavevmode\color{\setting@defaultfontcolor} \lfont range & \leavevmode\color{\setting@defaultfontcolor}\lfont type &\leavevmode\color{\setting@defaultfontcolor} \lfont weight &\leavevmode\color{\setting@defaultfontcolor} \lfont ammo \tabularnewline\hline
+	\csname #1weaponlist\endcsname
+	\end{tabular}
+}
+
 \newcommand\addweapon[8][]{
 	\setkeys{addweapon}{#1}
 	\addtocounter{\weapon@companion weaponweightcount}{#7}
@@ -844,6 +964,15 @@
 \newcolumntype{E}[1]{@{}>{\lfont\raggedleft}b{#1\unitlength}@{}}
 \newcolumntype{F}[1]{@{\hspace{-0.5ex}}>{\small\raggedleft}m{#1\unitlength}@{\hspace{0.5ex}}}
 
+\newcommand\printskills[1][]{
+	
+	 \begin{tabular}[t]{A{2}A{10}B{80}A{21}B{7}A{21}A{7}A{21}A{7}A{21}}
+    	\rowcolor{\setting@defaultboxcolor}& &\leavevmode\color{\setting@defaultfontcolor}\footnotesize \scshape Skill Names&\leavevmode\color{\setting@defaultfontcolor}\lfont Total\\ Bonus&&\leavevmode\color{\setting@defaultfontcolor}\lfont Ability\\ Mod.&&\leavevmode\color{\setting@defaultfontcolor}\lfont Ranks\\&&\leavevmode\color{\setting@defaultfontcolor}\lfont Misc.\\ Mod.\ \tabularnewline 
+ 	\csname #1skilllist\endcsname 
+	&\lfont\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}&\lfont Class Skill\hspace{2ex}  * trained only & & &\lfont Total & & \arabic{#1skillranks}&&
+	\end{tabular}
+}
+
 %% Skill commands
 %[Companion],Name, trained only, class, Abillity mod, ranks, misc
  \newcommand\addskill[7][]{
@@ -859,7 +988,7 @@
  \ifthenelse{\equal{#5}{str}\OR\equal{#5}{dex}}{\setcounter{#1tmpArmorPenalty}{\value{#1acitemscheckpenalty}}}{\setcounter{#1tmpArmorPenalty}{0}}
  \ifthenelse{\equal{#4}{}\OR\equal{#4}{0}}{\setcounter{#1tmpClassRanks}{0}}{\ifthenelse{\value{#1#2skillrankcount}>0}{\setcounter{#1tmpClassRanks}{3}}{\setcounter{#1tmpClassRanks}{0}}}
  \setcounter{#1#2skillcount}{\value{#1#2skillrankcount}+\value{#1#2bonuscount}+\value{#1#5modcount}+\value{#1tmpClassRanks}+\value{#1tmpArmorPenalty}}
- \expandafter\apptocmd\expandafter{\csname #1skilllist\endcsname}{\ifthenelse{\equal{#3}{}\OR\equal{#3}{0}}{}{*}&\classskillbox{#4}&\tfont{#2}&\plusminus{#1#2skillcount} & $=$ &\tabto*{1mm}\color{black! 35}\uppercase{#5}\tabto*{0mm}\color{black}\noindent\llap{\arabic{#1#5modcount}} & $+$ & $\arabic{#1#2skillrankcount}$ &  $+$ & $\arabic{#1#2bonuscount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}{}{}
+ \expandafter\apptocmd\expandafter{\csname #1skilllist\endcsname}{\ifthenelse{\equal{#3}{}\OR\equal{#3}{0}}{}{*}&\classskillbox{#4}&\tfont{#2}&\ifthenelse{\equal{#3}{}\OR\equal{#3}{0} \OR \value{#1#2skillrankcount}>0}{\plusminus{#1#2skillcount}}{-}  & $=$ &\tabto*{1mm}\color{black! 35}\uppercase{#5}\tabto*{0mm}\color{black}\noindent\llap{\arabic{#1#5modcount}} & $+$ & $\arabic{#1#2skillrankcount}$ &  $+$ & $\arabic{#1#2bonuscount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}{}{}
 }
 
 \newcommand\classskillbox[1]{
@@ -1036,6 +1165,13 @@
 }
 
 %Currency
+\newcommand\printcurrency[1][]{
+  	\begin{tabular}[t]{>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}}
+	\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor} \uppercase{Currency}& \leavevmode\lfont\color{\setting@defaultfontcolor}Carried& \leavevmode\lfont\color{\setting@defaultfontcolor}Carried weight&\leavevmode\lfont\color{\setting@defaultfontcolor}Stored\tabularnewline
+	\csname #1currencylist\endcsname
+	\end{tabular}
+}
+
 \newcommand\addcurrency[4]{
 \newcounter{#1currencycarriedcount}
 \newcounter{#1currencyweightcount}
@@ -1155,7 +1291,7 @@
 	{
 		\newpage
 		\begin{longtable}{#3} 
-			\multicolumn{#2}{c}{\singletitlebox{-210}{0}{420}{10}{#1}}
+			\multicolumn{#2}{c}{\drawbox[family = list, special family = custom]{-210}{0}{420}{10}{#1}}
 			\csname #1listhead\endcsname \endhead
 			\hline
 			\csname #1list\endcsname
@@ -1166,7 +1302,7 @@
 %List name, row content
 \newcommand\addtocustomlist[2]{
 	\setboolean{bool#1list}{true}
-	\expandafter\apptocmd\expandafter{\csname #1list\endcsname}{#2\tabularnewline\hline}{}{}
+	\expandafter\apptocmd\expandafter{\csname #1list\endcsname}{#2\\*\nobreakhline}{}{}
 }
 \newcommand\addheadtocustomlist[2]{
 	\expandafter\apptocmd\expandafter{\csname #1listhead\endcsname}{#2\tabularnewline\hline}{}{}
@@ -1225,10 +1361,10 @@
 		}
 
 		\begin{picture}(420,200)
-		\singletitlebox{-11.5}{200}{420}{10}{#2}
+		\drawbox[family = caster, special family = caster name]{-11.5}{200}{420}{10}{#2}
 		%\titlebox{0}{150}{28}{DEX}{dexterity}
 		%\stretchattributes{33}{150}{102}{\arabic{chardexcount},\plusminus{chardexmodcount},\plusminus{chardextmpadjcount},\plusminus{chardextmpmodcount}}
-		\singletitlebox{-11.5}{180}{205}{10}{spells per day}
+		\drawbox[family = caster, special family = spells per day]{-11.5}{180}{205}{10}{spells per day}
 		%Spells per day
 		\stretchlabels{85}{170}{180}{TOTAL, class, abillity mod., misc}
 		\stretchequalattributes{85}{155}{180}{\arabic{\caster@companion #20classspellslots},0,\arabic{\caster@companion #20miscspellslots}}
@@ -1299,7 +1435,7 @@
 		\put(0.5,22){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #29knownspells}}}
 		%Domains, Bloodlines, Schools
 
-		\singletitlebox{203}{180}{65}{10}{Caster Level}
+		\drawbox[family = caster, special family = caste level]{203}{180}{65}{10}{Caster Level}
 		\put(273,180.5){\framebox(15,\boxheight){}}
 		\put(270,182.5){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #2casterlevelcount}}}
 	
@@ -1310,9 +1446,11 @@
 		}
 
 		\end{picture}
-		\begin{longtable}{| p{.015\textwidth}| p{.015\textwidth} | p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.05\textwidth} | p{.03\textwidth}| p{.015\textwidth} |} 
-			\multicolumn{8}{c}{\singletitlebox{-210}{0}{420}{10}{#2 spells}}\tabularnewline
-			%\csname #1listhead\endcsname \endhead
+		\begin{longtable}{| p{.015\textwidth}| p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.07\textwidth} | p{.0427\textwidth}| p{.02\textwidth} |} 
+			\multicolumn{7}{c}{\drawbox[family = caster, special family = caster spells]{-210}{-2.8}{420}{10}{#2 spells}}\tabularnewline
+			\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline\hline
+			\multicolumn{7}{c}{}\tabularnewline
+			\endhead 
 			\hline
 			\csname \caster@companion #20spelllist\endcsname
 			\csname \caster@companion #21spelllist\endcsname
@@ -1339,7 +1477,7 @@
 	\setkeys{addpower}{#1}
 	\ifcsdef{\power@companion #3#2list}{}{
 		\expandafter\newcommand\csname \power@companion #3#2list\endcsname{}
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\tabularnewline\rowcolor{black} \leavevmode\color{white}\centering\uppercase{#2}\tabularnewline}{}{} %\rowcolor{black} \leavevmode\color{white}\centering\uppercase{#2}\tabularnewline
+		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\tabularnewline\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor}\centering\uppercase{#2}\tabularnewline}{}{} %\rowcolor{black} \leavevmode\color{white}\centering\uppercase{#2}\tabularnewline
 		\expandafter\apptocmd\expandafter{\csname \power@companion #3powerlist\endcsname}{\setkeys{addpower}{#1} \csname \power@companion #3#2list\endcsname\tabularnewline}{}{}
 	}
 	\ifthenelse{\equal{\power@parent}{}}{		
@@ -1390,7 +1528,7 @@
 	}
 	\apptocmd{\printcompanions}{
 		\renewcommand\currcompanion{#2}
-		\newpage
+		\newpagetitlebox[#2]
 		\printsheet[#2]
 	}{}{}
 	\resetkeys
@@ -1404,7 +1542,33 @@
 	\newpage
 	\ifthenelse{\equal{#1}{}}{}{
 		\begin{picture}(420,0)
-		\singletitlebox{-11.5}{10}{420}{10}{#1}	
+		%\singletitlebox{\setting@ctbx}{\setting@ctby}{\setting@ctbwidth}{\setting@ctbheight}{#1}
+		\drawbox[family = companion]{\setting@ctbx}{\setting@ctby}{\setting@ctbwidth}{\setting@ctbheight}{#1}
 		\end{picture}
 	}
 }
+%----------------------------------------------------------------------Settings----------------------------------------------------------------------
+\newcommand\currsetting{default}
+\newcommand\setting[1]{\renewcommand{\currsetting}{#1}}
+
+\newcommand\newsetting[2][]{
+	\expandafter\newcommand\csname setting#2\endcsname{#1}
+}
+
+\newcommand\setsetting[1]{
+	\begingroup\edef\x{\endgroup\noexpand\setkeys{setting}{\csname setting#1\endcsname}}\x
+	\graphicspath{{Images/#1/}{Images/default/}}
+}
+
+\newcommand\settingdefault{
+	font = a,
+	default box color = black,
+	default font color = white,
+	companion titlebox x = -11.5,
+	companion titlebox y = 10,
+	companion titlebox height = 10,
+	companion titlebox width = 420
+}
+\setsetting{default}
+\IfFileExists{Settings.tex}{\input{Settings.tex}}{}
+\setsetting{\currsetting}

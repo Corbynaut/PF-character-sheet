@@ -4,16 +4,10 @@
 \unitlength\textwidth
 \divide\unitlength 420
 \renewcommand\printsheet[1][]{
-\ifthenelse{\equal{#1}{}}{}{
-		\begin{picture}(420,0)
-		\singletitlebox{-11.5}{10}{420}{10}{#1}	
-		\end{picture}
-	}
-
 \noindent\begin{picture}(420,579)
 
 \begin{picture}(0,0)
-	\put(32,520){\hbox{\includegraphics[scale=0.035]{Images/Logo}}}
+	\put(38.5,520){\hbox{\myincludegraphics[scale=0.043]{Logo}}}
 \end{picture}
 
 
@@ -65,7 +59,7 @@
   \stretchattributes{33}{440}{102}{\arabic{#1chacount},\plusminus{#1chamodcount},\plusminus{#1chatmpcount},\plusminus{#1chatmpmodcount}}
 
   %% HP
-  \singletitlebox{107}{505}{26}{12}{HP}
+  \drawbox[family = info, special family = hp]{107}{505}{26}{12}{HP}
   \put(137,505){\framebox(38,12){}}
   \put(137,512){\makebox(14,4){\tiny\scshape Total}}
   \put(137,505){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \chartotalhp}}
@@ -107,20 +101,20 @@
   \stretchequalattributes{60}{350}{205}{\arabic{#1willcount},\arabic{#1wismodcount},0,\arabic{#1willbonuscount},\arabic{#1willtmpcount}}
 
   %%Base attack bonus, spell resistance
-  \singletitlebox{0}{329}{90}{11}{base attack bonus}
+  \drawbox[family = info, special family = bab]{0}{329}{90}{11}{base attack bonus}
   \attributes{94}{330}{\arabic{#1babcount}}
-  \singletitlebox{113}{329}{74}{11}{spell resistance}
+  \drawbox[family = info, special family = sr]{113}{329}{74}{11}{spell resistance}
   \attributes{190}{330}{0}
   
 %%CMB and CMD
-  \singletitlebox{0}{309}{21}{11}{cmb}
+  \drawbox[family = info, special family = cmb]{0}{309}{21}{11}{cmb}
   \stretchequalattributes{25}{310}{130}{\arabic{#1babcount},\arabic{#1strmodcount},\arabic{#1specialsizemodcount}}
   \stretchlabels{25}{304}{130}{TOTAL, BAB,str mod., size mod.}
-  \singletitlebox{0}{289}{21}{11}{cmd}
+  \drawbox[family = info, special family = cmd]{0}{289}{21}{11}{cmd}
   \stretchequalattributes{25}{290}{130}{\arabic{#1babcount},\arabic{#1strmodcount},\arabic{#1dexmodcount},\arabic{#1specialsizemodcount} ,10}
   \stretchlabels{25}{284}{130}{TOTAL, BAB,str mod.,dex mod., size mod.,default}
 
-  \singletitlebox{135}{284}{25}{35}{speed}
+  \drawbox[family = info, special family = speed]{135}{284}{25}{35}{speed}
   % \put(135,284){\framebox(25,35){\uppercase{Speed}}}
   \put(165,310){\framebox(40,\boxheight){}}
   \put(164,311){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\arabic{#1base speedcount} &ft. & \basespeedsquares[#1]& sq.\end{tabular}}
@@ -145,25 +139,17 @@
  
 \noindent\begin{picture}(0,0)
 %%Weapons
- \put(-2,60){\begin{tabular}[t]{>{\centering}p{85\unitlength} >{\centering}p{55\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
-\rowcolor{black}\leavevmode\color{white} \uppercase{Weapons} & \leavevmode\color{white}\lfont Attack modifiers & \leavevmode\color{white}\lfont damage & \leavevmode\color{white}\lfont critical &\leavevmode\color{white} \lfont range & \leavevmode\color{white}\lfont type &\leavevmode\color{white} \lfont weight &\leavevmode\color{white} \lfont ammo \tabularnewline\hline
-\csname #1weaponlist\endcsname
-\end{tabular}}
+ \put(-2,60){\printweapons[#1]}
 
 \end{picture}
 
-  \put(215,508.89){
-  \begin{tabular}[t]{A{2}A{10}B{80}A{21}B{7}A{21}A{7}A{21}A{7}A{21}}
-    \rowcolor{black}& &\leavevmode\color{white}\footnotesize \scshape Skill Names&\leavevmode\color{white}\lfont Total\\ Bonus&&\leavevmode\color{white}\lfont Ability\\ Mod.&&\leavevmode\color{white}\lfont Ranks\\&&\leavevmode\color{white}\lfont Misc.\\ Mod.\ \tabularnewline
- \csname #1skilllist\endcsname 
-&\lfont\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}&\lfont Class Skill\hspace{2ex}  * trained only & & &\lfont Total & & \arabic{#1skillranks}
-\end{tabular}}
+  \put(215,508.89){\printskills[#1]}
 
-  \singletitlebox{-2}{255}{205.4}{10}{Conditional Modifiers}
+  \drawbox[family = info, special family = conditional modifiers]{-2}{255}{205.4}{10}{Conditional Modifiers}
   \put(-1.7,170){\framebox(204.78,85){}}
   \put(0,210){\parbox[b][43\unitlength][t]{200\unitlength}{\itshape \csname #1conditionalmodlist\endcsname}}
 
-  \singletitlebox{-2}{150}{205.4}{10}{Languages}
+   \drawbox[family = info, special family = languages]{-2}{150}{205.4}{10}{Languages}
   \put(-1.7,85){\framebox(204.78,65){}}
   \put(0,110){\parbox[b][38\unitlength][t]{200\unitlength}{\itshape \tfont \csname #1languagelist\endcsname }}
 
@@ -173,7 +159,7 @@
 
 \noindent\begin{picture}(420,594)
 
-  \singletitlebox{0}{594}{205}{10}{WORN MAGIC ITEM EQUIPMENT}
+  \drawbox[family = item, special family = magic item]{0}{594}{205}{10}{WORN MAGIC ITEM EQUIPMENT}
   \put(0,589){\begin{tabular}[t]{@{}p{30\unitlength} @{\hspace{1\unitlength}}>{\centering}p{169\unitlength}}
 \\
   \hline
@@ -192,7 +178,7 @@
   \tfont Wrist: & \csname #1magicitemwrist\endcsname
  \end{tabular}}
 
- \singletitlebox{215}{594}{205}{10}{gear}
+  \drawbox[family = item, special family =gear]{215}{594}{205}{10}{gear}
   \put(215,589){\begin{tabular}[t]{@{}p{150\unitlength} @{\hspace{1\unitlength}}>{\centering}p{29\unitlength}>{\centering}p{15\unitlength}@{}}\printgearitems[#1] \end{tabular}}
 
 %%AC-items
@@ -200,28 +186,24 @@
   
   \put(0,325){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{#1acitemsbonus} &\tfont\ifthenelse{\value{#1maxdexbonuscount}<9999}{\plusminus{#1maxdexbonuscount}}{-} &\tfont \plusminus{#1acitemscheckpenalty} &\tfont \arabic{#1acitemsspellfailure}\% &&\tfont \arabic{#1acitemsweight}~lbs.  \end{tabular}}
 
-\singletitlebox{0}{300}{205}{10}{Bags \& Containers}
+\drawbox[family = gear, special family = container]{0}{300}{205}{10}{Bags \& Containers}
   \put(0,295){\begin{tabular}[t]{@{}p{129\unitlength} @{\hspace{1\unitlength}}>{\centering}p{40\unitlength}>{\centering}p{25\unitlength}@{}}\printcontainers[#1] \end{tabular}}
 
-\put(-2,210){
-  \begin{tabular}[t]{>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}}
-\rowcolor{black} \leavevmode\color{white} \uppercase{Currency}& \leavevmode\lfont\color{white}Carried& \leavevmode\lfont\color{white}Carried weight&\leavevmode\lfont\color{white}Stored\tabularnewline
-\csname #1currencylist\endcsname
-\end{tabular}}
+\put(-2,210){\printcurrency[#1]}
 
-\singletitlebox{0}{140}{205}{10}{Carried Weight}
+ \drawbox[family = item, special family = weight]{0}{140}{205}{10}{Carried Weight}
   \put(-2,135){ \begin{tabular}[t]{>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{34\unitlength}}
   \lfont Armor \& Weapons &\lfont Currency & \lfont Equipment &\lfont Misc & \tfont\uppercase{Total} \tabularnewline\hline\\
   \printweight[#1]
 \end{tabular}}
 
-\singletitlebox{0}{90}{205}{10}{Loads \& Lift}
+\drawbox[family = gear, special family = loads and lift]{0}{90}{205}{10}{Loads \& Lift}
   \put(-2,85){ \begin{tabular}[t]{>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}}
   \lfont Light load&\lfont medium load & \lfont heavy load &\lfont & \lfont lift above head&\lfont lift of ground & \lfont drag \& push\tabularnewline\hline\\
  \printloadsandlift[#1]
 \end{tabular}}
 
-\singletitlebox{0}{30}{205}{10}{Experience Points}
+\drawbox[family = info, special family = exp]{0}{30}{204.8}{10}{Experience Points}
   \put(-2,25){ \begin{tabular}[t]{|B{102}|B{102}|}
   \tfont\uppercase{ Current} &\tfont\uppercase{Next Level}\tabularnewline\hline
  & \\
@@ -233,7 +215,10 @@
 \ifthenelse{\equal{\value{#1boolfeatures}}{0}}{}{
  \newpagetitlebox[#1]
 \begin{longtable}{| p{.25\textwidth} | p{.666\textwidth} |p{.015\textwidth}| } 
-\multicolumn{3}{c}{\singletitlebox{-210}{0}{420}{10}{features}}\endhead
+\multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\uppercase{Name}&\centering \color{white}\lfont\uppercase{Text}&\centering \color{white}\centering\lfont\uppercase{Uses}\tabularnewline
+\multicolumn{3}{c}{}\tabularnewline
+\endhead
 \ifx\featurelist\emptylist
 \else
 \csname #1featurelist\endcsname
@@ -244,7 +229,10 @@
 \ifthenelse{\equal{\value{#1boolfeats}}{0}}{}{
 \newpagetitlebox[#1]
 \begin{longtable}{| p{.25\textwidth} | p{.704\textwidth} |} 
-\multicolumn{2}{c}{\singletitlebox{-210}{0}{420}{10}{feats}}\endhead
+\multicolumn{2}{c}{\drawbox[family = list, special family = feat]{-210}{-2.8}{420}{10}{feats}}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\uppercase{Name}&\centering \color{white}\lfont\uppercase{Text}\tabularnewline
+\multicolumn{2}{c}{}\tabularnewline
+\endhead
 \hline
 \csname #1featlist\endcsname
 \end{longtable}
@@ -253,8 +241,10 @@
 
 \ifthenelse{\equal{\value{#1boolspells}}{0}}{}{
 \newpagetitlebox[#1]
-\begin{longtable}{| p{.015\textwidth}| p{.015\textwidth} | p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.05\textwidth} | p{.03\textwidth}| p{.015\textwidth} |} 
-\multicolumn{8}{c}{\singletitlebox{-210}{0}{420}{10}{spells}}\tabularnewline
+\begin{longtable}{| p{.015\textwidth}| p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.07\textwidth} | p{.0427\textwidth}| p{.02\textwidth} |} 
+\multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline\hline
+\multicolumn{7}{c}{}\tabularnewline
 \endhead 
 \hline
 \csname #1default0spelllist\endcsname
@@ -277,7 +267,7 @@
 	\else
 	 \newpage
 	\begin{longtable}{| p{.25\textwidth} | p{.704\textwidth} |} 
-	\multicolumn{2}{c}{\singletitlebox{-210}{0}{420}{10}{notes}}\endhead
+	\multicolumn{2}{c}{\drawbox[family = list, special family = note]{-210}{0}{420}{10}{notes}}\endhead
 	\hline
 	\notelist
 	\end{longtable}
