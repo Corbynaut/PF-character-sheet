@@ -116,6 +116,7 @@
 	\newcounter{#1tmpArmorPenalty}
 	\newcounter{#1tmpspellmisc}
 	\newcounter{#1containerweightcount}
+	\newcounter{#1initiativebonuscount}
 	%AC
 	\newcounter{#1acitemsbonus}
 	\newcounter{#1acitemscheckpenalty}
@@ -451,6 +452,7 @@
 \newcommand{\characmod}{dexmodcount}
 %change the attribute to calculate Initiative
 \newcommand{\charinitmod}{dexmodcount}
+\newcommand{\charinitbonus}{initiativebonuscount}
 %change the attribute to calculate Reflex save
 \newcommand{\charrefmod}{wismodcount}
 
@@ -1056,6 +1058,7 @@
 	}{	
 		\addtocounter{\class@companion willcount}{#3*#7}
 	}
+	\addtocounter{\class@companion levelcount}{#3}
 	\resetkeys
 }
 
