@@ -55,9 +55,6 @@
 \define@key{setting}{companion titlebox height}{\def\setting@ctbheight{#1}}
 \define@key{setting}{companion titlebox width}{\def\setting@ctbwidth{#1}}
 
-
-
-
 %%Variables
 %loop
 \newcounter{loopcount}
@@ -116,6 +113,7 @@
 	\newcounter{#1tmpArmorPenalty}
 	\newcounter{#1tmpspellmisc}
 	\newcounter{#1containerweightcount}
+	\newcounter{#1initiativebonuscount}
 	%AC
 	\newcounter{#1acitemsbonus}
 	\newcounter{#1acitemscheckpenalty}
@@ -452,7 +450,7 @@
 %change the attribute to calculate Initiative
 \newcommand{\charinitmod}{dexmodcount}
 %change the attribute to calculate Reflex save
-\newcommand{\charrefmod}{wismodcount}
+\newcommand{\charrefmod}{dexmodcount}
 
 %Text for Conditional Modifiers
 \newcommand{\textconditionalmodifiers}{}
@@ -1290,8 +1288,9 @@
 	{
 		\newpage
 		\begin{longtable}{#3} 
-			\multicolumn{#2}{c}{\drawbox[family = list, special family = custom]{-210}{0}{420}{10}{#1}}
-			\csname #1listhead\endcsname \endhead
+			\multicolumn{#2}{c}{\drawbox[family = list, special family = custom]{-210}{-2.8}{420}{10}{#1}}\tabularnewline
+			\csname #1listhead\endcsname 
+			\endhead
 			\hline
 			\csname #1list\endcsname
 		\end{longtable}
@@ -1301,10 +1300,10 @@
 %List name, row content
 \newcommand\addtocustomlist[2]{
 	\setboolean{bool#1list}{true}
-	\expandafter\apptocmd\expandafter{\csname #1list\endcsname}{#2\\*\nobreakhline}{}{}
+	\expandafter\apptocmd\expandafter{\csname #1list\endcsname}{#2\\\hline}{}{}
 }
 \newcommand\addheadtocustomlist[2]{
-	\expandafter\apptocmd\expandafter{\csname #1listhead\endcsname}{#2\tabularnewline\hline}{}{}
+	\expandafter\apptocmd\expandafter{\csname #1listhead\endcsname}{#2 \tabularnewline}{}{}
 }
 
 %%Caster
