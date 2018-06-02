@@ -170,6 +170,7 @@
 %\addfeat{Name}{Text}{additional commands}
 \addfeat{Exotic Weapon Proficiency\linebreak Weapon}{You make attack rolls with the weapon normally.}{}
 \addfeat{Skill Focus (Knowledge Nature)}{You get a +3 bonus on all checks involving the chosen skill. If you have 10 or more ranks in that skill, this bonus increases to +6.}{\ifthenelse{\value{knowledge (nature)skillrankcount}<10}{\addtypedbonus{knowledge (nature)}{untyped}{3}}{\addtypedbonus{knowledge (nature)}{untyped}{6}}}
+\addfeat{Cunning Initiative}{At 2nd level, an inquisitor adds her Wisdom modifier on initiative checks, in addition to her Dexterity modifier.}{\addtypedbonus{initiative}{untyped}{\maxof{\value{Classsslevelcount}/2}{1}}}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Features
