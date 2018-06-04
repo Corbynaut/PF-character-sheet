@@ -115,23 +115,29 @@
 	\newcounter{#1containerweightcount}
 	\newcounter{#1initiativebonuscount}
 	%AC
+	\newcounter{#1account}
 	\newcounter{#1acitemsbonus}
 	\newcounter{#1acitemscheckpenalty}
 	\newcounter{#1acitemsspellfailure}
 	\newcounter{#1acitemsweight}
 	\newcounter{#1flatfootedaccount}
+	\newcounter{#1flatfootedbonuscount}
 	\newcounter{#1touchaccount}
-	\newcounter{#1dodgebonuscount}
-	\newcounter{#1deflectionbonuscount}
-	\newcounter{#1dexbonuscount}
-	\newcounter{#1armorbonuscount}
-	\newcounter{#1shieldbonuscount}
-	\newcounter{#1naturalbonuscount}
-	\newcounter{#1miscbonuscount}	
+	\newcounter{#1touchbonuscount}
+	\newcounter{#1acdodgebonuscount}
+	\newcounter{#1acdeflectionbonuscount}
+	\newcounter{#1acdexbonuscount}
+	\newcounter{#1acbonuscount}
+	\newcounter{#1acarmorbonuscount}
+	\newcounter{#1acshieldbonuscount}
+	\newcounter{#1acnaturalbonuscount}
+	\newcounter{#1acmiscbonuscount}	
 	\newcounter{#1fortbonuscount}
 	\newcounter{#1refbonuscount}
 	\newcounter{#1willbonuscount}
 	\newcounter{#1maxdexbonuscount} \setcounter{maxdexbonuscount}{9999}
+
+	\newcounter{#1spellresistancebonuscount}
 	%Weapons
 	\newcounter{#1weaponweightcount}
 	\newcounter{#1tmpattackmodcount}
@@ -269,6 +275,7 @@
 \define@key{addacitem}{companion}{\def\acitem@companion{#1}}
 \define@key{addacitem}{basespeed-30}{\def\acitem@basespeedthirty{#1}}
 \define@key{addacitem}{basespeed-20}{\def\acitem@basespeedtwenty{#1}}
+\define@key{addacitem}{enhancement}{\def\acitem@enhancement{#1}}
 
 \define@key{addpower}{companion}{\def\power@companion{#1}}
 \define@key{addpower}{parent}{\def\power@parent{#1}}
@@ -293,13 +300,17 @@
 \define@key{addcondition}{companion}{\def\condition@companion{#1}}
 \define@key{addcondition}{comma}{\def\condition@comma{#1}}
 \define@key{addcondition}{line break}{\def\condition@linebreak{#1}}
+
+\define@key{addfeature}{class}{\def\feature@class{#1}}
+\define@key{addfeature}{level}{\def\feature@level{#1}}
+\define@key{addfeature}{companion}{\def\feature@companion{#1}}
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
 	\setkeys{addcaster}{companion =, offset=0,zeroth=0,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
 	\setkeys{addweapon}{enhancement = 0, attack attribute = str, attack bonus = 0, damage attribute = str, damage bonus = 0, companion =}%
 	\setkeys{addspell}{companion =, caster level bonus = 0, caster =, prepared =}%
 	\setkeys{addgear}{type = item, companion =}%
-	\setkeys{addacitem}{basespeed-30 =-, basespeed-20 =-, companion =}%
+	\setkeys{addacitem}{basespeed-30 =-, basespeed-20 =-, companion =, enhancement = 0}%
 	\setkeys{addpower}{companion =, parent =, additional commands =}%
 	\setkeys{addclass}{calculate bab =,calculate fort =,calculate ref =,calculate will =, companion =}%
 	\setkeys{addcompanion}{type =,load file=}%
@@ -307,6 +318,7 @@
 	\setkeys{addspellsavebonus}{companion=}%
 	\setkeys{addspellmisc}{companion=}%
 	\setkeys{addcondition}{companion=, comma =, line break=}%
+	\setkeys{addfeature}{companion = , class =, level = 0}%
 }
 \resetkeys
 
@@ -327,10 +339,10 @@
 \def\LT@@nobreakhline{%
   \ifx\@let@token\hline
     \global\let\@gtempa\@gobble
-    \gdef\LT@sep{\penalty\@M\vskip\doublerulesep}% <-- change here
+    \gdef\LT@sep{\penalty\@M\vskip\doublerulesep}%
   \else
     \global\let\@gtempa\@empty
-    \gdef\LT@sep{\penalty\@M\vskip-\arrayrulewidth}% <-- change here
+    \gdef\LT@sep{\penalty\@M\vskip-\arrayrulewidth}% 
   \fi
   \ifnum0=`{\fi}%
   \multispan\LT@cols
@@ -847,19 +859,24 @@
 	\expandafter\apptocmd\expandafter{\csname #1featlist\endcsname}{\selectfont\scshape#2 &\tfont  #3\\\hline}{}{}
 	\setcounter{#1boolfeats}{1}
 }
-
+	
 %%Features, class features, racial traits etc
 %[Companion] Name,Type, Text, Uses, additional commands
 \newcommand\addfeature[6][]{
-	#6
-	\ifcsname #1feature#3list\endcsname%		
-	\else
-		\expandafter\newcommand\csname #1feature#3list\endcsname{\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{#3}}\\*\nobreakhline}
-		\expandafter\apptocmd\expandafter{\csname #1featurelist\endcsname}{\csname #1feature#3list\endcsname}{}{}
+	\setkeys{addfeature}{#1}
+	\ifthenelse{\value{\feature@companion\feature@class levelcount} = \feature@level \OR \value{\feature@companion\feature@class levelcount} > \feature@level}
+	{
+		#6
+		\ifcsname \feature@companion feature#3list\endcsname	
+		\else
+			\expandafter\newcommand\csname \feature@companion feature#3list\endcsname{\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{#3}}\\*\nobreakhline}
+			\expandafter\apptocmd\expandafter{\csname \feature@companion featurelist\endcsname}{\csname \feature@companion feature#3list\endcsname}{}{}
 		
-	\fi
-	\expandafter\apptocmd\expandafter{\csname #1feature#3list\endcsname}{\selectfont\scshape#2 &\tfont  #4&\selectfont\scshape#5\\\hline}{}{}
-	\setcounter{#1boolfeatures}{1}
+		\fi
+		\expandafter\apptocmd\expandafter{\csname \feature@companion feature#3list\endcsname}{\selectfont\scshape#2 &\tfont  #4&\selectfont\scshape#5\\\hline}{}{}
+		\setcounter{\feature@companion boolfeatures}{1}
+	}{}
+	\resetkeys%
 }
 
 %%Spells
@@ -903,7 +920,6 @@
 }
 
 %%AC
-\newcommand{\tmparmorcounter}{armorbonuscount}
 
 \newcommand{\printacitems}[1][]{\tabularnewline\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \uppercase{AC Items} & \leavevmode\color{\setting@defaultfontcolor} \lfont ac bonus & \leavevmode\color{\setting@defaultfontcolor} \lfont max dex & \leavevmode\color{\setting@defaultfontcolor} \lfont penalty &\leavevmode\color{\setting@defaultfontcolor}  \lfont spell failure & \leavevmode\color{\setting@defaultfontcolor} \lfont type & \leavevmode\color{\setting@defaultfontcolor} \lfont weight \tabularnewline\hline\csname #1acitemlist\endcsname
 }
@@ -911,31 +927,34 @@
 \newcommand{\addacitem}[8][]{
 \setkeys{addacitem}{#1}
 \ifthenelse{\equal{\detokenize{#7}}{\detokenize{light}}\OR\equal{\detokenize{#7}}{\detokenize{medium}}\OR\equal{\detokenize{#7}}{\detokenize{heavy}}\OR\equal{\detokenize{#7}}{\detokenize{armor}}}
-	{\addtocounter{\acitem@companion armorbonuscount}{#3}}
-	{\ifthenelse{\equal{\detokenize{#7}}{\detokenize{shield}}}
-		{\setcounter{\acitem@companion shieldbonuscount}{\maxof{\value{\acitem@companion shieldbonuscount}}{#3}}}
-		{\ifthenelse{\equal{\detokenize{#7}}{\detokenize{natural}}}
-			{\addtocounter{\acitem@companion naturalbonuscount}{#3}}
-			{\addtocounter{\acitem@companion miscbonuscount}{#3}}}}
- \IsInteger{#4}{\setcounter{\acitem@companion maxdexbonuscount}{\minof{\value{\acitem@companion maxdexbonuscount}}{#4}}}{}
-  \ifthenelse {\value{\characmod}>\value{\acitem@companion maxdexbonuscount}}{\setcounter{\acitem@companion dexbonuscount}{\value{\acitem@companion maxdexbonuscount}}}{\setcounter{\acitem@companion dexbonuscount}{\value{\characmod}}}
-  \addtocounter{\acitem@companion acitemsbonus}{#3}
+	{\addtypedbonus[\acitem@companion]{ac}{armor}{#3+\acitem@enhancement}}
+	{\ifcsname c@ac#7bonuscount\endcsname
+		\addtypedbonus[\acitem@companion]{ac}{#7}{#3+\acitem@enhancement}
+	\else
+		\addtypedbonus[\acitem@companion]{ac}{misc}{#3+\acitem@enhancement}
+	\fi
+	}
+
+  \IsInteger{#4}{\setcounter{\acitem@companion maxdexbonuscount}{\minof{\value{\acitem@companion maxdexbonuscount}}{#4}}}{}
+  \ifthenelse {\value{\characmod}>\value{\acitem@companion maxdexbonuscount}}{\setcounter{\acitem@companion acdexbonuscount}{\value{\acitem@companion maxdexbonuscount}}}{\setcounter{\acitem@companion acdexbonuscount}{\value{\characmod}}}
+  \addtocounter{\acitem@companion acitemsbonus}{#3+\acitem@enhancement}
   \addtocounter{\acitem@companion acitemscheckpenalty}{#5}
   \addtocounter{\acitem@companion acitemsspellfailure}{#6}
   \addtocounter{\acitem@companion acitemsweight}{#8}
   \ifthenelse{\value{\acitem@companion racebasespeedcount} = 30}{ \IsInteger{\acitem@basespeedthirty}{\addtocounter{\acitem@companion armorspeedpenaltycount}{\value{\acitem@companion racebasespeedcount}- \acitem@basespeedthirty}}{}}{\IsInteger{\acitem@basespeedtwenty}{\addtocounter{\acitem@companion armorspeedpenaltycount}{\value{\acitem@companion racebasespeedcount}-\acitem@basespeedtwenty}}{}}
- \expandafter\apptocmd\expandafter{\csname\acitem@companion acitemlist\endcsname}{\tfont#2 & \tfont#3 & \tfont#4 &\tfont #5 &\tfont #6\% & \tfont#7 & \tfont#8~lbs.\tabularnewline\hline}{}{}
+ \expandafter\apptocmd\expandafter{\csname\acitem@companion acitemlist\endcsname}{\setkeys{addacitem}{#1}\tfont#2 \ifthenelse{\acitem@enhancement = 0}{}{+ \acitem@enhancement}& \setkeys{addacitem}{#1}\tfont \writevalue{#3+\acitem@enhancement} & \tfont#4 &\tfont #5 &\tfont #6\% & \tfont#7 & \tfont#8~lbs.\tabularnewline\hline}{}{}
  \resetkeys
 }
 
 \newcommand\calculateflatfootedac[1][]{
-	\addtocounter{#1flatfootedaccount}{10+\value{#1armorbonuscount}+\value{#1deflectionbonuscount}+\value{#1shieldbonuscount}+\value{#1naturalbonuscount}+\value{#1miscbonuscount}+\value{#1sizemodcount}-\value{#1dodgebonuscount}}
+	\addtocounter{#1flatfootedaccount}{10+\value{#1acarmorbonuscount}+\value{#1acdeflectionbonuscount}+\value{#1acshieldbonuscount}+\value{#1acnaturalbonuscount}+\value{#1acmiscbonuscount}+\value{#1sizemodcount}-\value{#1acdodgebonuscount}+\value{#1flatfootedbonuscount}}
 	\arabic{#1flatfootedaccount}
 }
 \newcommand\calculatetouchac[1][]{
-	\addtocounter{#1touchaccount}{10+\value{#1sizemodcount}+\value{#1deflectionbonuscount}+\value{#1miscbonuscount}+\value{#1dexbonuscount}}
+	\addtocounter{#1touchaccount}{10+\value{#1sizemodcount}+\value{#1acdeflectionbonuscount}+\value{#1acmiscbonuscount}+\value{#1acdexbonuscount}+\value{#1touchbonuscount}}
 	\arabic{#1touchaccount}
 }
+
 
 %%Weapons
 

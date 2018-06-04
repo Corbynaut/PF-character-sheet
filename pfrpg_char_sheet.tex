@@ -75,12 +75,12 @@
   
   %% INIT
   \titlebox{107}{440}{43}{INITIATIVE}{modifier}
-  \stretchequalattributes{152}{440}{206}{\arabic{\charinitmod},\arabic{#1initiativebonuscount}}
+  \stretchequalattributes{152}{440}{206}{\arabic{\charinitmod},0}
   \stretchlabels{152}{434}{206}{TOTAL, dex modifier, misc modifier}
   
   %% AC
   \titlebox{0}{420}{27}{AC}{armour class}
-  \equalattributes{25}{420}{10,\arabic{#1armorbonuscount},\arabic{#1shieldbonuscount},\arabic{#1dexbonuscount},\arabic{#1sizemodcount},\arabic{#1naturalbonuscount},\arabic{#1deflectionbonuscount},\arabic{#1miscbonuscount}}{20}
+  \equalattributes{25}{420}{10,\arabic{#1acarmorbonuscount},\arabic{#1acshieldbonuscount},\arabic{#1acdexbonuscount},\arabic{#1sizemodcount},\arabic{#1acnaturalbonuscount},\arabic{#1acdeflectionbonuscount},\arabic{#1acmiscbonuscount}}{20}
   \scaleattributelabels{25}{410}{TOTAL,default, armor bonus,shield bonus,dex \mbox{modifier},size \mbox{modifier},natural armour,\mbox{deflection} \mbox{modifier},misc \mbox{modifier}}{20}
 
   %% Touch, Flat footed
@@ -104,7 +104,7 @@
   \drawbox[family = info, special family = bab]{0}{329}{90}{11}{base attack bonus}
   \attributes{94}{330}{\arabic{#1babcount}}
   \drawbox[family = info, special family = sr]{113}{329}{74}{11}{spell resistance}
-  \attributes{190}{330}{0}
+  \attributes{190}{330}{\arabic{#1spellresistancebonuscount}}
   
 %%CMB and CMD
   \drawbox[family = info, special family = cmb]{0}{309}{21}{11}{cmb}
@@ -184,7 +184,7 @@
 %%AC-items
   \put(0,449){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{23\unitlength} >{\centering}p{17\unitlength} } \printacitems[#1] \end{tabular}}
   
-  \put(0,325){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{#1acitemsbonus} &\tfont\ifthenelse{\value{#1maxdexbonuscount}<9999}{\plusminus{#1maxdexbonuscount}}{-} &\tfont \plusminus{#1acitemscheckpenalty} &\tfont \arabic{#1acitemsspellfailure}\% &&\tfont \arabic{#1acitemsweight}~lbs.  \end{tabular}}
+  \put(0,325){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{#1acbonuscount} &\tfont\ifthenelse{\value{#1maxdexbonuscount}<9999}{\plusminus{#1maxdexbonuscount}}{-} &\tfont \plusminus{#1acitemscheckpenalty} &\tfont \arabic{#1acitemsspellfailure}\% &&\tfont \arabic{#1acitemsweight}~lbs.  \end{tabular}}
 
 \drawbox[family = gear, special family = container]{0}{300}{205}{10}{Bags \& Containers}
   \put(0,295){\begin{tabular}[t]{@{}p{129\unitlength} @{\hspace{1\unitlength}}>{\centering}p{40\unitlength}>{\centering}p{25\unitlength}@{}}\printcontainers[#1] \end{tabular}}
