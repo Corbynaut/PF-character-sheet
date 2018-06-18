@@ -175,6 +175,7 @@
 	%Weight
 	\newcounter{#1weightcount}	
 	\newcounter{#1miscweightcount}
+	\expandafter\newcommand\csname #1currentload\endcsname{}
 	%Loads and Lift
 	\newcounter{#1lightloadcount}
 	\newcounter{#1mediumloadcount}
@@ -246,6 +247,10 @@
 % ========= KEY DEFINITIONS =========
 \define@key{addcaster}{companion}{\def\caster@companion{#1}}
 \define@key{addcaster}{offset}{\def\caster@offset{#1}}
+\define@key{addcaster}{level name}{\def\caster@levelname{#1}}
+\define@key{addcaster}{spell name}{\def\caster@spellname{#1}}
+\define@key{addcaster}{calculate bonus spells}{\def\caster@calculatebonusspells{#1}}
+\define@key{addcaster}{show dcs}{\def\caster@showdcs{#1}}
 \define@key{addcaster}{zeroth}{\def\caster@zeroth{#1}}
 \define@key{addcaster}{first}{\def\caster@first{#1}}
 \define@key{addcaster}{second}{\def\caster@second{#1}}
@@ -306,7 +311,7 @@
 \define@key{addfeature}{companion}{\def\feature@companion{#1}}
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
-	\setkeys{addcaster}{companion =, offset=0,zeroth=0,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
+	\setkeys{addcaster}{level name = caster, spell name = spells,calculate bonus spells = true, show dcs = true, companion =, offset=0,zeroth=infinity,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
 	\setkeys{addweapon}{enhancement = 0, attack attribute = str, attack bonus = 0, damage attribute = str, damage bonus = 0, companion =}%
 	\setkeys{addspell}{companion =, caster level bonus = 0, caster =, prepared =}%
 	\setkeys{addgear}{type = item, companion =}%
@@ -353,8 +358,8 @@
   \noalign{\penalty\@M}%
   \@gtempa}
 
-\newcommand\plusminus[1]{
-  \ifthenelse{\value{#1}>0}{$+\arabic{#1}$}{$\arabic{#1}$}
+\newcommand\plusminus[1]{%
+  \ifthenelse{\value{#1}>0}{$+\arabic{#1}$}{$\arabic{#1}$}%
 }
 
 \newif\ifgraphicexist
@@ -525,7 +530,7 @@
 	\put(#2,#3){%
     	\setlength\fboxsep{0pt}\colorbox{\csname setting@\selectedboxfamily boxcolor\endcsname}{%
       	\makebox(#4,#5){%
-        	\color{\csname setting@\selectedboxfamily fontcolor\endcsname}{\centering\uppercase{#6}}%
+        	\color{\csname setting@\selectedboxfamily fontcolor\endcsname}{\centering\MakeUppercase{#6}}%
       }%
     }%
   }%
@@ -869,7 +874,7 @@
 		#6
 		\ifcsname \feature@companion feature#3list\endcsname	
 		\else
-			\expandafter\newcommand\csname \feature@companion feature#3list\endcsname{\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{#3}}\\*\nobreakhline}
+			\expandafter\newcommand\csname \feature@companion feature#3list\endcsname{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{#3}}\\*\nobreakhline}
 			\expandafter\apptocmd\expandafter{\csname \feature@companion featurelist\endcsname}{\csname \feature@companion feature#3list\endcsname}{}{}
 		
 		\fi
@@ -881,25 +886,25 @@
 
 %%Spells
 %Range (close, medium, long) , Caster, Caster level adjustment
-\newcommand\spellrange[3]{
-	\IsInteger{#3}{\setcounter{tmpcasterlevelbonus}{#3}}{\setcounter{tmpcasterlevelbonus}{0}}
-	\ifthenelse{\equal{#1}{close}}{
+\newcommand\spellrange[3]{%
+	\IsInteger{#3}{\setcounter{tmpcasterlevelbonus}{#3}}{\setcounter{tmpcasterlevelbonus}{0}}%
+	\ifthenelse{\equal{#1}{close}}{%
 		\ifcsname c@#2rangeclosecount\endcsname%
 		\setcounter{#2rangeclosecount}{25+(\value{#2casterlevelcount}+\value{tmpcasterlevelbonus})/2*5}%
 		\arabic{#2rangeclosecount} ft.%
 		\else 25 ft.\fi%
-	}{
-	\ifthenelse{\equal{#1}{medium}}{
+	}{%
+	\ifthenelse{\equal{#1}{medium}}{%
 		\ifcsname c@#2rangemediumcount\endcsname%
 		\setcounter{#2rangemediumcount}{100+(\value{#2casterlevelcount}+\value{tmpcasterlevelbonus})*10}%
 		\arabic{#2rangemediumcount} ft.%
 		\else 100 ft.\fi%
-	}{
+	}{%
 	\ifthenelse{\equal{#1}{long}}{\ifcsname c@#2rangelongcount\endcsname%
 		\setcounter{#2rangelongcount}{400+(\value{#2casterlevelcount}+\value{tmpcasterlevelbonus})*40}%
 		\arabic{#2rangelongcount} ft.%
 		\else 400 ft.\fi%
-	}{#1}}}
+	}{#1}}}%
 }
 
 %Caster, Level, Name, Text, School, Duration, Range, Save, SR
@@ -907,12 +912,12 @@
 	\setkeys{addspell}{#1}
 	\ifcsdef{\spell@companion \spell@caster #2spelllist}
 	{
-		\ifthenelse{\boolean{\spell@companion \spell@caster#2spelllistbool}}{}{\setboolean{\spell@companion \spell@caster#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion  \spell@caster#2spelllist\endcsname}{\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\*\nobreakhline}{}{}}
+		\ifthenelse{\boolean{\spell@companion \spell@caster#2spelllistbool}}{}{\setboolean{\spell@companion \spell@caster#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion  \spell@caster#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\*\nobreakhline}{}{}}
 		\expandafter\apptocmd\expandafter{\csname \spell@companion \spell@caster #2spelllist\endcsname}{
 		\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}
 		\addtocounter{\spell@companion\spell@caster#2knownspells}{1}
 	}{		
-		\ifthenelse{\boolean{\spell@companion default#2spelllistbool}}{}{\setboolean{\spell@companion default#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion default#2spelllist\endcsname}{\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\*\nobreakhline}{}{}}
+		\ifthenelse{\boolean{\spell@companion default#2spelllistbool}}{}{\setboolean{\spell@companion default#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion default#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\*\nobreakhline}{}{}}
 		\expandafter\apptocmd\expandafter{\csname \spell@companion default#2spelllist\endcsname}{\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}		
 		\setcounter{\spell@companion boolspells}{1}		
 	}
@@ -941,7 +946,7 @@
   \addtocounter{\acitem@companion acitemscheckpenalty}{#5}
   \addtocounter{\acitem@companion acitemsspellfailure}{#6}
   \addtocounter{\acitem@companion acitemsweight}{#8}
-  \ifthenelse{\value{\acitem@companion racebasespeedcount} = 30}{ \IsInteger{\acitem@basespeedthirty}{\addtocounter{\acitem@companion armorspeedpenaltycount}{\value{\acitem@companion racebasespeedcount}- \acitem@basespeedthirty}}{}}{\IsInteger{\acitem@basespeedtwenty}{\addtocounter{\acitem@companion armorspeedpenaltycount}{\value{\acitem@companion racebasespeedcount}-\acitem@basespeedtwenty}}{}}
+  \ifthenelse{\value{\acitem@companion racebasespeedcount} = 30}{ \IsInteger{\acitem@basespeedthirty}{\setcounter{\acitem@companion armorspeedpenaltycount}{\maxof{\value{\acitem@companion racebasespeedcount}- \acitem@basespeedthirty}{\value{\acitem@companion armorspeedpenaltycount}}}}{}}{\IsInteger{\acitem@basespeedtwenty}{\setcounter{\acitem@companion armorspeedpenaltycount}{\maxof{\value{\acitem@companion racebasespeedcount}-\acitem@basespeedtwenty}{\value{\acitem@companion armorspeedpenaltycount}}}}{}}
  \expandafter\apptocmd\expandafter{\csname\acitem@companion acitemlist\endcsname}{\setkeys{addacitem}{#1}\tfont#2 \ifthenelse{\acitem@enhancement = 0}{}{+ \acitem@enhancement}& \setkeys{addacitem}{#1}\tfont \writevalue{#3+\acitem@enhancement} & \tfont#4 &\tfont #5 &\tfont #6\% & \tfont#7 & \tfont#8~lbs.\tabularnewline\hline}{}{}
  \resetkeys
 }
@@ -981,8 +986,7 @@
 \newcolumntype{E}[1]{@{}>{\lfont\raggedleft}b{#1\unitlength}@{}}
 \newcolumntype{F}[1]{@{\hspace{-0.5ex}}>{\small\raggedleft}m{#1\unitlength}@{\hspace{0.5ex}}}
 
-\newcommand\printskills[1][]{
-	
+\newcommand\printskills[1][]{	
 	 \begin{tabular}[t]{A{2}A{10}B{80}A{21}B{7}A{21}A{7}A{21}A{7}A{21}}
     	\rowcolor{\setting@defaultboxcolor}& &\leavevmode\color{\setting@defaultfontcolor}\footnotesize \scshape Skill Names&\leavevmode\color{\setting@defaultfontcolor}\lfont Total\\ Bonus&&\leavevmode\color{\setting@defaultfontcolor}\lfont Ability\\ Mod.&&\leavevmode\color{\setting@defaultfontcolor}\lfont Ranks\\&&\leavevmode\color{\setting@defaultfontcolor}\lfont Misc.\\ Mod.\ \tabularnewline 
  	\csname #1skilllist\endcsname 
@@ -1002,10 +1006,11 @@
  \addtocounter{#1#2skilltrainedonly}{1}
  \addtocounter{#1#2skillrankcount}{#6}
  \addtocounter{#1#2bonuscount}{#7}
+ \expandafter\apptocmd\expandafter{\csname #1skilllist\endcsname}{
  \ifthenelse{\equal{#5}{str}\OR\equal{#5}{dex}}{\setcounter{#1tmpArmorPenalty}{\value{#1acitemscheckpenalty}}}{\setcounter{#1tmpArmorPenalty}{0}}
  \ifthenelse{\equal{#4}{}\OR\equal{#4}{0}}{\setcounter{#1tmpClassRanks}{0}}{\ifthenelse{\value{#1#2skillrankcount}>0}{\setcounter{#1tmpClassRanks}{3}}{\setcounter{#1tmpClassRanks}{0}}}
  \setcounter{#1#2skillcount}{\value{#1#2skillrankcount}+\value{#1#2bonuscount}+\value{#1#5modcount}+\value{#1tmpClassRanks}+\value{#1tmpArmorPenalty}}
- \expandafter\apptocmd\expandafter{\csname #1skilllist\endcsname}{\ifthenelse{\equal{#3}{}\OR\equal{#3}{0}}{}{*}&\classskillbox{#4}&\tfont{#2}&\ifthenelse{\equal{#3}{}\OR\equal{#3}{0} \OR \value{#1#2skillrankcount}>0}{\plusminus{#1#2skillcount}}{-}  & $=$ &\tabto*{1mm}\color{black! 35}\uppercase{#5}\tabto*{0mm}\color{black}\noindent\llap{\arabic{#1#5modcount}} & $+$ & $\arabic{#1#2skillrankcount}$ &  $+$ & $\arabic{#1#2bonuscount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}{}{}
+\ifthenelse{\equal{#3}{}\OR\equal{#3}{0}}{}{*}&\classskillbox{#4}&\tfont{#2}&\ifthenelse{\equal{#3}{}\OR\equal{#3}{0} \OR \value{#1#2skillrankcount}>0}{\plusminus{#1#2skillcount}}{-}  & $=$ &\tabto*{1mm}\color{black! 35}\uppercase{#5}\tabto*{0mm}\color{black}\noindent\llap{\arabic{#1#5modcount}} & $+$ & $\arabic{#1#2skillrankcount}$ &  $+$ & $\arabic{#1#2bonuscount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}{}{}
 }
 
 \newcommand\classskillbox[1]{
@@ -1028,12 +1033,12 @@
 	\resetkeys
 }
 
-\newcommand\writevalue[1]{
+\newcommand\writevalue[1]{%
 	\setcounter{tmpcount}{#1}%
 	\arabic{tmpcount}%
 }
 
-\newcommand\writesignedvalue[1]{
+\newcommand\writesignedvalue[1]{%
 	\setcounter{tmpcount}{#1}%
 	\plusminus{tmpcount}%
 }
@@ -1200,18 +1205,20 @@
 }
 
 %Weight
-\newcommand{\printweight}[1][]{
+
+\newcommand{\calculateweight}[1][]{
 	\addtocounter{#1itemweightcount}{\value{#1containerweightcount}}
 	\setcounter{#1weightcount}{\value{#1acitemsweight}+\value{#1weaponweightcount}+\value{#1currencyweightcount}+\value{#1itemweightcount}+\value{#1miscweightcount}}
+}
+
+\newcommand{\printweight}[1][]{
 	\arabic{#1acitemsweight} + \arabic{#1weaponweightcount} & \arabic{#1currencyweightcount} & \arabic{#1itemweightcount}& \arabic{#1miscweightcount}& \arabic{#1weightcount}
 }
 
 %Loads and Lift
-\newcommand{\currentload}{\tfont OVER ENCUMBERED}
 \newcommand{\tmpseries}{}
 
-\newcommand{\printloadsandlift}[1][]{		
-
+\newcommand{\calculateloadsandlift}[1][]{
 	\ifthenelse{\value{#1strcount} < 10}{\setcounter{#1heavyloadcount}{10*\value{#1strcount}}}
 	{
 		\setcounter{tmpbasecapacitycount}{\value{#1strcount}/10}
@@ -1261,33 +1268,21 @@
 	\setcounter{#1liftofgroundcount}{\value{#1heavyloadcount}*2}
 	\setcounter{#1dragandpushcount}{\value{#1heavyloadcount}*5}
 
-	\ifnum \value{#1weightcount} < \value{#1heavyloadcount}
-			\renewcommand{\currentload}{\tfont HEAVY}
-	\fi
-
-	\ifnum \value{#1weightcount} < \value{#1mediumloadcount}
-			\renewcommand{\currentload}{\tfont MEDIUM}
-	\fi
-
 	\ifnum\value{#1weightcount} < \value{#1lightloadcount}
-			\renewcommand{\currentload}{\tfont LIGHT}
-	\fi
+		\expandafter\renewcommand\csname #1currentload\endcsname{LIGHT}
+	\else
+	\ifnum \value{#1weightcount} < \value{#1mediumloadcount}
+		\addacitem[companion = #1, basespeed-30 = 20, basespeed-20 = 15]{MEDIUM\\ ENCUMBRANCE}{0}{3}{-3}{0}{Encumbrance}{0}%
+		\expandafter\renewcommand\csname #1currentload\endcsname{MEDIUM}
+	\else
+		\addacitem[companion = #1,basespeed-30 = 20, basespeed-20 = 15]{HEAVY\\ ENCUMBRANCE}{0}{1}{-6}{0}{Encumbrance}{0}%
+		\expandafter\renewcommand\csname #1currentload\endcsname{HEAVY}
+	\fi\fi\
+}
 
+\newcommand{\printloadsandlift}[1][]{		
 	\tfont \arabic{#1lightloadcount} lbs.& \tfont \arabic{#1mediumloadcount} lbs. & \tfont \arabic{#1heavyloadcount} lbs.& & \tfont \arabic{#1liftaboveheadcount} lbs. & \tfont  \arabic{#1liftofgroundcount} lbs.& \tfont \arabic{#1dragandpushcount} lbs.\tabularnewline\hline
-	\multicolumn{3}{c}{\uppercase{Current load}}& & \multicolumn{3}{c}{
-	\ifnum\value{#1weightcount} < \value{#1lightloadcount}
-		\tfont LIGHT
-	\else
-
-	\ifnum \value{#1weightcount} < \value{#1mediumloadcount}
-		\tfont MEDIUM
-	\else
-
-	\ifnum \value{#1weightcount} < \value{#1heavyloadcount}
-		\tfont HEAVY
-		\else
-		\tfont OVER ENCUMBERED
-	\fi\fi\fi}\tabularnewline\hline
+	\multicolumn{3}{c}{\uppercase{Current load}}& &\multicolumn{3}{c}{\csname #1currentload\endcsname}\tabularnewline\hline
 }
 
 \newcommand\addnote[2]{
@@ -1334,24 +1329,28 @@
 	{
 		\expandafter\newcommand\csname \caster@companion #2\arabic{loopcount}spelllist\endcsname{}
 		\newboolean{\caster@companion #2\arabic{loopcount}spelllistbool}
+		\newboolean{\caster@companion #2\arabic{loopcount}isnumberbool}
+		\setboolean{\caster@companion #2\arabic{loopcount}isnumberbool}{true}
 		\newcounter{\caster@companion #2known\arabic{loopcount}spells}
 		\newcounter{\caster@companion #2\arabic{loopcount}classspellslots}	
 		\newcounter{\caster@companion #2\arabic{loopcount}miscspellslots}
 		\newcounter{\caster@companion #2\arabic{loopcount}savebonus}
 		\newcounter{\caster@companion #2\arabic{loopcount}knownspells}
-		\ifthenelse{\value{loopcount}>0}{\newcounter{\caster@companion #2\arabic{loopcount}abillityspellslots}}{}
+		\newcounter{\caster@companion #2\arabic{loopcount}abillityspellslots}
 	}
 	
-	\setcounter{\caster@companion #20classspellslots}{\csname caster@zeroth\endcsname}
-	\setcounter{\caster@companion #21classspellslots}{\csname caster@first\endcsname}
-	\setcounter{\caster@companion #22classspellslots}{\csname caster@second\endcsname}
-	\setcounter{\caster@companion #23classspellslots}{\csname caster@third\endcsname}
-	\setcounter{\caster@companion #24classspellslots}{\csname caster@fourth\endcsname}
-	\setcounter{\caster@companion #25classspellslots}{\csname caster@fifth\endcsname}
-	\setcounter{\caster@companion #26classspellslots}{\csname caster@sixth\endcsname}
-	\setcounter{\caster@companion #27classspellslots}{\csname caster@seventh\endcsname}
-	\setcounter{\caster@companion #28classspellslots}{\csname caster@eighth\endcsname}
-	\setcounter{\caster@companion#29classspellslots}{\csname caster@ninth\endcsname}
+	\IsInteger{\csname caster@zeroth\endcsname}{\setcounter{\caster@companion #20classspellslots}{\csname caster@zeroth\endcsname}}{\setboolean{\caster@companion #20isnumberbool}{false}}
+	\IsInteger{\csname caster@first\endcsname}{\setcounter{\caster@companion #21classspellslots}{\csname caster@first\endcsname}}{\setboolean{\caster@companion #21isnumberbool}{false}}
+	\IsInteger{\csname caster@second\endcsname}{\setcounter{\caster@companion #22classspellslots}{\csname caster@second\endcsname}}{\setboolean{\caster@companion #22isnumberbool}{false}}
+	\IsInteger{\csname caster@third\endcsname}{\setcounter{\caster@companion #23classspellslots}{\csname caster@third\endcsname}}{\setboolean{\caster@companion #23isnumberbool}{false}}
+	\IsInteger{\csname caster@fourth\endcsname}{\setcounter{\caster@companion #24classspellslots}{\csname caster@fourth\endcsname}}{\setboolean{\caster@companion #24isnumberbool}{false}}
+	\IsInteger{\csname caster@fifth\endcsname}{\setcounter{\caster@companion #25classspellslots}{\csname caster@fifth\endcsname}}{\setboolean{\caster@companion #25isnumberbool}{false}}
+	\IsInteger{\csname caster@sixth\endcsname}{\setcounter{\caster@companion #26classspellslots}{\csname caster@sixth\endcsname}}{\setboolean{\caster@companion #26isnumberbool}{false}}
+	\IsInteger{\csname caster@seventh\endcsname}{\setcounter{\caster@companion #27classspellslots}{\csname caster@seventh\endcsname}}{\setboolean{\caster@companion #27isnumberbool}{false}}
+	\IsInteger{\csname caster@eighth\endcsname}{\setcounter{\caster@companion #28classspellslots}{\csname caster@eighth\endcsname}}{\setboolean{\caster@companion #28isnumberbool}{false}}
+	\IsInteger{\csname caster@ninth\endcsname}{\setcounter{\caster@companion #29classspellslots}{\csname caster@ninth\endcsname}}{\setboolean{\caster@companion #29isnumberbool}{false}}
+	
+ 	\newcounter{\caster@companion #2knownspells}
 
 	%Domains, School, Bloodlines
 	\expandafter\newcommand\csname \caster@companion #2powerlist\endcsname{}	
@@ -1366,7 +1365,7 @@
 		{
 			\addtocounter{\caster@companion #2\arabic{loopcount}savebonus}{10+\value{loopcount}+\value{\caster@companion #3modcount}}	
 		}
-		
+		\ifthenelse{\boolean{\caster@calculatebonusspells}}{
 		\forloop{loopcount}{1}{\value{loopcount}<10}
 		{
 			\setcounter{tmpcount}{\value{loopcount}-1}
@@ -1376,24 +1375,28 @@
 				}{}
 			}
 		}
+		}{}
 
 		\begin{picture}(420,200)
 		\drawbox[family = caster, special family = caster name]{-11.5}{200}{420}{10}{#2}
-		%\titlebox{0}{150}{28}{DEX}{dexterity}
-		%\stretchattributes{33}{150}{102}{\arabic{chardexcount},\plusminus{chardexmodcount},\plusminus{chardextmpadjcount},\plusminus{chardextmpmodcount}}
-		\drawbox[family = caster, special family = spells per day]{-11.5}{180}{205}{10}{spells per day}
+		\drawbox[family = caster, special family = spells per day]{-11.5}{180}{205}{10}{\caster@spellname\, per day}
 		%Spells per day
 		\stretchlabels{85}{170}{180}{TOTAL, class, abillity mod., misc}
-		\stretchequalattributes{85}{155}{180}{\arabic{\caster@companion #20classspellslots},0,\arabic{\caster@companion #20miscspellslots}}
-		\stretchequalattributes{85}{140}{180}{\arabic{\caster@companion #21classspellslots},\arabic{\caster@companion #21abillityspellslots},\arabic{\caster@companion #21miscspellslots}}
-		\stretchequalattributes{85}{125}{180}{\arabic{\caster@companion #22classspellslots},\arabic{\caster@companion #22abillityspellslots},\arabic{\caster@companion #22miscspellslots}}
-		\stretchequalattributes{85}{110}{180}{\arabic{\caster@companion #23classspellslots},\arabic{\caster@companion #23abillityspellslots},\arabic{\caster@companion #23miscspellslots}}
-		\stretchequalattributes{85}{95}{180}{\arabic{\caster@companion #24classspellslots},\arabic{\caster@companion #24abillityspellslots},\arabic{\caster@companion #24miscspellslots}}
-		\stretchequalattributes{85}{80}{180}{\arabic{\caster@companion #25classspellslots},\arabic{\caster@companion #25abillityspellslots},\arabic{\caster@companion #25miscspellslots}}
-		\stretchequalattributes{85}{65}{180}{\arabic{\caster@companion #26classspellslots},\arabic{\caster@companion #26abillityspellslots},\arabic{\caster@companion #26miscspellslots}}
-		\stretchequalattributes{85}{50}{180}{\arabic{\caster@companion #27classspellslots},\arabic{\caster@companion #27abillityspellslots},\arabic{\caster@companion #27miscspellslots}}
-		\stretchequalattributes{85}{35}{180}{\arabic{\caster@companion #28classspellslots},\arabic{\caster@companion #28abillityspellslots},\arabic{\caster@companion #28miscspellslots}}
-		\stretchequalattributes{85}{20}{180}{\arabic{\caster@companion #29classspellslots},\arabic{\caster@companion #29abillityspellslots},\arabic{\caster@companion #29miscspellslots}}
+		\setcounter{tmpcount}{155}
+		\forloop{loopcount}{0}{\value{loopcount}<10}
+		{
+			\ifthenelse{\boolean{\caster@companion #2\arabic{loopcount}isnumberbool}}
+			{
+				\stretchequalattributes{85}{\arabic{tmpcount}}{180}{\arabic{\caster@companion #2\arabic{loopcount}classspellslots},\arabic{\caster@companion #2\arabic{loopcount}abillityspellslots},\arabic{\caster@companion #2\arabic{loopcount}miscspellslots}}
+			}
+			{
+				\put(85,\arabic{tmpcount}){\framebox(15,\boxheight){}}
+				\addtocounter{tmpcount}{2}
+				\put(82.5,\arabic{tmpcount}){\parbox[b][3\unitlength][b]{20\unitlength}{\centering $\infty$}}
+				\addtocounter{tmpcount}{-2}
+			}
+			\addtocounter{tmpcount}{-15}
+		}
 		%Spell level
 		\put(54,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \uppercase{Level}}}
 		\put(60,125){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 0}}
@@ -1407,6 +1410,7 @@
 		\put(60,4){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 8th}}
 		\put(60,-11){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 9th}}
 		%Spell DC
+		\ifthenelse{\boolean{\caster@showdcs}}{
 		\put(32,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\uppercase{Save DC}}}
 		\put(30,155){\framebox(15,\boxheight){}}
 		\put(27.5,157){\parbox[b][3\unitlength][b]{20\unitlength}{\centering  \arabic{\caster@companion #20savebonus}}}
@@ -1428,8 +1432,13 @@
 		\put(27.5,37){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #28savebonus}}}
 		\put(30,20){\framebox(15,\boxheight){}}		
 		\put(27.5,22){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #29savebonus}}}
-		%Spells known
-		\put(3,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\uppercase{Spells known}}}	
+		}{}
+		%Spells known			
+		\forloop{loopcount}{0}{\value{loopcount}<10}
+		{
+			\addtocounter{\caster@companion #2knownspells}{\value{\caster@companion #2\arabic{loopcount}knownspells}}
+		}	
+		\put(3,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\uppercase{\caster@spellname\, known}}}	
 		\put(3,155){\framebox(15,\boxheight){}}
 		\put(0.5,157){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #20knownspells}}}
 		\put(3,140){\framebox(15,\boxheight){}}
@@ -1450,11 +1459,16 @@
 		\put(0.5,37){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #28knownspells}}}
 		\put(3,20){\framebox(15,\boxheight){}}
 		\put(0.5,22){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #29knownspells}}}
+		\put(3,5){\framebox(15,\boxheight){}}
+		\put(0.5,7){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #2knownspells}}}
 		%Domains, Bloodlines, Schools
+		\drawbox[family = caster, special family = caster level]{203}{180}{75}{10}{\caster@levelname\, Level}
+		\put(282,180.5){\framebox(15,\boxheight){}}
+		\put(279,182.5){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #2casterlevelcount}}}
 
-		\drawbox[family = caster, special family = caste level]{203}{180}{65}{10}{Caster Level}
-		\put(273,180.5){\framebox(15,\boxheight){}}
-		\put(270,182.5){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #2casterlevelcount}}}
+		\drawbox[family = caster, special family = caster attribute]{300}{180}{85}{10}{Primary Attribute}
+		\put(390,180.5){\framebox(18,\boxheight){}}
+		\put(387,182.5){\parbox[b][3\unitlength][b]{24\unitlength}{\centering \MakeUppercase{#3}}}
 	
 		\put(203,178){\begin{tabular}[t]{p{195\unitlength}}
 		\csname \caster@companion #2powerlist\endcsname	
@@ -1464,6 +1478,9 @@
 
 		\end{picture}
 		\begin{longtable}{| p{.015\textwidth}| p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.07\textwidth} | p{.0427\textwidth}| p{.02\textwidth} |} 
+			\multicolumn{7}{c}{\drawbox[family = caster, special family = caster spells]{-210}{-2.8}{420}{10}{#2 \caster@spellname}}\tabularnewline
+			\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline
+			\endfirsthead 
 			\multicolumn{7}{c}{\drawbox[family = caster, special family = caster spells]{-210}{-2.8}{420}{10}{#2 spells}}\tabularnewline
 			\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline\hline
 			\multicolumn{7}{c}{}\tabularnewline
@@ -1490,25 +1507,25 @@
 }
 
 %[], category, Caster, Name
-\newcommand\addpower[4][]{
-	\setkeys{addpower}{#1}
-	\ifcsdef{\power@companion #3#2list}{}{
-		\expandafter\newcommand\csname \power@companion #3#2list\endcsname{}
+\newcommand\addpower[4][]{%
+	\setkeys{addpower}{#1}%
+	\ifcsdef{\power@companion #3#2list}{}{%
+		\expandafter\newcommand\csname \power@companion #3#2list\endcsname{}%
 		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\tabularnewline\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor}\centering\uppercase{#2}\tabularnewline}{}{} %\rowcolor{black} \leavevmode\color{white}\centering\uppercase{#2}\tabularnewline
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3powerlist\endcsname}{\setkeys{addpower}{#1} \csname \power@companion #3#2list\endcsname\tabularnewline}{}{}
-	}
-	\ifthenelse{\equal{\power@parent}{}}{		
-		\ifcsdef{\power@companion #3#2#4list}{}{
-			\expandafter\newcommand\csname \power@companion #3#2#4sublist\endcsname{}
-			\expandafter\newcommand\csname \power@companion #3#2#4list\endcsname{}
-		}
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2#4list\endcsname}{\setkeys{addpower}{#1}#4 \\\csname \power@companion #3#2#4sublist\endcsname}{}{}
-	}{
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2\power@parent sublist\endcsname}{\hspace{20pt}\textbullet\, #4\\}{}{}
-	}
-	\power@commands
-	\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\setkeys{addpower}{#1}\csname \power@companion #3#2#4list\endcsname}{}{}
-	\resetkeys
+		\expandafter\apptocmd\expandafter{\csname \power@companion #3powerlist\endcsname}{\setkeys{addpower}{#1} \csname \power@companion #3#2list\endcsname}{}{}%
+	}%
+	\ifthenelse{\equal{\power@parent}{}}{%		
+		\ifcsdef{\power@companion #3#2#4list}{}{%
+			\expandafter\newcommand\csname \power@companion #3#2#4sublist\endcsname{}%
+			\expandafter\newcommand\csname \power@companion #3#2#4list\endcsname{}%
+		}%
+		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2#4list\endcsname}{\setkeys{addpower}{#1}#4 \\\csname \power@companion #3#2#4sublist\endcsname}{}{}%
+	}{%
+		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2\power@parent sublist\endcsname}{\hspace{20pt}\textbullet\, #4\\}{}{}%
+	}%
+	\power@commands%
+	\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\setkeys{addpower}{#1}\csname \power@companion #3#2#4list\endcsname}{}{}%
+	\resetkeys%
 }
 
 %Caster, Level, Type, Value

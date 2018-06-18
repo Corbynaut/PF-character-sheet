@@ -4,13 +4,13 @@
 \unitlength\textwidth
 \divide\unitlength 420
 \renewcommand\printsheet[1][]{
+\calculateweight[#1]
+\calculateloadsandlift[#1]
 \noindent\begin{picture}(420,579)
 
 \begin{picture}(0,0)
 	\put(38.5,520){\hbox{\myincludegraphics[scale=0.043]{Logo}}}
 \end{picture}
-
-
   \put(140,530){\renewcommand{\arraystretch}{1.5}
     \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
       \multicolumn{3}{D{110}}{\csname #1charname\endcsname} &\multicolumn{3}{D{69}}{ \csname #1charalignment\endcsname} & \multicolumn{2}{D{46}}{\csname #1charplayername\endcsname} \\\cmidrule(rl){1-3}\cmidrule(rl){4-6}\cmidrule(rl){7-8}
@@ -30,7 +30,6 @@
       }%
     }%
   }%
-
   %% Labels
   \put(0,512){\makebox(28,3){\tiny\scshape attribute}}
   \stretchlabels{33}{512}{102}{ability score,  ability modifier, Temp Adjustment, Temp Modifier}
@@ -217,6 +216,9 @@
 \begin{longtable}{| p{.25\textwidth} | p{.666\textwidth} |p{.015\textwidth}| } 
 \multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
 \rowcolor{black}\centering\color{white}\lfont\uppercase{Name}&\centering \color{white}\lfont\uppercase{Text}&\centering \color{white}\centering\lfont\uppercase{Uses}\tabularnewline
+\endfirsthead
+\multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\uppercase{Name}&\centering \color{white}\lfont\uppercase{Text}&\centering \color{white}\centering\lfont\uppercase{Uses}\tabularnewline
 \multicolumn{3}{c}{}\tabularnewline
 \endhead
 \ifx\featurelist\emptylist
@@ -243,8 +245,11 @@
 \newpagetitlebox[#1]
 \begin{longtable}{| p{.015\textwidth}| p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.07\textwidth} | p{.0427\textwidth}| p{.02\textwidth} |} 
 \multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline\hline
-\multicolumn{7}{c}{}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline
+\endfirsthead 
+\multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline
+\multicolumn{3}{c}{}\tabularnewline
 \endhead 
 \hline
 \csname #1default0spelllist\endcsname
