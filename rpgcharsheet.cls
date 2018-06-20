@@ -287,6 +287,7 @@
 \define@key{addspell}{caster level bonus}{\def\spell@clbonus{#1}}
 \define@key{addspell}{caster}{\def\spell@caster{#1}}
 \define@key{addspell}{prepared}{\def\spell@prepared{#1}}
+\define@key{addspell}{known}{\def\spell@known{#1}}
 
 \define@key{addgear}{type}{\def\gear@type{#1}}
 \define@key{addgear}{companion}{\def\gear@companion{#1}}
@@ -328,7 +329,7 @@
 \newcommand\resetkeys{
 	\setkeys{addcaster}{level name = caster, spell name = spells,calculate bonus spells = true, show dcs = true, companion =, offset=0,zeroth=infinity,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
 	\setkeys{addweapon}{notes =, enhancement = 0, attack attribute = str, attack bonus = 0, damage attribute = str, damage bonus = 0, companion =}%
-	\setkeys{addspell}{companion =, caster level bonus = 0, caster =, prepared =}%
+	\setkeys{addspell}{companion =, caster level bonus = 0, caster =, prepared =, known = true}%
 	\setkeys{addgear}{type = item, companion =}%
 	\setkeys{addacitem}{notes =,armorspeed =, companion =, enhancement = 0}%
 	\setkeys{addpower}{companion =, parent =, additional commands =}%
@@ -775,7 +776,7 @@
   \advance\downabitcount-1
   \put(#1,\downabitcount){\setlength\fboxsep{0pt}\colorbox{\setting@defaultboxcolor}{\makebox(#3,11){}}}%
   \advance\ycount1
-  \put(#1,\ycount){\makebox(#3,\hcount){\color{\setting@defaultfontcolor}{\uppercase{#4}}}}
+  \put(#1,\ycount){\makebox(#3,\hcount){\color{\setting@defaultfontcolor}{\MakeUppercase{#4}}}}
   \advance\hcount-7
   \advance\ycount-1
   \put(#1,\ycount){\makebox(#3,\hcount){\color{\setting@defaultfontcolor}{\tiny\scshape #5}}}
@@ -941,7 +942,7 @@
 	#6
 	\ifcsname \feature@companion feature#3list\endcsname	
 	\else
-		\expandafter\newcommand\csname \feature@companion feature#3list\endcsname{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\uppercase{#3}}\\*\nobreakhline}
+		\expandafter\newcommand\csname \feature@companion feature#3list\endcsname{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\MakeUppercase{#3}}\\*\nobreakhline}
 		\expandafter\apptocmd\expandafter{\csname \feature@companion featurelist\endcsname}{\csname \feature@companion feature#3list\endcsname}{}{}
 	
 	\fi
@@ -978,12 +979,16 @@
 	\setkeys{addspell}{#1}
 	\ifcsdef{\spell@companion \spell@caster #2spelllist}
 	{
-		\ifthenelse{\boolean{\spell@companion \spell@caster#2spelllistbool}}{}{\setboolean{\spell@companion \spell@caster#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion  \spell@caster#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\*\nobreakhline}{}{}}
+		\ifthenelse{\boolean{\spell@companion \spell@caster#2spelllistbool}}{}{\setboolean{\spell@companion \spell@caster#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion  \spell@caster#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \MakeUppercase
+{TIER}}\\*\nobreakhline}{}{}}
 		\expandafter\apptocmd\expandafter{\csname \spell@companion \spell@caster #2spelllist\endcsname}{
 		\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}
-		\addtocounter{\spell@companion\spell@caster#2knownspells}{1}
+		\ifthenelse{\boolean{\spell@known}}
+		{
+			\addtocounter{\spell@companion\spell@caster#2knownspells}{1}
+		}{}
 	}{		
-		\ifthenelse{\boolean{\spell@companion default#2spelllistbool}}{}{\setboolean{\spell@companion default#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion default#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \uppercase{TIER}}\\*\nobreakhline}{}{}}
+		\ifthenelse{\boolean{\spell@companion default#2spelllistbool}}{}{\setboolean{\spell@companion default#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion default#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \MakeUppercase{TIER}}\\*\nobreakhline}{}{}}
 		\expandafter\apptocmd\expandafter{\csname \spell@companion default#2spelllist\endcsname}{\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}		
 		\setcounter{\spell@companion boolspells}{1}		
 	}
@@ -992,7 +997,7 @@
 
 %%AC
 
-\newcommand{\printacitems}[1][]{\tabularnewline\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \uppercase{AC Items} & \leavevmode\color{\setting@defaultfontcolor} \lfont ac bonus & \leavevmode\color{\setting@defaultfontcolor} \lfont max \csname #1acmod\endcsname & \leavevmode\color{\setting@defaultfontcolor} \lfont penalty &\leavevmode\color{\setting@defaultfontcolor}  \lfont spell failure & \leavevmode\color{\setting@defaultfontcolor} \lfont type & \leavevmode\color{\setting@defaultfontcolor} \lfont weight \tabularnewline\hline\csname #1acitemlist\endcsname
+\newcommand{\printacitems}[1][]{\tabularnewline\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \MakeUppercase{AC Items} & \leavevmode\color{\setting@defaultfontcolor} \lfont ac bonus & \leavevmode\color{\setting@defaultfontcolor} \lfont max \csname #1acmod\endcsname & \leavevmode\color{\setting@defaultfontcolor} \lfont penalty &\leavevmode\color{\setting@defaultfontcolor}  \lfont spell failure & \leavevmode\color{\setting@defaultfontcolor} \lfont type & \leavevmode\color{\setting@defaultfontcolor} \lfont weight \tabularnewline\hline\csname #1acitemlist\endcsname
 }
 
 \newcommand\calculatereducedspeed[1]
@@ -1054,7 +1059,7 @@
 
 \newcommand\printweapons[1][]{
 	\begin{tabular}[t]{p{85\unitlength} >{\centering}p{55\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
-	\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \uppercase{Weapons} & \leavevmode\color{\setting@defaultfontcolor}\lfont Attack modifiers & \leavevmode\color{\setting@defaultfontcolor}\lfont damage & \leavevmode\color{\setting@defaultfontcolor}\lfont critical &\leavevmode\color{\setting@defaultfontcolor} \lfont range & \leavevmode\color{\setting@defaultfontcolor}\lfont type &\leavevmode\color{\setting@defaultfontcolor} \lfont weight &\leavevmode\color{\setting@defaultfontcolor} \lfont ammo \tabularnewline\hline
+	\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \MakeUppercase{Weapons} & \leavevmode\color{\setting@defaultfontcolor}\lfont Attack modifiers & \leavevmode\color{\setting@defaultfontcolor}\lfont damage & \leavevmode\color{\setting@defaultfontcolor}\lfont critical &\leavevmode\color{\setting@defaultfontcolor} \lfont range & \leavevmode\color{\setting@defaultfontcolor}\lfont type &\leavevmode\color{\setting@defaultfontcolor} \lfont weight &\leavevmode\color{\setting@defaultfontcolor} \lfont ammo \tabularnewline\hline
 	\csname #1weaponlist\endcsname
 	\end{tabular}
 }
@@ -1280,7 +1285,7 @@
 %Currency
 \newcommand\printcurrency[1][]{
   	\begin{tabular}[t]{>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}>{\centering}p{42\unitlength}}
-	\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor} \uppercase{Currency}& \leavevmode\lfont\color{\setting@defaultfontcolor}Carried& \leavevmode\lfont\color{\setting@defaultfontcolor}Carried weight&\leavevmode\lfont\color{\setting@defaultfontcolor}Stored\tabularnewline
+	\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor} \MakeUppercase{Currency}& \leavevmode\lfont\color{\setting@defaultfontcolor}Carried& \leavevmode\lfont\color{\setting@defaultfontcolor}Carried weight&\leavevmode\lfont\color{\setting@defaultfontcolor}Stored\tabularnewline
 	\csname #1currencylist\endcsname
 	\end{tabular}
 }
@@ -1374,11 +1379,11 @@
 
 \newcommand{\printloadsandlift}[1][]{		
 	\tfont \arabic{#1lightloadcount} lbs.& \tfont \arabic{#1mediumloadcount} lbs. & \tfont \arabic{#1heavyloadcount} lbs.& & \tfont \arabic{#1liftaboveheadcount} lbs. & \tfont  \arabic{#1liftofgroundcount} lbs.& \tfont \arabic{#1dragandpushcount} lbs.\tabularnewline\hline
-	\multicolumn{3}{c}{\uppercase{Current load}}& &\multicolumn{3}{c}{\csname #1currentload\endcsname}\tabularnewline\hline
+	\multicolumn{3}{c}{\MakeUppercase{Current load}}& &\multicolumn{3}{c}{\csname #1currentload\endcsname}\tabularnewline\hline
 }
 
 \newcommand\addnote[2]{
-	 \apptocmd{\notelist}{\uppercase{#1}&\tfont#2\tabularnewline \hline}{}{}
+	 \apptocmd{\notelist}{\MakeUppercase{#1}&\tfont#2\tabularnewline \hline}{}{}
 }
 
 %%Lists
@@ -1490,7 +1495,7 @@
 			\addtocounter{tmpcount}{-15}
 		}
 		%Spell level
-		\put(54,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \uppercase{Level}}}
+		\put(54,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \MakeUppercase{Level}}}
 		\put(60,125){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 0}}
 		\put(60,109){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 1st}}
 		\put(60,94){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 2nd}}
@@ -1503,7 +1508,7 @@
 		\put(60,-11){\parbox[b][38\unitlength][t]{10\unitlength}{\centering 9th}}
 		%Spell DC
 		\ifthenelse{\boolean{\caster@showdcs}}{
-		\put(32,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\uppercase{Save DC}}}
+		\put(32,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\MakeUppercase{Save DC}}}
 		\put(30,155){\framebox(15,\boxheight){}}
 		\put(27.5,157){\parbox[b][3\unitlength][b]{20\unitlength}{\centering  \arabic{\caster@companion #20savebonus}}}
 		\put(30,140){\framebox(15,\boxheight){}}
@@ -1530,7 +1535,7 @@
 		{
 			\addtocounter{\caster@companion #2knownspells}{\value{\caster@companion #2\arabic{loopcount}knownspells}}
 		}	
-		\put(3,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\uppercase{\caster@spellname\, known}}}	
+		\put(3,137){\parbox[b][38\unitlength][t]{10\unitlength}{\centering \lfont\MakeUppercase{\caster@spellname\, known}}}	
 		\put(3,155){\framebox(15,\boxheight){}}
 		\put(0.5,157){\parbox[b][3\unitlength][b]{20\unitlength}{\centering \arabic{\caster@companion #20knownspells}}}
 		\put(3,140){\framebox(15,\boxheight){}}
@@ -1571,10 +1576,10 @@
 		\end{picture}
 		\begin{longtable}{| p{.015\textwidth}| p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.07\textwidth} | p{.0427\textwidth}| p{.02\textwidth} |} 
 			\multicolumn{7}{c}{\drawbox[family = caster, special family = caster spells]{-210}{-2.8}{420}{10}{#2 \caster@spellname}}\tabularnewline
-			\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline
+			\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Prep.}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering\color{white}\lfont\MakeUppercase{School}&\centering\color{white}\lfont\MakeUppercase{Duration}&\centering\color{white}\lfont\MakeUppercase{Range}&\centering\color{white}\lfont\MakeUppercase{Save}&\centering\color{white}\lfont\MakeUppercase{SR}\tabularnewline
 			\endfirsthead 
 			\multicolumn{7}{c}{\drawbox[family = caster, special family = caster spells]{-210}{-2.8}{420}{10}{#2 spells}}\tabularnewline
-			\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline\hline
+			\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Prep.}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering\color{white}\lfont\MakeUppercase{School}&\centering\color{white}\lfont\MakeUppercase{Duration}&\centering\color{white}\lfont\MakeUppercase{Range}&\centering\color{white}\lfont\MakeUppercase{Save}&\centering\color{white}\lfont\MakeUppercase{SR}\tabularnewline\hline
 			\multicolumn{7}{c}{}\tabularnewline
 			\endhead 
 			\hline
@@ -1603,7 +1608,7 @@
 	\setkeys{addpower}{#1}%
 	\ifcsdef{\power@companion #3#2list}{}{%
 		\expandafter\newcommand\csname \power@companion #3#2list\endcsname{}%
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\tabularnewline\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor}\centering\uppercase{#2}\tabularnewline}{}{} %\rowcolor{black} \leavevmode\color{white}\centering\uppercase{#2}\tabularnewline
+		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\tabularnewline\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor}\centering\MakeUppercase{#2}\tabularnewline}{}{} %\rowcolor{black} \leavevmode\color{white}\centering\MakeUppercase{#2}\tabularnewline
 		\expandafter\apptocmd\expandafter{\csname \power@companion #3powerlist\endcsname}{\setkeys{addpower}{#1} \csname \power@companion #3#2list\endcsname}{}{}%
 	}%
 	\ifthenelse{\equal{\power@parent}{}}{%		

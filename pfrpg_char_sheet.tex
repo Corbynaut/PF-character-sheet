@@ -114,7 +114,7 @@
   \stretchlabels{25}{284}{130}{TOTAL, BAB,\csname #1cmdstrmod\endcsname\, mod.,\csname #1cmddexmod\endcsname\, mod., size mod.,default}
 
   \drawbox[family = info, special family = speed]{135}{284}{25}{35}{speed}
-  % \put(135,284){\framebox(25,35){\uppercase{Speed}}}
+  % \put(135,284){\framebox(25,35){\MakeUppercase{Speed}}}
   \put(165,310){\framebox(40,\boxheight){}}
   \put(164,311){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\arabic{#1basespeedcount} &ft. & \basespeedsquares[#1]& sq.\end{tabular}}
   \put(165,307){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont base speed}}
@@ -183,7 +183,7 @@
 %%AC-items
   \put(0,449){\begin{tabular}[t]{p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{23\unitlength} >{\centering}p{17\unitlength} } \printacitems[#1] \end{tabular}}
   
-  \put(0,325){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\uppercase{totals} &\tfont \plusminus{#1acbonuscount} &\tfont\ifthenelse{\value{#1maxdexbonuscount}<9999}{\plusminus{#1maxdexbonuscount}}{-} &\tfont \plusminus{#1acitemscheckpenalty} &\tfont \arabic{#1acitemsspellfailure}\% &&\tfont \arabic{#1acitemsweight}~lbs.  \end{tabular}}
+  \put(0,325){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\MakeUppercase{totals} &\tfont \plusminus{#1acbonuscount} &\tfont\ifthenelse{\value{#1maxdexbonuscount}<9999}{\plusminus{#1maxdexbonuscount}}{-} &\tfont \plusminus{#1acitemscheckpenalty} &\tfont \arabic{#1acitemsspellfailure}\% &&\tfont \arabic{#1acitemsweight}~lbs.  \end{tabular}}
 
 \drawbox[family = gear, special family = container]{0}{300}{205}{10}{Bags \& Containers}
   \put(0,295){\begin{tabular}[t]{@{}p{129\unitlength} @{\hspace{1\unitlength}}>{\centering}p{40\unitlength}>{\centering}p{25\unitlength}@{}}\printcontainers[#1] \end{tabular}}
@@ -192,7 +192,7 @@
 
  \drawbox[family = item, special family = weight]{0}{140}{205}{10}{Carried Weight}
   \put(-2,135){ \begin{tabular}[t]{>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{34\unitlength}}
-  \lfont Armor \& Weapons &\lfont Currency & \lfont Equipment &\lfont Misc & \tfont\uppercase{Total} \tabularnewline\hline\\
+  \lfont Armor \& Weapons &\lfont Currency & \lfont Equipment &\lfont Misc & \tfont\MakeUppercase{Total} \tabularnewline\hline\\
   \printweight[#1]
 \end{tabular}}
 
@@ -204,7 +204,7 @@
 
 \drawbox[family = info, special family = exp]{0}{30}{204.8}{10}{Experience Points}
   \put(-2,25){ \begin{tabular}[t]{|B{102}|B{102}|}
-  \tfont\uppercase{ Current} &\tfont\uppercase{Next Level}\tabularnewline\hline
+  \tfont\MakeUppercase{ Current} &\tfont\MakeUppercase{Next Level}\tabularnewline\hline
  & \\
  & \\
 \hline
@@ -215,10 +215,10 @@
  \newpagetitlebox[#1]
 \begin{longtable}{| p{.25\textwidth} | p{.666\textwidth} |p{.015\textwidth}| } 
 \multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\uppercase{Name}&\centering \color{white}\lfont\uppercase{Text}&\centering \color{white}\centering\lfont\uppercase{Uses}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Name}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering \color{white}\centering\lfont\MakeUppercase{Uses}\tabularnewline
 \endfirsthead
 \multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\uppercase{Name}&\centering \color{white}\lfont\uppercase{Text}&\centering \color{white}\centering\lfont\uppercase{Uses}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Name}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering \color{white}\centering\lfont\MakeUppercase{Uses}\tabularnewline
 \multicolumn{3}{c}{}\tabularnewline
 \endhead
 \ifx\featurelist\emptylist
@@ -232,7 +232,7 @@
 \newpagetitlebox[#1]
 \begin{longtable}{| p{.25\textwidth} | p{.704\textwidth} |} 
 \multicolumn{2}{c}{\drawbox[family = list, special family = feat]{-210}{-2.8}{420}{10}{feats}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\uppercase{Name}&\centering \color{white}\lfont\uppercase{Text}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Name}&\centering \color{white}\lfont\MakeUppercase{Text}\tabularnewline
 \multicolumn{2}{c}{}\tabularnewline
 \endhead
 \hline
@@ -245,10 +245,10 @@
 \newpagetitlebox[#1]
 \begin{longtable}{| p{.015\textwidth}| p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.07\textwidth} | p{.0427\textwidth}| p{.02\textwidth} |} 
 \multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Prep.}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering\color{white}\lfont\MakeUppercase{School}&\centering\color{white}\lfont\MakeUppercase{Duration}&\centering\color{white}\lfont\MakeUppercase{Range}&\centering\color{white}\lfont\MakeUppercase{Save}&\centering\color{white}\lfont\MakeUppercase{SR}\tabularnewline
 \endfirsthead 
 \multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\uppercase{Prep.}&\centering \color{white}\lfont\uppercase{Text}&\centering\color{white}\lfont\uppercase{School}&\centering\color{white}\lfont\uppercase{Duration}&\centering\color{white}\lfont\uppercase{Range}&\centering\color{white}\lfont\uppercase{Save}&\centering\color{white}\lfont\uppercase{SR}\tabularnewline
+\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Prep.}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering\color{white}\lfont\MakeUppercase{School}&\centering\color{white}\lfont\MakeUppercase{Duration}&\centering\color{white}\lfont\MakeUppercase{Range}&\centering\color{white}\lfont\MakeUppercase{Save}&\centering\color{white}\lfont\MakeUppercase{SR}\tabularnewline
 \multicolumn{3}{c}{}\tabularnewline
 \endhead 
 \hline
