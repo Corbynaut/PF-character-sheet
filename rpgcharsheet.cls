@@ -280,6 +280,7 @@
 \define@key{addweapon}{attack bonus}{\def\weapon@attackbonus{#1}}
 \define@key{addweapon}{damage attribute}{\def\weapon@damageattribute{#1modcount}}
 \define@key{addweapon}{damage bonus}{\def\weapon@damagebonus{#1}}
+\define@key{addweapon}{notes}{\def\weapon@notes{#1}}
 \define@key{addweapon}{companion}{\def\weapon@companion{#1}}
 
 \define@key{addspell}{companion}{\def\spell@companion{#1}}
@@ -293,6 +294,7 @@
 \define@key{addacitem}{companion}{\def\acitem@companion{#1}}
 \define@key{addacitem}{armorspeed}{\def\acitem@armorspeed{#1}}
 \define@key{addacitem}{enhancement}{\def\acitem@enhancement{#1}}
+\define@key{addacitem}{notes}{\def\acitem@notes{#1}}
 
 \define@key{addpower}{companion}{\def\power@companion{#1}}
 \define@key{addpower}{parent}{\def\power@parent{#1}}
@@ -325,10 +327,10 @@
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
 	\setkeys{addcaster}{level name = caster, spell name = spells,calculate bonus spells = true, show dcs = true, companion =, offset=0,zeroth=infinity,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
-	\setkeys{addweapon}{enhancement = 0, attack attribute = str, attack bonus = 0, damage attribute = str, damage bonus = 0, companion =}%
+	\setkeys{addweapon}{notes =, enhancement = 0, attack attribute = str, attack bonus = 0, damage attribute = str, damage bonus = 0, companion =}%
 	\setkeys{addspell}{companion =, caster level bonus = 0, caster =, prepared =}%
 	\setkeys{addgear}{type = item, companion =}%
-	\setkeys{addacitem}{armorspeed =, companion =, enhancement = 0}%
+	\setkeys{addacitem}{notes =,armorspeed =, companion =, enhancement = 0}%
 	\setkeys{addpower}{companion =, parent =, additional commands =}%
 	\setkeys{addclass}{calculate bab =,calculate fort =,calculate ref =,calculate will =, companion =}%
 	\setkeys{addcompanion}{type =,load file=}%
@@ -1034,7 +1036,7 @@
 {
 	\setcounter{\acitem@companion armorspeedcount}{\minof{\acitem@armorspeed}{\value{\acitem@companion armorspeedcount}}}
 }
- \expandafter\apptocmd\expandafter{\csname\acitem@companion acitemlist\endcsname}{\setkeys{addacitem}{#1}\tfont#2 \ifthenelse{\acitem@enhancement = 0}{}{+ \acitem@enhancement}& \setkeys{addacitem}{#1}\tfont \writevalue{#3+\acitem@enhancement} & \tfont#4 &\tfont #5 &\tfont #6\% & \tfont#7 & \tfont#8~lbs.\tabularnewline\hline}{}{}
+ \expandafter\apptocmd\expandafter{\csname\acitem@companion acitemlist\endcsname}{\setkeys{addacitem}{#1}\tfont#2 \ifthenelse{\acitem@enhancement = 0}{}{+ \acitem@enhancement}& \setkeys{addacitem}{#1}\tfont \writevalue{#3+\acitem@enhancement} & \tfont#4 &\tfont #5 &\tfont #6\% & \tfont#7 & \tfont#8~lbs.\setkeys{addacitem}{#1}\ifthenelse{\equal{\acitem@notes}{}}{}{\tabularnewline[-0.9ex] \multicolumn{7}{l}{\setkeys{addacitem}{#1}\tfont\acitem@notes}}\tabularnewline\hline}{}{}
  \resetkeys
 }
 
@@ -1051,7 +1053,7 @@
 %%Weapons
 
 \newcommand\printweapons[1][]{
-	\begin{tabular}[t]{>{\centering}p{85\unitlength} >{\centering}p{55\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
+	\begin{tabular}[t]{p{85\unitlength} >{\centering}p{55\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
 	\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \uppercase{Weapons} & \leavevmode\color{\setting@defaultfontcolor}\lfont Attack modifiers & \leavevmode\color{\setting@defaultfontcolor}\lfont damage & \leavevmode\color{\setting@defaultfontcolor}\lfont critical &\leavevmode\color{\setting@defaultfontcolor} \lfont range & \leavevmode\color{\setting@defaultfontcolor}\lfont type &\leavevmode\color{\setting@defaultfontcolor} \lfont weight &\leavevmode\color{\setting@defaultfontcolor} \lfont ammo \tabularnewline\hline
 	\csname #1weaponlist\endcsname
 	\end{tabular}
@@ -1064,7 +1066,8 @@
 		\setkeys{addweapon}{#1}
 		\setcounter{tmpattackmodcount}{\value{\weapon@companion babcount}+\value{\weapon@companion \weapon@attackattribute}+\value{\weapon@companion sizemodcount}+\weapon@attackbonus+\weapon@enhancement}
 		\setcounter{tmpweapondamagecount}{\value{\weapon@companion \weapon@damageattribute}+\weapon@damagebonus+\weapon@enhancement}
-		\tfont#2 \ifthenelse{\weapon@enhancement = 0}{}{+\weapon@enhancement} & \setkeys{addweapon}{#1}\tfont \plusminus{tmpattackmodcount}\ifthenelse{\value{\weapon@companion babcount}>5}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>10}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>15}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}  & \tfont#3\ifthenelse{\value{tmpweapondamagecount} = 0}{}{\plusminus{tmpweapondamagecount}} &\tfont #4 &\tfont #5 & \tfont#6 & \tfont#7~lbs. & \tfont#8 \tabularnewline\hline \resetkeys}{}{}
+		\tfont#2 \ifthenelse{\weapon@enhancement = 0}{}{+\weapon@enhancement} & \setkeys{addweapon}{#1}\tfont \plusminus{tmpattackmodcount}\ifthenelse{\value{\weapon@companion babcount}>5}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>10}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>15}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}  & \tfont#3\ifthenelse{\value{tmpweapondamagecount} = 0}{}{\plusminus{tmpweapondamagecount}} &\tfont #4 &\tfont #5 & \tfont#6 & \tfont#7~lbs. & \tfont#8 \setkeys{addweapon}{#1}\ifthenelse{\equal{\weapon@notes}{}}{}{\tabularnewline[-0.9ex] \multicolumn{8}{l}{\setkeys{addweapon}{#1}\tfont\weapon@notes}}\tabularnewline\hline}{}{}
+	\resetkeys
 }
 
 \newcolumntype{A}[1]{@{}>{\centering\footnotesize}m{#1\unitlength}@{}}
@@ -1361,10 +1364,10 @@
 		\expandafter\renewcommand\csname #1currentload\endcsname{LIGHT}%
 	\else%
 	\ifnum \value{#1weightcount} < \value{#1mediumloadcount}%
-		\addacitem[companion = #1]{MEDIUM\\ ENCUMBRANCE}{0}{3}{-3}{0}{medium}{0}%
+		\addacitem[companion = #1]{\centering{MEDIUM\newline ENCUMBRANCE}}{0}{3}{-3}{0}{medium}{0}%
 		\expandafter\renewcommand\csname #1currentload\endcsname{MEDIUM}%
 	\else%
-		\addacitem[companion = #1]{HEAVY\\ ENCUMBRANCE}{0}{1}{-6}{0}{heavy}{0}%
+		\addacitem[companion = #1]{HEAVY\newline ENCUMBRANCE}{0}{1}{-6}{0}{heavy}{0}%
 		\expandafter\renewcommand\csname #1currentload\endcsname{HEAVY}%
 	\fi\fi%
 }

@@ -94,16 +94,16 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%AC-Items
 %\addacitem{Name}{AC bonus}{Max dex}{Armor check penalty}{Spell failure}{Type (light, medium, heavy, shield, natural, misc)}{Weight}
-\addacitem[enhancement = 5, armorspeed = 25]{Test armor}{2}{5}{0}{0}{light}{1000}
+\addacitem[enhancement = 5, armorspeed = 25, notes = benevolent]{Test armor}{2}{5}{0}{0}{light}{1000}
 \addacitem{Test shield}{1}{-}{-1}{35}{shield}{70}
 \addacitem{Test natural}{2}{-}{0}{0}{natural}{70}
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Weapons
 %\addweapon{Name}{Damage}{Critical}{Range}{Type}{Weight}{Ammo}
-\addweapon[attack attribute = int]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[attack attribute = int, notes = note]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
 \addweapon[damage attribute = none]{Weapon str - none}{2d6}{18-20/x2}{-}{S}{12}{-}
 \addweapon[attack attribute = dex, damage attribute = dex]{Weapon dex-dex}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[enhancement= 5]{Weapon str-str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[enhancement= 5, notes = {flaming, bane vegetables}]{Weapon str-str}{2d6}{18-20/x2}{-}{B}{12}{-}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Worn magic items
