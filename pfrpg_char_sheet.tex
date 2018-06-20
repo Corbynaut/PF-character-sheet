@@ -61,7 +61,7 @@
   \drawbox[family = info, special family = hp]{107}{505}{26}{12}{HP}
   \put(137,505){\framebox(38,12){}}
   \put(137,512){\makebox(14,4){\tiny\scshape Total}}
-  \put(137,505){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \chartotalhp}}
+  \put(137,505){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \chartotalhp[#1]}}
   \put(177,505){\framebox(28,12){}}
   \put(177,512){\makebox(8,4){\tiny\scshape DR}}
 
@@ -74,13 +74,13 @@
   
   %% INIT
   \titlebox{107}{440}{43}{INITIATIVE}{modifier}
-  \stretchequalattributes{152}{440}{206}{\arabic{\charinitmod},0}
-  \stretchlabels{152}{434}{206}{TOTAL, dex modifier, misc modifier}
+  \stretchequalattributes{152}{440}{206}{\arabic{\csname #1initiativemod\endcsname modcount},\arabic{#1initiativebonuscount}}
+  \stretchlabels{152}{434}{206}{TOTAL, \csname #1initiativemod\endcsname\, modifier, misc modifier}
   
   %% AC
   \titlebox{0}{420}{27}{AC}{armour class}
   \equalattributes{25}{420}{10,\arabic{#1acarmorbonuscount},\arabic{#1acshieldbonuscount},\arabic{#1acdexbonuscount},\arabic{#1sizemodcount},\arabic{#1acnaturalbonuscount},\arabic{#1acdeflectionbonuscount},\arabic{#1acmiscbonuscount}}{20}
-  \scaleattributelabels{25}{410}{TOTAL,default, armor bonus,shield bonus,dex \mbox{modifier},size \mbox{modifier},natural armour,\mbox{deflection} \mbox{modifier},misc \mbox{modifier}}{20}
+  \scaleattributelabels{25}{410}{TOTAL,default, armor bonus,shield bonus,\csname #1acmod\endcsname\, \mbox{modifier},size \mbox{modifier},natural armour,\mbox{deflection} \mbox{modifier},misc \mbox{modifier}}{20}
 
   %% Touch, Flat footed
   \titlebox{0}{400}{35}{TOUCH}{armour class}
@@ -92,12 +92,12 @@
 
   %% fort, reflex and will
   \stretchlabels{60}{392}{205}{TOTAL, base save, ability modifier, magic modifier, misc modifier, temporary modifier}
-  \titlebox{0}{380}{53}{fortitude}{(constitution)}
-  \stretchequalattributes{60}{380}{205}{\arabic{#1fortcount},\arabic{#1conmodcount},0,\arabic{#1fortbonuscount},\arabic{#1forttmpcount}}
-  \titlebox{0}{365}{53}{reflex}{(dexterity)}
-  \stretchequalattributes{60}{365}{205}{\arabic{#1refcount},\arabic{#1dexmodcount},0,\arabic{#1refbonuscount},\arabic{#1reftmpcount}}
-  \titlebox{0}{350}{53}{will}{(wisdom)}  
-  \stretchequalattributes{60}{350}{205}{\arabic{#1willcount},\arabic{#1wismodcount},0,\arabic{#1willbonuscount},\arabic{#1willtmpcount}}
+  \titlebox{0}{380}{53}{fortitude}{(\writeattributename{\csname #1fortmod\endcsname})}
+  \stretchequalattributes{60}{380}{205}{\arabic{#1fortcount},\arabic{\csname #1fortmod\endcsname modcount},0,\arabic{#1fortbonuscount},\arabic{#1forttmpcount}}
+  \titlebox{0}{365}{53}{reflex}{(\writeattributename{\csname #1refmod\endcsname})}
+  \stretchequalattributes{60}{365}{205}{\arabic{#1refcount},\arabic{\csname #1refmod\endcsname modcount},0,\arabic{#1refbonuscount},\arabic{#1reftmpcount}}
+  \titlebox{0}{350}{53}{will}{(\writeattributename{\csname #1willmod\endcsname})}  
+  \stretchequalattributes{60}{350}{205}{\arabic{#1willcount},\arabic{\csname #1willmod\endcsname modcount},0,\arabic{#1willbonuscount},\arabic{#1willtmpcount}}
 
   %%Base attack bonus, spell resistance
   \drawbox[family = info, special family = bab]{0}{329}{90}{11}{base attack bonus}
@@ -107,19 +107,19 @@
   
 %%CMB and CMD
   \drawbox[family = info, special family = cmb]{0}{309}{21}{11}{cmb}
-  \stretchequalattributes{25}{310}{130}{\arabic{#1babcount},\arabic{#1strmodcount},\arabic{#1specialsizemodcount}}
-  \stretchlabels{25}{304}{130}{TOTAL, BAB,str mod., size mod.}
+  \stretchequalattributes{25}{310}{130}{\arabic{#1babcount},\arabic{\csname #1cmbmod\endcsname modcount},\arabic{#1specialsizemodcount}}
+  \stretchlabels{25}{304}{130}{TOTAL, BAB,\csname #1cmbmod\endcsname\, mod., size mod.}
   \drawbox[family = info, special family = cmd]{0}{289}{21}{11}{cmd}
-  \stretchequalattributes{25}{290}{130}{\arabic{#1babcount},\arabic{#1strmodcount},\arabic{#1dexmodcount},\arabic{#1specialsizemodcount} ,10}
-  \stretchlabels{25}{284}{130}{TOTAL, BAB,str mod.,dex mod., size mod.,default}
+  \stretchequalattributes{25}{290}{130}{\arabic{#1babcount},\arabic{\csname #1cmdstrmod\endcsname modcount},\arabic{\csname #1cmddexmod\endcsname modcount},\arabic{#1specialsizemodcount} ,10}
+  \stretchlabels{25}{284}{130}{TOTAL, BAB,\csname #1cmdstrmod\endcsname\, mod.,\csname #1cmddexmod\endcsname\, mod., size mod.,default}
 
   \drawbox[family = info, special family = speed]{135}{284}{25}{35}{speed}
   % \put(135,284){\framebox(25,35){\uppercase{Speed}}}
   \put(165,310){\framebox(40,\boxheight){}}
-  \put(164,311){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\arabic{#1base speedcount} &ft. & \basespeedsquares[#1]& sq.\end{tabular}}
+  \put(164,311){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\arabic{#1basespeedcount} &ft. & \basespeedsquares[#1]& sq.\end{tabular}}
   \put(165,307){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont base speed}}
   \put(165,297){\framebox(40,\boxheight){}}
-  \put(164,298){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\armorspeed[#1] &ft. & \armorspeedsquares[#1]& sq.\end{tabular}}
+  \put(164,298){\begin{tabular}[b]{F{17}E{2}F{16}E{2}}\arabic{#1armorspeedcount} &ft. & \armorspeedsquares[#1]& sq.\end{tabular}}
   \put(165,294){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont with armour}}
   \put(165,284){\framebox(40,\boxheight){}}
   \put(164,285){\begin{tabular}[b]{F{17}E{2}@{\hspace{1ex}/\hspace{-1.6ex}}F{16}E{2}}\arabic{#1fly speedcount} &ft. & 0& \end{tabular}}

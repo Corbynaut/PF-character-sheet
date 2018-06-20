@@ -25,6 +25,12 @@
 
 \favouredclass{ClassC}
 
+%changeattribute [companion], Target, new attribute
+%Changes skill, ac, cmb, cmd, initiative, fort, ref, will, and hp attribute
+%To change the attribute to attack and/or damage of weapons use the appropriate optional parametes r(attack attribute and/or damage attribute) of \addweapon
+%To change the attribute of a skill, the appropriate skill must be defined beforehand
+%ac must be changed before the first \addacitem command
+\changeattribute{ac}{int}
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Player and character info 
 \name{Name}
@@ -88,10 +94,9 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%AC-Items
 %\addacitem{Name}{AC bonus}{Max dex}{Armor check penalty}{Spell failure}{Type (light, medium, heavy, shield, natural, misc)}{Weight}
-\addacitem[enhancement = 5, basespeed-30 = 20, basespeed-20 = 15]{Test armor}{2}{5}{0}{0}{light}{3000}
+\addacitem[enhancement = 5, armorspeed = 25]{Test armor}{2}{5}{0}{0}{light}{1000}
 \addacitem{Test shield}{1}{-}{-1}{35}{shield}{70}
 \addacitem{Test natural}{2}{-}{0}{0}{natural}{70}
-
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Weapons
 %\addweapon{Name}{Damage}{Critical}{Range}{Type}{Weight}{Ammo}
@@ -148,6 +153,8 @@
 
 \addtypedbonus{stealth}{untyped}{\value{stealthsizemodcount}}
 \addtypedbonus{fly}{untyped}{\value{flysizemodcount}}
+
+%\addtypedbonus{ac}{dodge}{2}
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Conditional Modifiers
 %\addcondition[line break = true, comma = true]{Text}
@@ -155,22 +162,33 @@
 \addcondition[line break = true, comma = true]{Locate traps: \writesignedvalue{\value{ClassBlevelcount}/2}  perception}
 \addcondition{Sample condition}
 
-
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Feats
 %\addfeat{Name}{Text}{additional commands}
 \addfeat{Exotic Weapon Proficiency\linebreak Weapon}{You make attack rolls with the weapon normally.}{}
 \addfeat{Skill Focus (Knowledge Nature)}{You get a +3 bonus on all checks involving the chosen skill. If you have 10 or more ranks in that skill, this bonus increases to +6.}{\ifthenelse{\value{knowledge (nature)skillrankcount}<10}{\addtypedbonus{knowledge (nature)}{untyped}{3}}{\addtypedbonus{knowledge (nature)}{untyped}{6}}}
-\addfeat{Cunning Initiative}{At 2nd level, an inquisitor adds her Wisdom modifier on initiative checks, in addition to her Dexterity modifier.}{\addtypedbonus{initiative}{untyped}{\maxof{\value{ClassBlevelcount}/2}{1}}}
+%\unlockatlevel [companion, class], level, command
+%Unlcok commands at the specific level
+\unlockatlevel[class = ClassB]{5}{
+	\addfeat{Cunning Initiative}{At 2nd level, an inquisitor adds her Wisdom modifier on initiative checks, in addition to her Dexterity modifier.}{\addtypedbonus{initiative}{untyped}{\maxof{\value{ClassBlevelcount}/2}{1}}}
+}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Features
 %\addfeature{Name}{Type (class, race, trait, flaw, etc)}{Text}{Uses}{additional commands}
 \addfeature{Blatant}{flaws}{You suffer a -2 penalty to all Bluff, Disguise, and Stealth checks, as you find it difficult to conceal any aspect of your activities. Additionally, you cannot take 10 with these skills.}{-}{\addtypedbonus{bluff}{untyped}{-2}\addtypedbonus{disguise}{untyped}{-2}\addtypedbonus{stealth}{untyped}{-2}}
 
-\addfeature[class = ClassA, level = 5]{ClassA Level 5}{ClassA}{}{-}{}
-\addfeature[class = ClassB, level = 10]{ClassB Level 10}{ClassB}{}{-}{}
-\addfeature[class = ClassC, level = 5]{ClassC Level 5}{ClassC}{}{-}{}
+%\unlockatlevel [companion, class], level, command
+%Unlcok commands at the specific level
+\unlockatlevel[class = ClassA]{5}{
+	\addfeature{ClassA Level 5}{ClassA}{}{-}{}
+}
+\unlockatlevel[class = ClassB]{10}{
+	\addfeature{ClassB Level 10}{ClassB}{}{-}{}
+}
+\unlockatlevel[class = ClassC]{5}{
+	\addfeature{ClassC Level 5}{ClassC}{}{-}{}
+}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Spells
