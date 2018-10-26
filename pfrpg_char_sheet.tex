@@ -3,18 +3,20 @@
 \input{player.tex}
 \unitlength\textwidth
 \divide\unitlength 420
+
 \renewcommand\printsheet[1][]{
 \calculateweight[#1]
 \calculateloadsandlift[#1]
+\initacitems[#1]
 \noindent\begin{picture}(420,579)
 
 \begin{picture}(0,0)
-	\put(38.5,520){\hbox{\myincludegraphics[scale=0.043]{Logo}}}
+	\put(38.5,520){\hbox{\myincludegraphics[scale=0.043]{Logo.jpg}}}
 \end{picture}
   \put(140,530){\renewcommand{\arraystretch}{1.5}
     \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
       \multicolumn{3}{D{110}}{\csname #1charname\endcsname} &\multicolumn{3}{D{69}}{ \csname #1charalignment\endcsname} & \multicolumn{2}{D{46}}{\csname #1charplayername\endcsname} \\\cmidrule(rl){1-3}\cmidrule(rl){4-6}\cmidrule(rl){7-8}
-      \multicolumn{4}{D{92}}{\csname #1classlist\endcsname} &\multicolumn{2}{D{46}}{\csname #1chardiety\endcsname} & \multicolumn{2}{D{46}}{\csname #1charhomeland\endcsname} \\\cmidrule(rl){1-4}\cmidrule(rl){5-6}\cmidrule(rl){7-8}
+      \multicolumn{4}{D{92}}{\csname #1classlist\endcsname} &\multicolumn{2}{D{46}}{\csname #1chardeity\endcsname} & \multicolumn{2}{D{46}}{\csname #1charhomeland\endcsname} \\\cmidrule(rl){1-4}\cmidrule(rl){5-6}\cmidrule(rl){7-8}
       \csname #1charrace\endcsname & \csname #1charsize\endcsname & \csname #1chargender\endcsname & \csname #1charage\endcsname & \csname #1charheight\endcsname & \csname #1charweight\endcsname & \csname #1charhair\endcsname & \csname #1chareyes\endcsname \\\cmidrule(rl){1-1}\cmidrule(rl){2-2}\cmidrule(rl){3-3}\cmidrule(rl){4-4}\cmidrule(rl){5-5}\cmidrule(rl){6-6}\cmidrule(rl){7-7}\cmidrule(rl){8-8}
     \end{tabular}}
   \put(140,529){\renewcommand{\arraystretch}{1.9}
@@ -24,37 +26,37 @@
       \lfont race & \lfont size & \lfont gender & \lfont age & \lfont height & \lfont weight & \lfont hair & \lfont eyes \\
     \end{tabular}}
 
-  \put(-0.8,438.5){%
-    \setlength\fboxsep{0pt}\colorbox{black! 35}{%
-      \makebox(68,80){
-      }%
-    }%
-  }%
+%  \put(-0.8,438.5){%
+%    \setlength\fboxsep{0pt}\colorbox{black! 35}{%
+%      \makebox(68,80){
+%      }%
+%    }%
+%  }%
   %% Labels
   \put(0,512){\makebox(28,3){\tiny\scshape attribute}}
   \stretchlabels{33}{512}{102}{ability score,  ability modifier, Temp Adjustment, Temp Modifier}
   %% STR
-  \titlebox{0}{500}{28}{STR}{strength}
+  \drawbox[subtext = strength]{0}{500}{28}{10}{STR}
 \stretchattributes{33}{500}{102}{\arabic{#1strcount},\plusminus{#1strmodcount},\plusminus{#1strtmpcount},\plusminus{#1strtmpmodcount}}
 
   %% DEX
-  \titlebox{0}{488}{28}{DEX}{dexterity}
+  \drawbox[subtext = dexterity]{0}{488}{28}{10}{DEX}
   \stretchattributes{33}{488}{102}{\arabic{#1dexcount},\plusminus{#1dexmodcount},\plusminus{#1dextmpcount},\plusminus{#1dextmpmodcount}}
   
   %% CON
-  \titlebox{0}{476}{28}{CON}{constitution}
+  \drawbox[subtext = constitution]{0}{476}{28}{10}{CON}
   \stretchattributes{33}{476}{102}{\arabic{#1concount},\plusminus{#1conmodcount},\plusminus{#1contmpcount},\plusminus{#1contmpmodcount}}
   
   %% INT
-  \titlebox{0}{464}{28}{INT}{intelligence}
+  \drawbox[subtext = intelligence]{0}{464}{28}{10}{INT}
   \stretchattributes{33}{464}{102}{\arabic{#1intcount},\plusminus{#1intmodcount},\plusminus{#1inttmpcount},\plusminus{#1inttmpmodcount}}
 
   %% WIS
-  \titlebox{0}{452}{28}{WIS}{wisdom}
+  \drawbox[subtext = wisdom]{0}{452}{28}{10}{WIS}
   \stretchattributes{33}{452}{102}{\arabic{#1wiscount},\plusminus{#1wismodcount},\plusminus{#1wistmpcount},\plusminus{#1wistmpmodcount}}
 
   %% CHA
-  \titlebox{0}{440}{28}{CHA}{charisma}
+  \drawbox[subtext = charisma]{0}{440}{28}{10}{CHA}
   \stretchattributes{33}{440}{102}{\arabic{#1chacount},\plusminus{#1chamodcount},\plusminus{#1chatmpcount},\plusminus{#1chatmpmodcount}}
 
   %% HP
@@ -73,31 +75,31 @@
   \put(107,455){\framebox(98,20){}}
   
   %% INIT
-  \titlebox{107}{440}{43}{INITIATIVE}{modifier}
-  \stretchequalattributes{152}{440}{206}{\arabic{\csname #1initiativemod\endcsname modcount},\arabic{#1initiativebonuscount}}
+  \drawbox[subtext = modifier]{107}{440}{43}{10}{INITIATIVE}
+  \stretchequalattributes{152}{440}{206}{\arabic{#1\csname #1initiativemod\endcsname modcount},\arabic{#1initiativebonuscount}}
   \stretchlabels{152}{434}{206}{TOTAL, \csname #1initiativemod\endcsname\, modifier, misc modifier}
   
   %% AC
-  \titlebox{0}{420}{27}{AC}{armour class}
+  \drawbox[subtext = armor class]{0}{420}{27}{10}{AC}
   \equalattributes{25}{420}{10,\arabic{#1acarmorbonuscount},\arabic{#1acshieldbonuscount},\arabic{#1acdexbonuscount},\arabic{#1sizemodcount},\arabic{#1acnaturalbonuscount},\arabic{#1acdeflectionbonuscount},\arabic{#1acmiscbonuscount}}{20}
-  \scaleattributelabels{25}{410}{TOTAL,default, armor bonus,shield bonus,\csname #1acmod\endcsname\, \mbox{modifier},size \mbox{modifier},natural armour,\mbox{deflection} \mbox{modifier},misc \mbox{modifier}}{20}
+  \scaleattributelabels{25}{410}{TOTAL,default, armor bonus,shield bonus,\csname #1acmod\endcsname\, \mbox{modifier},size \mbox{modifier},natural armor,\mbox{deflection} \mbox{modifier},misc \mbox{modifier}}{20}
 
   %% Touch, Flat footed
-  \titlebox{0}{400}{35}{TOUCH}{armour class}
+  \drawbox[subtext = armour class]{0}{400}{35}{10}{TOUCH}
   \attributes{40}{400}{\calculatetouchac[#1]}
-  \titlebox{60}{400}{55}{FLAT-FOOTED}{armour class}
+  \drawbox[subtext = armour class]{60}{400}{55}{10}{FLAT-FOOTED}
   \attributes{120}{400}{\calculateflatfootedac[#1]} 
   \put(140,400){\framebox(65,9){}}
   \put(140,400){\parbox[b][8\unitlength][t]{65\unitlength}{\raggedleft \lfont modifiers}}
 
   %% fort, reflex and will
   \stretchlabels{60}{392}{205}{TOTAL, base save, ability modifier, magic modifier, misc modifier, temporary modifier}
-  \titlebox{0}{380}{53}{fortitude}{(\writeattributename{\csname #1fortmod\endcsname})}
-  \stretchequalattributes{60}{380}{205}{\arabic{#1fortcount},\arabic{\csname #1fortmod\endcsname modcount},0,\arabic{#1fortbonuscount},\arabic{#1forttmpcount}}
-  \titlebox{0}{365}{53}{reflex}{(\writeattributename{\csname #1refmod\endcsname})}
-  \stretchequalattributes{60}{365}{205}{\arabic{#1refcount},\arabic{\csname #1refmod\endcsname modcount},0,\arabic{#1refbonuscount},\arabic{#1reftmpcount}}
-  \titlebox{0}{350}{53}{will}{(\writeattributename{\csname #1willmod\endcsname})}  
-  \stretchequalattributes{60}{350}{205}{\arabic{#1willcount},\arabic{\csname #1willmod\endcsname modcount},0,\arabic{#1willbonuscount},\arabic{#1willtmpcount}}
+  \drawbox[subtext = (\writeattributename{\csname #1fortmod\endcsname})]{0}{380}{53}{10}{fortitude}
+  \stretchequalattributes{60}{380}{205}{\arabic{#1fortcount},\arabic{#1\csname #1fortmod\endcsname modcount},0,\arabic{#1fortbonuscount},\arabic{#1forttmpcount}}
+  \drawbox[subtext =(\writeattributename{\csname #1refmod\endcsname})]{0}{365}{53}{10}{reflex}
+  \stretchequalattributes{60}{365}{205}{\arabic{#1refcount},\arabic{#1\csname #1refmod\endcsname modcount},0,\arabic{#1refbonuscount},\arabic{#1reftmpcount}}
+  \drawbox[subtext =(\writeattributename{\csname #1willmod\endcsname})]{0}{350}{53}{10}{will}  
+  \stretchequalattributes{60}{350}{205}{\arabic{#1willcount},\arabic{#1\csname #1willmod\endcsname modcount},0,\arabic{#1willbonuscount},\arabic{#1willtmpcount}}
 
   %%Base attack bonus, spell resistance
   \drawbox[family = info, special family = bab]{0}{329}{90}{11}{base attack bonus}
@@ -107,10 +109,10 @@
   
 %%CMB and CMD
   \drawbox[family = info, special family = cmb]{0}{309}{21}{11}{cmb}
-  \stretchequalattributes{25}{310}{130}{\arabic{#1babcount},\arabic{\csname #1cmbmod\endcsname modcount},\arabic{#1specialsizemodcount}}
+  \stretchequalattributes{25}{310}{130}{\arabic{#1babcount}, \arabic{#1\csname #1cmbmod\endcsname modcount},\arabic{#1specialsizemodcount}}
   \stretchlabels{25}{304}{130}{TOTAL, BAB,\csname #1cmbmod\endcsname\, mod., size mod.}
   \drawbox[family = info, special family = cmd]{0}{289}{21}{11}{cmd}
-  \stretchequalattributes{25}{290}{130}{\arabic{#1babcount},\arabic{\csname #1cmdstrmod\endcsname modcount},\arabic{\csname #1cmddexmod\endcsname modcount},\arabic{#1specialsizemodcount} ,10}
+  \stretchequalattributes{25}{290}{130}{\arabic{#1babcount},\arabic{#1\csname #1cmdstrmod\endcsname modcount},\arabic{#1\csname #1cmddexmod\endcsname modcount},\arabic{#1specialsizemodcount} ,10}
   \stretchlabels{25}{284}{130}{TOTAL, BAB,\csname #1cmdstrmod\endcsname\, mod.,\csname #1cmddexmod\endcsname\, mod., size mod.,default}
 
   \drawbox[family = info, special family = speed]{135}{284}{25}{35}{speed}
@@ -133,12 +135,12 @@
   \put(185,271){\framebox(20,\boxheight){}}
   \put(184,272){\begin{tabular}[b]{F{16}E{2}}\arabic{#1burrow speedcount} &ft.\end{tabular}}
   \put(185,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont burrow}}
-  \titlebox{0}{271}{50}{favoured}{Class}
+  \drawbox[subtext = Class]{0}{271}{50}{10}{favoured}
   \put(55,271){\framebox(75,\boxheight){\footnotesize \charfavouredclass}}
  
 \noindent\begin{picture}(0,0)
 %%Weapons
- \put(-2,60){\printweapons[#1]}
+ \put(-2,70){\printweapons[#1]}
 
 \end{picture}
 
@@ -160,7 +162,7 @@
 
   \drawbox[family = item, special family = magic item]{0}{594}{205}{10}{WORN MAGIC ITEM EQUIPMENT}
   \put(0,589){\begin{tabular}[t]{@{}p{30\unitlength} @{\hspace{1\unitlength}}>{\centering}p{169\unitlength}}
-\\
+  \lfont slot &  \lfont ITEM\tabularnewline
   \hline
   \tfont Belt: & \csname #1magicitembelt\endcsname \tabularnewline
   \tfont Body: & \csname #1magicitembody\endcsname \tabularnewline
@@ -178,7 +180,7 @@
  \end{tabular}}
 
   \drawbox[family = item, special family =gear]{215}{594}{205}{10}{gear}
-  \put(215,589){\begin{tabular}[t]{@{}p{150\unitlength} @{\hspace{1\unitlength}}>{\centering}p{29\unitlength}>{\centering}p{15\unitlength}@{}}\printgearitems[#1] \end{tabular}}
+  \put(215,589){\begin{tabular}[t]{>{\centering}p{10\unitlength} @{}p{136.3\unitlength} @{\hspace{1\unitlength}}>{\centering}p{29\unitlength}>{\centering}p{15\unitlength}@{}}\printgearitems[#1] \end{tabular}}
 
 %%AC-items
   \put(0,449){\begin{tabular}[t]{p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{23\unitlength} >{\centering}p{17\unitlength} } \printacitems[#1] \end{tabular}}
@@ -186,25 +188,25 @@
   \put(0,325){\begin{tabular}[t]{>{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{10\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{20\unitlength} >{\centering}p{17\unitlength} }\MakeUppercase{totals} &\tfont \plusminus{#1acbonuscount} &\tfont\ifthenelse{\value{#1maxdexbonuscount}<9999}{\plusminus{#1maxdexbonuscount}}{-} &\tfont \plusminus{#1acitemscheckpenalty} &\tfont \arabic{#1acitemsspellfailure}\% &&\tfont \arabic{#1acitemsweight}~lbs.  \end{tabular}}
 
 \drawbox[family = gear, special family = container]{0}{300}{205}{10}{Bags \& Containers}
-  \put(0,295){\begin{tabular}[t]{@{}p{129\unitlength} @{\hspace{1\unitlength}}>{\centering}p{40\unitlength}>{\centering}p{25\unitlength}@{}}\printcontainers[#1] \end{tabular}}
+  \put(0,295){\begin{tabular}[t]{>{\centering}p{10\unitlength}@{} @{}p{115.3\unitlength} @{\hspace{1\unitlength}}>{\centering}p{40\unitlength}>{\centering}p{25\unitlength}@{}}\printcontainers[#1] \end{tabular}}
 
-\put(-2,210){\printcurrency[#1]}
+\put(-2,95){\printcurrency[#1]}
 
- \drawbox[family = item, special family = weight]{0}{140}{205}{10}{Carried Weight}
-  \put(-2,135){ \begin{tabular}[t]{>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{34\unitlength}}
+ \drawbox[family = item, special family = weight]{0}{200}{205}{10}{Carried Weight}
+  \put(-2,195){ \begin{tabular}[t]{>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{31\unitlength}>{\centering}p{34\unitlength}}
   \lfont Armor \& Weapons &\lfont Currency & \lfont Equipment &\lfont Misc & \tfont\MakeUppercase{Total} \tabularnewline\hline\\
   \printweight[#1]
 \end{tabular}}
 
-\drawbox[family = gear, special family = loads and lift]{0}{90}{205}{10}{Loads \& Lift}
-  \put(-2,85){ \begin{tabular}[t]{>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}}
+\drawbox[family = gear, special family = loads and lift]{0}{155}{205}{10}{Loads \& Lift}
+  \put(-2,150){ \begin{tabular}[t]{>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}>{\centering}p{20\unitlength}}
   \lfont Light load&\lfont medium load & \lfont heavy load &\lfont & \lfont lift above head&\lfont lift of ground & \lfont drag \& push\tabularnewline\hline\\
  \printloadsandlift[#1]
 \end{tabular}}
 
-\drawbox[family = info, special family = exp]{0}{30}{204.8}{10}{Experience Points}
+\drawbox[family = info, special family = exp]{0}{25.6}{204.8}{10}{Experience Points}
   \put(-2,25){ \begin{tabular}[t]{|B{102}|B{102}|}
-  \tfont\MakeUppercase{ Current} &\tfont\MakeUppercase{Next Level}\tabularnewline\hline
+  \hline\tfont\MakeUppercase{ Current} &\tfont\MakeUppercase{Next Level}\tabularnewline\hline
  & \\
  & \\
 \hline
@@ -213,56 +215,18 @@
 \end{picture} 
 \ifthenelse{\equal{\value{#1boolfeatures}}{0}}{}{
  \newpagetitlebox[#1]
-\begin{longtable}{| p{.25\textwidth} | p{.666\textwidth} |p{.015\textwidth}| } 
-\multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Name}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering \color{white}\centering\lfont\MakeUppercase{Uses}\tabularnewline
-\endfirsthead
-\multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Name}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering \color{white}\centering\lfont\MakeUppercase{Uses}\tabularnewline
-\multicolumn{3}{c}{}\tabularnewline
-\endhead
-\ifx\featurelist\emptylist
-\else
-\csname #1featurelist\endcsname
-\fi
-\end{longtable}
+\printfeatures[#1]
 }
 
 \ifthenelse{\equal{\value{#1boolfeats}}{0}}{}{
 \newpagetitlebox[#1]
-\begin{longtable}{| p{.25\textwidth} | p{.704\textwidth} |} 
-\multicolumn{2}{c}{\drawbox[family = list, special family = feat]{-210}{-2.8}{420}{10}{feats}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Name}&\centering \color{white}\lfont\MakeUppercase{Text}\tabularnewline
-\multicolumn{2}{c}{}\tabularnewline
-\endhead
-\hline
-\csname #1featlist\endcsname
-\end{longtable}
+\printfeats[#1]
 }
 \csname #1printcasters\endcsname
 
 \ifthenelse{\equal{\value{#1boolspells}}{0}}{}{
 \newpagetitlebox[#1]
-\begin{longtable}{| p{.015\textwidth}| p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.07\textwidth} | p{.0427\textwidth}| p{.02\textwidth} |} 
-\multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Prep.}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering\color{white}\lfont\MakeUppercase{School}&\centering\color{white}\lfont\MakeUppercase{Duration}&\centering\color{white}\lfont\MakeUppercase{Range}&\centering\color{white}\lfont\MakeUppercase{Save}&\centering\color{white}\lfont\MakeUppercase{SR}\tabularnewline
-\endfirsthead 
-\multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
-\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Prep.}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering\color{white}\lfont\MakeUppercase{School}&\centering\color{white}\lfont\MakeUppercase{Duration}&\centering\color{white}\lfont\MakeUppercase{Range}&\centering\color{white}\lfont\MakeUppercase{Save}&\centering\color{white}\lfont\MakeUppercase{SR}\tabularnewline
-\multicolumn{3}{c}{}\tabularnewline
-\endhead 
-\hline
-\csname #1default0spelllist\endcsname
-\csname #1default1spelllist\endcsname
-\csname #1default2spelllist\endcsname
-\csname #1default3spelllist\endcsname
-\csname #1default4spelllist\endcsname
-\csname #1default5spelllist\endcsname
-\csname #1default6spelllist\endcsname
-\csname #1default7spelllist\endcsname
-\csname #1default8spelllist\endcsname
-\csname #1default9spelllist\endcsname
-\end{longtable}
+\printspells[#1]
 }
 }
 \printsheet

@@ -13,7 +13,6 @@
 \RequirePackage{booktabs}
 \RequirePackage{dashrule}
 \RequirePackage{etex}
-\RequirePackage{cancel}
 \RequirePackage{xcolor}
 \RequirePackage{xstring}
 \RequirePackage{color}
@@ -31,8 +30,11 @@
 \RequirePackage{fmtcount}
 \RequirePackage{keyval}
 \RequirePackage{currfile}
+\RequirePackage{pgffor}
+\RequirePackage{environ}
 \ProcessOptions\relax
 \RequirePackage{graphicx}
+\RequirePackage{xparse}
 
 \RequirePackage{transparent}
 
@@ -40,9 +42,10 @@
 %========== BOX KEYS===========
 \define@key{box}{family}{\def\box@family{#1}}
 \define@key{box}{special family}{\def\box@specialfamily{#1}}
+\define@key{box}{subtext}{\def\box@subtext{#1}}
 
 \newcommand\resetboxkeys{
-	\setkeys{box}{family =, special family=}
+	\setkeys{box}{family =, special family=, subtext =}
 }
 \resetboxkeys
 %========== SETTING KEYS===========
@@ -61,9 +64,15 @@
 \newcounter{innerloopcount}
 \newcounter{tmpcount}
 \newcounter{tmpcount2}
+\newcounter{tmpcount3}
+\newcounter{tmpcount4}
+\newcounter{tmpcount5}
+\newcounter{boolcount}
 \newcounter{result}
+\newboolean{tmpbool}
 \newcommand\tmpcmd{}
 \newcommand\tmptwocmd{}
+\newcommand\stackabletypes{untyped, dodge, racial}
 %% Attribute box dimensions
 \newcount\boxwidth\boxwidth=15
 \newcount\boxheight\boxheight=9
@@ -117,15 +126,21 @@
 	\newcounter{#1containerweightcount}
 	\newcounter{#1initiativebonuscount}	
 	
-	\expandafter\newcommand\csname#1acmod\endcsname{dex}
-	\expandafter\newcommand\csname#1cmbmod\endcsname{str}
-	\expandafter\newcommand\csname#1cmdstrmod\endcsname{str}
-	\expandafter\newcommand\csname#1cmddexmod\endcsname{dex}
-	\expandafter\newcommand\csname#1initiativemod\endcsname{dex}
-	\expandafter\newcommand\csname#1fortmod\endcsname{con}
-	\expandafter\newcommand\csname#1refmod\endcsname{dex}
-	\expandafter\newcommand\csname#1willmod\endcsname{wis}
-	\expandafter\newcommand\csname#1hpmod\endcsname{con}
+	\expandafter\def\csname#1acmod\endcsname{dex}
+	\expandafter\def\csname#1cmbmod\endcsname{str}
+	\expandafter\def\csname#1cmdstrmod\endcsname{str}
+	\expandafter\def\csname#1cmddexmod\endcsname{dex}
+	\expandafter\def\csname#1initiativemod\endcsname{dex}
+	\expandafter\def\csname#1fortmod\endcsname{con}
+	\expandafter\def\csname#1refmod\endcsname{dex}
+	\expandafter\def\csname#1willmod\endcsname{wis}
+	\expandafter\def\csname#1hpmod\endcsname{con}
+
+	%Gear
+	\newcounter{#1gearidcount}
+	\newcounter{#1itemidcount}
+	\newcounter{#1containeridcount}
+	
 
 	%AC
 	\newcounter{#1account}
@@ -151,6 +166,9 @@
 	\newcounter{#1maxdexbonuscount} \setcounter{maxdexbonuscount}{9999}
 
 	\newcounter{#1spellresistancebonuscount}
+
+	\newcounter{#1armoridcount}
+
 	%Weapons
 	\newcounter{#1weaponweightcount}
 	\newcounter{#1tmpattackmodcount}
@@ -210,39 +228,39 @@
 		\newboolean{#1default\arabic{loopcount}spelllistbool}
 	}
 	%%Lists
-	\expandafter\newcommand\csname #1emptylist\endcsname{}
-	\expandafter\newcommand\csname #1containerlist\endcsname{}
-	\expandafter\newcommand\csname #1itemlist\endcsname{}
-	\expandafter\newcommand\csname #1conditionalmodlist\endcsname{}
-	\expandafter\newcommand\csname #1featlist\endcsname{}
-	\expandafter\newcommand\csname #1featurelist\endcsname{}
-	\expandafter\newcommand\csname #1acitemlist\endcsname{}
-	\expandafter\newcommand\csname #1weaponlist\endcsname{}
-	\expandafter\newcommand\csname #1skilllist\endcsname{}
-	\expandafter\newcommand\csname #1classlist\endcsname{}
-	\expandafter\newcommand\csname #1languagelist\endcsname{}
-	\expandafter\newcommand\csname #1currencylist\endcsname{}
-	\expandafter\newcommand\csname #1notelist\endcsname{}
-	\expandafter\newcommand\csname #1printcasters\endcsname{}
+	\global\expandafter\def\csname #1emptylist\endcsname{}
+	\global\expandafter\def\csname #1containerlist\endcsname{}
+	\global\expandafter\def\csname #1itemlist\endcsname{}
+	\global\expandafter\def\csname #1conditionalmodlist\endcsname{}
+	\global\expandafter\def\csname #1featlist\endcsname{}
+	\global\expandafter\def\csname #1featurelist\endcsname{}
+	\global\expandafter\def\csname #1acitemlist\endcsname{}
+	\global\expandafter\def\csname #1weaponlist\endcsname{}
+	\global\expandafter\def\csname #1skilllist\endcsname{}
+	\global\expandafter\def\csname #1classlist\endcsname{}
+	\global\expandafter\def\csname #1languagelist\endcsname{}
+	\global\expandafter\def\csname #1currencylist\endcsname{}
+	\global\expandafter\def\csname #1notelist\endcsname{}
+	\global\expandafter\def\csname #1printcasters\endcsname{}
 
-	\expandafter\newcommand\csname #1magicitembelt\endcsname{}
-	\expandafter\newcommand\csname #1magicitembody\endcsname{}
-	\expandafter\newcommand\csname #1magicitemchest\endcsname{}
-	\expandafter\newcommand\csname #1magicitemeyes\endcsname{}
-	\expandafter\newcommand\csname #1magicitemfeet\endcsname{}
-	\expandafter\newcommand\csname #1magicitemhands\endcsname{}
-	\expandafter\newcommand\csname #1magicitemhead\endcsname{}
-	\expandafter\newcommand\csname #1magicitemheadband\endcsname{}
-	\expandafter\newcommand\csname #1magicitemneck\endcsname{}
-	\expandafter\newcommand\csname #1magicitemringone\endcsname{}
-	\expandafter\newcommand\csname #1magicitemringtwo\endcsname{}
-	\expandafter\newcommand\csname #1magicitemshoulders\endcsname{}
-	\expandafter\newcommand\csname #1magicitemwrist\endcsname{}
+	\global\expandafter\def\csname #1magicitembelt\endcsname{}
+	\global\expandafter\def\csname #1magicitembody\endcsname{}
+	\global\expandafter\def\csname #1magicitemchest\endcsname{}
+	\global\expandafter\def\csname #1magicitemeyes\endcsname{}
+	\global\expandafter\def\csname #1magicitemfeet\endcsname{}
+	\global\expandafter\def\csname #1magicitemhands\endcsname{}
+	\global\expandafter\def\csname #1magicitemhead\endcsname{}
+	\global\expandafter\def\csname #1magicitemheadband\endcsname{}
+	\global\expandafter\def\csname #1magicitemneck\endcsname{}
+	\global\expandafter\def\csname #1magicitemringone\endcsname{}
+	\global\expandafter\def\csname #1magicitemringtwo\endcsname{}
+	\global\expandafter\def\csname #1magicitemshoulders\endcsname{}
+	\global\expandafter\def\csname #1magicitemwrist\endcsname{}
 
 	\expandafter\newcommand\csname #1charname\endcsname{}
 	\expandafter\newcommand\csname #1charplayername\endcsname{}
 	\expandafter\newcommand\csname #1charalignment\endcsname{}
-	\expandafter\newcommand\csname #1chardiety\endcsname{}
+	\expandafter\newcommand\csname #1chardeity\endcsname{}
 	\expandafter\newcommand\csname #1charrace\endcsname{}
 	\expandafter\newcommand\csname #1charhomeland\endcsname{}
 	\expandafter\newcommand\csname #1charsize\endcsname{}
@@ -278,10 +296,13 @@
 \define@key{addweapon}{enhancement}{\def\weapon@enhancement{#1}}
 \define@key{addweapon}{attack attribute}{\def\weapon@attackattribute{#1modcount}}
 \define@key{addweapon}{attack bonus}{\def\weapon@attackbonus{#1}}
+\define@key{addweapon}{attack}{\def\weapon@attack{#1}}
 \define@key{addweapon}{damage attribute}{\def\weapon@damageattribute{#1modcount}}
 \define@key{addweapon}{damage bonus}{\def\weapon@damagebonus{#1}}
 \define@key{addweapon}{notes}{\def\weapon@notes{#1}}
 \define@key{addweapon}{companion}{\def\weapon@companion{#1}}
+\define@key{addweapon}{category}{\def\weapon@category{#1}}
+\define@key{addweapon}{base}{\def\weapon@base{#1}}
 
 \define@key{addspell}{companion}{\def\spell@companion{#1}}
 \define@key{addspell}{caster level bonus}{\def\spell@clbonus{#1}}
@@ -291,11 +312,15 @@
 
 \define@key{addgear}{type}{\def\gear@type{#1}}
 \define@key{addgear}{companion}{\def\gear@companion{#1}}
+\define@key{addgear}{overwrite weight}{\def\gear@overwritetweight{#1}}
+\define@key{addgear}{symbol}{\def\gear@symbol{#1}}
 
 \define@key{addacitem}{companion}{\def\acitem@companion{#1}}
 \define@key{addacitem}{armorspeed}{\def\acitem@armorspeed{#1}}
 \define@key{addacitem}{enhancement}{\def\acitem@enhancement{#1}}
 \define@key{addacitem}{notes}{\def\acitem@notes{#1}}
+\define@key{addacitem}{category}{\def\acitem@category{#1}}
+\define@key{addacitem}{base}{\def\acitem@base{#1}}
 
 \define@key{addpower}{companion}{\def\power@companion{#1}}
 \define@key{addpower}{parent}{\def\power@parent{#1}}
@@ -325,13 +350,20 @@
 
 \define@key{unlockatlevel}{companion}{\def\unlockatlevel@companion{#1}}
 \define@key{unlockatlevel}{class}{\def\unlockatlevel@class{#1}}
+
+\define@key{addtypedbonus}{companion}{\def\addtypedbonus@companion{#1}}
+\define@key{addtypedbonus}{stackablecategory}{\def\addtypedbonus@stackablecategory{#1}}
+
+\define@key{containerenv}{weightless}{\def\containerenv@weightless{#1}}
+\define@key{containerenv}{symbol}{\def\containerenv@symbol{#1}}
+
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
 	\setkeys{addcaster}{level name = caster, spell name = spells,calculate bonus spells = true, show dcs = true, companion =, offset=0,zeroth=infinity,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
-	\setkeys{addweapon}{notes =, enhancement = 0, attack attribute = str, attack bonus = 0, damage attribute = str, damage bonus = 0, companion =}%
+	\setkeys{addweapon}{notes =, enhancement = 0, attack attribute = str, attack bonus = 0, attack =, damage attribute = str, damage bonus = 0, companion =, category =, base =}%
 	\setkeys{addspell}{companion =, caster level bonus = 0, caster =, prepared =, known = true}%
-	\setkeys{addgear}{type = item, companion =}%
-	\setkeys{addacitem}{notes =,armorspeed =, companion =, enhancement = 0}%
+	\setkeys{addgear}{type = item, companion =, overwrite weight = false, symbol =}%
+	\setkeys{addacitem}{notes =,armorspeed =, companion =, enhancement = 0, category =, base =}%
 	\setkeys{addpower}{companion =, parent =, additional commands =}%
 	\setkeys{addclass}{calculate bab =,calculate fort =,calculate ref =,calculate will =, companion =}%
 	\setkeys{addcompanion}{type =,load file=}%
@@ -341,10 +373,16 @@
 	\setkeys{addcondition}{companion=, comma =, line break=}%
 	\setkeys{addfeature}{companion =}%
 	\setkeys{unlockatlevel}{companion = , class =}%
+	\setkeys{addtypedbonus}{companion = , stackablecategory =}%
+	\setkeys{containerenv}{weightless = false, symbol = }%
 }
 \resetkeys
 
 %%Commands
+
+\newcommand{\appendcmd}[2]{
+		\g@addto@macro#1{#2}
+}
 
 \newcommand*{\IsInteger}[3]{%
     \IfStrEq{#1}{ }{%
@@ -479,12 +517,11 @@
   \advance\xcount by #4
 }
 
-%change the attribute to calculate AC
-\newcommand{\characmod}{dexmodcount}
-%change the attribute to calculate Initiative
-\newcommand{\charinitmod}{dexmodcount}
-%change the attribute to calculate Reflex save
-\newcommand{\charrefmod}{dexmodcount}
+%%Adds a stackable type to either the weapon, armor or default list
+%\addstackabletype[weapon or armor]{Type}
+\newcommand{\addstackabletype}[1]{
+	 \expandafter\appendcmd\expandafter{\stackabletypes}{,#1}
+}
 
 %changeattribute [companion], Target, new attribute
 %Changes skill, ac, cmb, cmd, initiative, fort, ref, will, and hp attribute
@@ -577,34 +614,62 @@
 
 %%Draw Box
 \newcommand\selectedboxfamily{default}
-% [family, special family, ], x, y size x, size y, text
-\newcommand\drawbox[6][]{
+% [family, special family, ], x, y, size x, size y, text
+\newcommand\drawbox[6][]{%
 	\setkeys{box}{#1}%
-	\ifthenelse{\equal{\box@family}{}}{}{
-		\ifcsname setting@\box@family \endcsname
-			\renewcommand\selectedboxfamily{\csname setting@\box@family\endcsname}
+ 	\newcount\hcount\hcount=#5%
+	\setcounter{tmpcount}{1*\real{#4}-1}%
+	\setcounter{tmpcount2}{1*\real{#5}-1}%
+	\ifthenelse{\equal{\box@family}{}}{}{%
+		\ifcsname setting@\box@family \endcsname%
+			\renewcommand\selectedboxfamily{\csname setting@\box@family\endcsname}%
 		%\else	
 			%\expandafter\expandafter\expandafter\define@key\expandafter{setting}\expandafter\expandafter{\csname \box@family box color\endcsname}{\edef\csname setting@\box@family boxcolor\endcsname{#1}}
 			%\renewcommand\selectedboxfamily{\csname setting@\box@family\endcsname}
-		\fi
-	}
-
-	\ifthenelse{\equal{\box@specialfamily}{}}{}{
-		\ifcsname setting@\box@family \endcsname
-			\renewcommand\selectedboxfamily{\csname setting@\box@specialfamily\endcsname}
+		\fi%
+	}%
+	\ifthenelse{\equal{\box@specialfamily}{}}{}{%
+		\ifcsname setting@\box@family \endcsname%
+			\renewcommand\selectedboxfamily{\csname setting@\box@specialfamily\endcsname}%
 		%\else	
 			%\expandafter\expandafter\expandafter\define@key\expandafter{setting}\expandafter\expandafter{\csname \box@specialfamily box color\endcsname}{\edef\csname setting@\box@specialfamily boxcolor\endcsname{#1}}
-		\fi
-	}
-	
-	\put(#2,#3){%
-    	\setlength\fboxsep{0pt}\colorbox{\csname setting@\selectedboxfamily boxcolor\endcsname}{%
-      	\makebox(#4,#5){%
-        	\color{\csname setting@\selectedboxfamily fontcolor\endcsname}{\centering\MakeUppercase{#6}}%
-      }%
-    }%
-  }%
-	\resetboxkeys
+		\fi%
+	}%	
+	\ifx\box@subtext\empty%
+		\put(#2,#3){%
+    			\framebox(#4,#5){\setlength\fboxsep{0pt}\colorbox{\csname setting@\selectedboxfamily boxcolor\endcsname}{%
+      				\makebox(#4,#5){%
+        					\color{\csname setting@\selectedboxfamily fontcolor\endcsname}{%
+							\centering{\MakeUppercase{#6}}%
+						}%
+					}%
+      				}%
+    			}%
+  		}%
+	\else%
+		\advance\hcount 1%
+		\put(#2,#3){%
+    			\framebox(#4,#5){\setlength\fboxsep{0pt}\colorbox{\csname setting@\selectedboxfamily boxcolor\endcsname}{%
+      				\makebox(#4,#5){%
+        					\color{\csname setting@\selectedboxfamily fontcolor\endcsname}{%
+							\vspace{3pt}\centering{\MakeUppercase{#6}}%
+						}%
+					}%
+      				}%
+    			}%
+  		}%	
+		\advance\hcount -7%
+		\addtocounter{tmpcount}{-4}%
+		\put(#2,#3){%    			
+      			\makebox(#4,\hcount){%
+        				\color{\csname setting@\selectedboxfamily fontcolor\endcsname}{%
+					\tiny\scshape \box@subtext%
+				}%
+			}%
+      			
+  		}%
+    	\fi%
+	\resetboxkeys%
 }
 
 \def\stretchattributes#1#2#3#4{%
@@ -785,34 +850,46 @@
 %%typed bonus
 % [] Target, type, value
 \newcommand\addtypedbonus[4][]{
-	\ifcsname c@#1#2#3bonuscount\endcsname
-		\setcounter{tmpmiscbonus}{\value{#1#2#3bonuscount}}
-		\ifthenelse{\equal{#3}{untyped}\OR\equal{#3}{dodge}\OR\equal{#3}{racial}}
+
+	\setkeys{addtypedbonus}{#1}
+	\setcounter{tmpcount}{0}
+
+	\ifcsname c@\addtypedbonus@companion#2#3bonuscount\endcsname
+		\setcounter{tmpmiscbonus}{\value{\addtypedbonus@companion#2#3bonuscount}}
+		\foreach\member in \stackabletypes {
+			\ifthenelse{\equal{#3}{\member}}
+			{
+				\setcounter{tmpcount}{1}
+			}{}
+		}
+		\ifthenelse{\value{tmpcount} = 1}
 		{
-			\addtocounter{#1#2#3bonuscount}{#4}
+			\addtocounter{\addtypedbonus@companion#2#3bonuscount}{#4}
 		}
 		{
-			\setcounter{#1#2#3bonuscount}{\maxof{\value{#1#2#3bonuscount}}{#4}}
+			\setcounter{\addtypedbonus@companion#2#3bonuscount}{\maxof{\value{\addtypedbonus@companion#2#3bonuscount}}{#4}}
 		}
+
 	\else
-		\newcounter{#1#2#3bonuscount}
+		\newcounter{\addtypedbonus@companion#2#3bonuscount}
 		\setcounter{tmpmiscbonus}{0}
-		\setcounter{#1#2#3bonuscount}{#4}
+		\setcounter{\addtypedbonus@companion#2#3bonuscount}{#4}
 	\fi
+
 	\ifthenelse{\equal{#2}{str} \OR\equal{#2}{dex} \OR\equal{#2}{con} \OR\equal{#2}{int} \OR\equal{#2}{wis} \OR\equal{#2}{cha}}
 	{
-		\addtocounter{#1#2count}{\value{#1#2#3bonuscount}-\value{tmpmiscbonus}}
-		\calculateattributemod{#1#2modcount}{#1#2count}
+		\addtocounter{\addtypedbonus@companion#2count}{\value{\addtypedbonus@companion#2#3bonuscount}-\value{tmpmiscbonus}}
+		\calculateattributemod{\addtypedbonus@companion#2modcount}{\addtypedbonus@companion#2count}
 	}
 	{	
-		\addtocounter{#1#2bonuscount}{\value{#1#2#3bonuscount}-\value{tmpmiscbonus}}
+		\addtocounter{\addtypedbonus@companion#2bonuscount}{\value{\addtypedbonus@companion#2#3bonuscount}-\value{tmpmiscbonus}}
 	}
 	\ifthenelse{\equal{#3}{dodge}}
 	{
-		\addtocounter{#1acmiscbonuscount}{\value{#1#2#3bonuscount}-\value{tmpmiscbonus}}
+		\addtocounter{\addtypedbonus@companion acmiscbonuscount}{\value{\addtypedbonus@companion#2#3bonuscount}-\value{tmpmiscbonus}}
 	}{}
-	\ifcsname c@#1#2skillcount\endcsname
-		\addtocounter{#1#2skillcount}{\value{#1#2#3bonuscount}-\value{tmpmiscbonus}}
+	\ifcsname c@\addtypedbonus@companion#2skillcount\endcsname
+		\addtocounter{\addtypedbonus@companion#2skillcount}{\value{\addtypedbonus@companion#2#3bonuscount}-\value{tmpmiscbonus}}
 	\fi
 }
 %[Companion] Target, value
@@ -825,24 +902,72 @@
 		\calculateattributemod{#1#2modcount}{#1#2count}
 	}{}
 }
+%[Companion] Target, Type, value
+\newcommand\addcategorybonus[4][]{
+	\ifcsname c@#1#2#3categorybonuscount\endcsname
+	\else
+		\newcounter{#1#2#3categorybonuscount}
+	\fi
+	\addtocounter{#1#2#3categorybonuscount}{#4}
+}
 
 %%Gear
-\newcommand\printgearitems[1][]{ \lfont item& \lfont Qty&\lfont wt.\tabularnewline\hline \csname #1itemlist\endcsname \relax & & \relax \tabularnewline \textsc{Total} & & \arabic{#1itemweightcount}~lbs. \tabularnewline\hline}
-\newcommand\printcontainers[1][]{ \lfont Container& \lfont Volume&\lfont wt.\tabularnewline\hline \csname #1containerlist\endcsname  \relax & & \relax \tabularnewline \textsc{Total} & & \arabic{#1containerweightcount}~lbs. \tabularnewline\hline}
+
+\newcommand\printgearitems[1][]{
+ 	&\lfont item& \lfont Qty&\lfont wt.\tabularnewline\hline
+ 	\forloop{loopcount}{0}{\value{loopcount}<\value{#1itemidcount}}
+	{
+		\csname #1item\arabic{loopcount}symbol\endcsname
+		&\tfont\csname #1item\arabic{loopcount}name\endcsname
+		&\tfont\arabic{#1item\arabic{loopcount}qty}
+		&\tfont\arabic{#1item\arabic{loopcount}weight} lbs.\tabularnewline
+	}
+	\relax & & \relax \tabularnewline \textsc{Total} & & \multicolumn{2}{r}{\arabic{#1itemweightcount}~lbs.} \tabularnewline\hline
+}
+\newcommand\printcontainers[1][]{
+	& \lfont Container& \lfont Volume&\lfont wt.\tabularnewline\hline 
+	\forloop{loopcount}{0}{\value{loopcount}<\value{#1containeridcount}}
+	{
+		\csname #1container\arabic{loopcount}symbol\endcsname
+		&\tfont\csname #1container\arabic{loopcount}name\endcsname
+		&\tfont\csname#1container\arabic{loopcount}volume\endcsname
+		&\tfont\arabic{#1container\arabic{loopcount}weight} lbs.\tabularnewline
+	}
+	\relax & & \relax \tabularnewline \textsc{Total} & & & \arabic{#1containerweightcount}~lbs. \tabularnewline\hline
+}
 
 %[] Name, Quantity/Volume, Weight
 \newcommand\addgear[4][]{
  \setkeys{addgear}{#1}
- \newcounter{\gear@companion #2\gear@type weight}
- \ifthenelse{\equal{\gear@type}{item}}{
-  	\addtocounter{\gear@companion #2\gear@type weight}{#3*#4}
-  	\addtocounter{\gear@companion \gear@type weightcount}{#3* #4}
+ \ifthenelse{\equal{\gear@type}{item}}
+{
+	 \newcounter{\gear@companion item\arabic{\gear@companion itemidcount}weight}
+	\newcounter{\gear@companion item\arabic{\gear@companion itemidcount}qty}
+	\setcounter{\gear@companion item\arabic{\gear@companion itemidcount}qty}{#3}
+	\global\expandafter\def\csname \gear@companion item\arabic{\gear@companion itemidcount}symbol\endcsname{\setkeys{addgear}{#1} \gear@symbol}
+	\global\expandafter\def\csname \gear@companion item\arabic{\gear@companion itemidcount}name\endcsname{#2}
+	\ifthenelse{\boolean{\gear@overwritetweight}}
+	{
+  		\addtocounter{\gear@companion  item\arabic{\gear@companion itemidcount}weight}{#4}
+  		\addtocounter{\gear@companion itemweightcount}{#4}
+	}
+	{
+  		\addtocounter{\gear@companion  item\arabic{\gear@companion itemidcount}weight}{#3*#4}
+  		\addtocounter{\gear@companion itemweightcount}{#3* #4}
+	}
+	\addtocounter{\gear@companion itemidcount}{1}
   }
  {
-	\addtocounter{\gear@companion #2\gear@type weight}{#4}
-  	\addtocounter{\gear@companion \gear@type weightcount}{#4}
+	\global\expandafter\def\csname \gear@companion container\arabic{\gear@companion containeridcount}symbol\endcsname{\setkeys{addgear}{#1} \gear@symbol}
+	\global\expandafter\def\csname \gear@companion container\arabic{\gear@companion containeridcount}name\endcsname{#2}
+	\global\expandafter\def\csname\gear@companion container\arabic{\gear@companion containeridcount}volume\endcsname{#3}
+	 \newcounter{\gear@companion container\arabic{\gear@companion containeridcount}weight}
+	\addtocounter{\gear@companion container\arabic{\gear@companion containeridcount}weight}{#4}
+  	\addtocounter{\gear@companion containerweightcount}{#4}
+	\addtocounter{\gear@companion containeridcount}{1}
   }
-  \expandafter\apptocmd\expandafter{\csname \gear@companion\gear@type list\endcsname}{\tfont{#2} &\tfont #3&\setkeys{addgear}{#1} \tfont \arabic{\gear@companion #2\gear@type weight}~lbs.\tabularnewline \resetkeys}{}{}
+\addtocounter{\gear@companion gearidcount}{1}
+ % \expandafter\appendcmd\expandafter{\csname \gear@companion\gear@type list\endcsname}{\setkeys{addgear}{#1} \gear@symbol&\tfont{#2} &\tfont #3&\setkeys{addgear}{#1} \tfont \arabic{\gear@companion \arabic{#1itemidcount}\gear@type weight}~lbs.\tabularnewline \resetkeys}
   \resetkeys
 }
 
@@ -852,106 +977,166 @@
 	\ifthenelse{\equal{#2}{belt}}{
 	\ifx \magicitembelt\emptylist
 		#3
-	\apptocmd{\magicitembelt}{\tfont #1}{}{}
+	\appendcmd{\magicitembelt}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{body}}{
 	\ifx \magicitembody\emptylist
 		#3
-	\apptocmd{\magicitembody}{\tfont #1}{}{}
+	\appendcmd{\magicitembody}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{chest}}{
 	\ifx \magicitemchest\emptylist
 		#3
-	\apptocmd{\magicitemchest}{\tfont #1}{}{}
+	\appendcmd{\magicitemchest}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{eyes}}{
 	\ifx \magicitemeyes\emptylist
 		#3
-	\apptocmd{\magicitemeyes}{\tfont #1}{}{}
+	\appendcmd{\magicitemeyes}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{feet}}{
 	\ifx \magicitemfeet\emptylist
 		#3
-	\apptocmd{\magicitemfeet}{\tfont #1}{}{}
+	\appendcmd{\magicitemfeet}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{hands}}{
 	\ifx \magicitemhands\emptylist
 		#3
-	\apptocmd{\magicitemhands}{\tfont #1}{}{}
+	\appendcmd{\magicitemhands}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{head}}{
 	\ifx \magicitemhead\emptylist
 		#3
-	\apptocmd{\magicitemhead}{\tfont #1}{}{}
+	\appendcmd{\magicitemhead}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{headband}}{
 	\ifx \magicitemheadband\emptylist
 		#3
-	\apptocmd{\magicitemheadband}{\tfont #1}{}{}
+	\appendcmd{\magicitemheadband}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{neck}}{
 	\ifx \magicitemneck\emptylist
 		#3
-	\apptocmd{\magicitemneck}{\tfont #1}{}{}
+	\appendcmd{\magicitemneck}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{ring}}{
 		\ifx \magicitemringone\emptylist
 		#3
-		\apptocmd{\magicitemringone}{\tfont #1}{}{}
+		\appendcmd{\magicitemringone}{\tfont #1}
 		\else	
 		\ifx \magicitemringtwo\emptylist
 		#3
-		\apptocmd{\magicitemringtwo}{\tfont #1}{}{}
+		\appendcmd{\magicitemringtwo}{\tfont #1}
 		\fi
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{shoulders}}{
 	\ifx \magicitemshoulders\emptylist
 		#3
-	\apptocmd{\magicitemshoulders}{\tfont #1}{}{}
+	\appendcmd{\magicitemshoulders}{\tfont #1}
 		\fi
 	}{}
 	\ifthenelse{\equal{#2}{wrist}}{
 	\ifx \magicitemwrist\emptylist
 		#3
-	\apptocmd{\magicitemwrist}{\tfont #1}{}{}
+	\appendcmd{\magicitemwrist}{\tfont #1}
 		\fi
 	}{}
 }
 %%Feats
+\newcommand\printfeats[1][]{
+	\begin{longtable}{| p{.25\textwidth} | p{.704\textwidth} |} 
+\multicolumn{2}{c}{\drawbox[family = list, special family = feat]{-210}{-2.8}{420}{10}{feats}}\tabularnewline
+\hline
+\rowcolor{\setting@defaultboxcolor}\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Name}&\centering \color{\setting@defaultfontcolor}\lfont\MakeUppercase{Text}\tabularnewline
+\hline
+\multicolumn{2}{c}{}\tabularnewline
+\endhead
+\hline
+\csname #1featlist\endcsname
+\end{longtable}
+}
+
 %Name, Text, additional commands
 \newcommand\addfeat[4][]{
 	#4
-	\expandafter\apptocmd\expandafter{\csname #1featlist\endcsname}{\selectfont\scshape#2 &\tfont  #3\\\hline}{}{}
+	\expandafter\appendcmd\expandafter{\csname #1featlist\endcsname}{\selectfont\scshape#2 &\tfont  #3\\\hline}
 	\setcounter{#1boolfeats}{1}
 }
 	
 %%Features, class features, racial traits etc
+\newcommand\printfeatures[1][]{
+	\begin{longtable}{| p{.25\textwidth} | p{.666\textwidth} |p{.015\textwidth}| } 
+\multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
+\hline
+\rowcolor{\setting@defaultboxcolor}\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Name}&\centering \color{\setting@defaultfontcolor}\lfont\MakeUppercase{Text}&\centering \color{\setting@defaultfontcolor}\centering\lfont\MakeUppercase{Uses}\tabularnewline
+\hline
+\endfirsthead
+\multicolumn{3}{c}{\drawbox[family = list, special family = feature]{-210}{-2.8}{420}{10}{features}}\tabularnewline
+\hline
+\rowcolor{\setting@defaultboxcolor}\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Name}&\centering \color{\setting@defaultfontcolor}\lfont\MakeUppercase{Text}&\centering \color{\setting@defaultfontcolor}\centering\lfont\MakeUppercase{Uses}\tabularnewline
+\hline
+\multicolumn{3}{c}{}\tabularnewline
+\endhead
+\ifx\featurelist\emptylist
+\else
+\csname #1featurelist\endcsname
+\fi
+\end{longtable}
+}
+
 %[Companion] Name,Type, Text, Uses, additional commands
 \newcommand\addfeature[6][]{
 	\setkeys{addfeature}{#1}
 	#6
 	\ifcsname \feature@companion feature#3list\endcsname	
 	\else
-		\expandafter\newcommand\csname \feature@companion feature#3list\endcsname{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\MakeUppercase{#3}}\\*\nobreakhline}
-		\expandafter\apptocmd\expandafter{\csname \feature@companion featurelist\endcsname}{\csname \feature@companion feature#3list\endcsname}{}{}
+		\global\expandafter\def\csname \feature@companion feature#3list\endcsname{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{black! 10}\multicolumn{3}{|c|}{\centering\MakeUppercase{#3}}\\*\nobreakhline}
+		\expandafter\appendcmd\expandafter{\csname \feature@companion featurelist\endcsname}{\csname \feature@companion feature#3list\endcsname}
 	
 	\fi
-	\expandafter\apptocmd\expandafter{\csname \feature@companion feature#3list\endcsname}{\selectfont\scshape#2 &\tfont  #4&\selectfont\scshape#5\\\hline}{}{}
+	\expandafter\appendcmd\expandafter{\csname \feature@companion feature#3list\endcsname}{\selectfont\scshape#2 &\tfont  #4&\selectfont\scshape#5\\\hline}
 	\setcounter{\feature@companion boolfeatures}{1}
 	\resetkeys%
 }
 
 %%Spells
+
+\newcommand\printspells[1][]{
+	\begin{longtable}{| p{.015\textwidth}| p{.47\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.065\textwidth} | p{.07\textwidth}| p{.05\textwidth} |} 
+\multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
+\hline
+\rowcolor{\setting@defaultboxcolor}\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Prep.}&\centering \color{\setting@defaultfontcolor}\lfont\MakeUppercase{Text}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{School}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Duration}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Range}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Save}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{SR}\tabularnewline
+\hline
+\endfirsthead 
+\multicolumn{7}{c}{\drawbox[family = caster, special family = spell]{-210}{-2.8}{420}{10}{spells}}\tabularnewline
+\hline
+\rowcolor{\setting@defaultboxcolor}\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Prep.}&\centering \color{\setting@defaultfontcolor}\lfont\MakeUppercase{Text}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{School}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Duration}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Range}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Save}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{SR}\tabularnewline
+\multicolumn{3}{c}{}\tabularnewline
+\hline
+\endhead 
+\csname #1default0spelllist\endcsname
+\csname #1default1spelllist\endcsname
+\csname #1default2spelllist\endcsname
+\csname #1default3spelllist\endcsname
+\csname #1default4spelllist\endcsname
+\csname #1default5spelllist\endcsname
+\csname #1default6spelllist\endcsname
+\csname #1default7spelllist\endcsname
+\csname #1default8spelllist\endcsname
+\csname #1default9spelllist\endcsname
+\end{longtable}
+}
+
 %Range (close, medium, long) , Caster, Caster level adjustment
 \newcommand\spellrange[3]{%
 	\IsInteger{#3}{\setcounter{tmpcasterlevelbonus}{#3}}{\setcounter{tmpcasterlevelbonus}{0}}%
@@ -979,17 +1164,17 @@
 	\setkeys{addspell}{#1}
 	\ifcsdef{\spell@companion \spell@caster #2spelllist}
 	{
-		\ifthenelse{\boolean{\spell@companion \spell@caster#2spelllistbool}}{}{\setboolean{\spell@companion \spell@caster#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion  \spell@caster#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \MakeUppercase
-{TIER}}\\*\nobreakhline}{}{}}
-		\expandafter\apptocmd\expandafter{\csname \spell@companion \spell@caster #2spelllist\endcsname}{
-		\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}
+		\ifthenelse{\boolean{\spell@companion \spell@caster#2spelllistbool}}{}{\setboolean{\spell@companion \spell@caster#2spelllistbool}{true}\expandafter\appendcmd\expandafter{\csname\spell@companion  \spell@caster#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \MakeUppercase
+{LEVEL}}\\*\nobreakhline}}
+		\expandafter\appendcmd\expandafter{\csname \spell@companion \spell@caster #2spelllist\endcsname}{
+		\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\centering\tfont#5&\centering\tfont#6&\centering\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\centering\tfont#8&\centering\tfont#9\tabularnewline\hline}
 		\ifthenelse{\boolean{\spell@known}}
 		{
 			\addtocounter{\spell@companion\spell@caster#2knownspells}{1}
 		}{}
 	}{		
-		\ifthenelse{\boolean{\spell@companion default#2spelllistbool}}{}{\setboolean{\spell@companion default#2spelllistbool}{true}\expandafter\apptocmd\expandafter{\csname\spell@companion default#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \MakeUppercase{TIER}}\\*\nobreakhline}{}{}}
-		\expandafter\apptocmd\expandafter{\csname \spell@companion default#2spelllist\endcsname}{\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\tfont#5&\tfont#6&\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\tfont#8&\tfont#9\tabularnewline\hline}{}{}		
+		\ifthenelse{\boolean{\spell@companion default#2spelllistbool}}{}{\setboolean{\spell@companion default#2spelllistbool}{true}\expandafter\appendcmd\expandafter{\csname\spell@companion default#2spelllist\endcsname}{\multicolumn{3}{c}{}\tabularnewline\hline\rowcolor{\setting@defaultboxcolor! 10}\multicolumn{7}{|c|}{\centering\ORDINALstringnum{#2} \MakeUppercase{LEVEL}}\\*\nobreakhline}}
+		\expandafter\appendcmd\expandafter{\csname \spell@companion default#2spelllist\endcsname}{\multicolumn{7}{|c|}{\selectfont\scshape#3}\\*\nobreakhline \setkeys{addspell}{#1}\ifthenelse{\equal{\spell@prepared}{}\OR\equal{\spell@prepared}{0}\OR\equal{\spell@prepared}{false}}{}{X}& \tfont#4&\centering\tfont#5&\centering\tfont#6&\centering\setkeys{addspell}{#1}\tfont\setkeys{addspell}{#1}\spellrange{#7}{\spell@companion\spell@caster}{\spell@clbonus} &\centering\tfont#8&\centering\tfont#9\tabularnewline\hline}		
 		\setcounter{\spell@companion boolspells}{1}		
 	}
 	\resetkeys
@@ -997,15 +1182,29 @@
 
 %%AC
 
-\newcommand{\printacitems}[1][]{\tabularnewline\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \MakeUppercase{AC Items} & \leavevmode\color{\setting@defaultfontcolor} \lfont ac bonus & \leavevmode\color{\setting@defaultfontcolor} \lfont max \csname #1acmod\endcsname & \leavevmode\color{\setting@defaultfontcolor} \lfont penalty &\leavevmode\color{\setting@defaultfontcolor}  \lfont spell failure & \leavevmode\color{\setting@defaultfontcolor} \lfont type & \leavevmode\color{\setting@defaultfontcolor} \lfont weight \tabularnewline\hline\csname #1acitemlist\endcsname
+\newcommand{\printacitems}[1][]{
+	\tabularnewline\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \MakeUppercase{AC Items} & \leavevmode\color{\setting@defaultfontcolor} \lfont ac bonus & \leavevmode\color{\setting@defaultfontcolor} \lfont max \csname #1acmod\endcsname & \leavevmode\color{\setting@defaultfontcolor} \lfont penalty &\leavevmode\color{\setting@defaultfontcolor}  \lfont spell failure & \leavevmode\color{\setting@defaultfontcolor} \lfont type & \leavevmode\color{\setting@defaultfontcolor} \lfont weight \tabularnewline\hline
+	\forloop{loopcount}{0}{\value{loopcount}<\value{#1armoridcount}}
+	{
+		\tfont\csname #1armorid\arabic{loopcount}name\endcsname \ifthenelse{\arabic{#1armorid\arabic{loopcount}enhancement} = 0}{}{+ \arabic{#1armorid\arabic{loopcount}enhancement}}
+		&\tfont \writevalue{\value{armorid\arabic{loopcount}acbonus}}%\value{#1armorid\arabic{loopcount}enhancement}+\value{tmpcount2}}
+		&\tfont\ifthenelse{\value{#1armorid\arabic{loopcount}maxdex} >0}{\writevalue{\value{#1armorid\arabic{loopcount}maxdex}}}{-}
+		&\tfont \writevalue{\value{#1armorid\arabic{loopcount}penalty}}%+\value{tmpcount4}}
+		&\tfont \writevalue{\value{#1armorid\arabic{loopcount}spellfailure}+\value{tmpcount5}}\%
+		&\tfont \csname #1armorid\arabic{loopcount}type\endcsname
+		& \tfont\arabic{#1armorid\arabic{loopcount}weight}~lbs.\ifthenelse{\equal{\csname #1armorid\arabic{loopcount}notes\endcsname}{}}{}{\tabularnewline[-0.9ex] \multicolumn{7}{l}{\tfont\csname #1armorid\arabic{loopcount}notes\endcsname}}\tabularnewline\hline
+	}
+
+\csname #1acitemlist\endcsname
 }
 
 \newcommand\calculatereducedspeed[1]
 {
 	\setcounter{tmpcount2}{#1/5+1}
-	\forloop{loopcount}{1}{\value{loopcount}<\value{tmpcount2}}
+	\setcounter{result}{0}
+	\forloop{innerloopcount}{1}{\value{innerloopcount}<\value{tmpcount2}}
 	{
-		\MODULO{\arabic{loopcount}}{3}{\tmpcmd}
+		\MODULO{\arabic{innerloopcount}}{3}{\tmpcmd}
 		\ifthenelse{\tmpcmd > 0}
 		{
 			\addtocounter{result}{5}
@@ -1014,35 +1213,119 @@
 }
 
 \newcommand{\addacitem}[8][]{
-\setkeys{addacitem}{#1}
-\ifthenelse{\equal{\detokenize{#7}}{\detokenize{light}}\OR\equal{\detokenize{#7}}{\detokenize{medium}}\OR\equal{\detokenize{#7}}{\detokenize{heavy}}\OR\equal{\detokenize{#7}}{\detokenize{armor}}}
-	{\addtypedbonus[\acitem@companion]{ac}{armor}{#3+\acitem@enhancement}}
-	{\ifcsname c@ac#7bonuscount\endcsname
-		\addtypedbonus[\acitem@companion]{ac}{#7}{#3+\acitem@enhancement}
-	\else
-		\addtypedbonus[\acitem@companion]{ac}{misc}{#3+\acitem@enhancement}
-	\fi
-	}
+	\setkeys{addacitem}{#1}
+	%define variables
+	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}acbonus}
+	\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}acbonus}{#3+\acitem@enhancement}
+	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdex}
+	\IsInteger{#4}{\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdex}{#4}}{\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdex}{-1}}
+	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}penalty}
+	\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}penalty}{#5}
+	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}spellfailure}
+	\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}spellfailure}{#6}
+	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}weight}
+	\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}weight}{#8}
+	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}enhancement}
+	\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}enhancement}{\acitem@enhancement}
 
-  \IsInteger{#4}{\setcounter{\acitem@companion maxdexbonuscount}{\minof{\value{\acitem@companion maxdexbonuscount}}{#4}}}{}
-  \ifthenelse {\value{\csname\acitem@companion acmod\endcsname modcount}>\value{\acitem@companion maxdexbonuscount}}{\setcounter{\acitem@companion acdexbonuscount}{\value{\acitem@companion maxdexbonuscount}}}{\setcounter{\acitem@companion acdexbonuscount}{\value{\csname\acitem@companion acmod\endcsname modcount}}}
-  \addtocounter{\acitem@companion acitemsbonus}{#3+\acitem@enhancement}
-  \addtocounter{\acitem@companion acitemscheckpenalty}{#5}
-  \addtocounter{\acitem@companion acitemsspellfailure}{#6}
-  \addtocounter{\acitem@companion acitemsweight}{#8}
-\ifthenelse{\equal{\acitem@armorspeed}{}}
-{
-\ifthenelse{\equal{\detokenize{#7}}{\detokenize{medium}}\OR\equal{\detokenize{#7}}{\detokenize{heavy}}}
-{
-	\calculatereducedspeed{\value{\acitem@companion basespeedcount}}
-	\setcounter{\acitem@companion armorspeedcount}{\minof{\value{result}}{\value{\acitem@companion armorspeedcount}}}
-}{}
+	%\expandafter\newcommand\csname \acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdex\endcsname{#4}
+	\global\expandafter\def\csname \acitem@companion armorid\arabic{\acitem@companion armoridcount}name\endcsname{#2}
+	\global\expandafter\def\csname \acitem@companion armorid\arabic{\acitem@companion armoridcount}type\endcsname{#7}
+	\global\expandafter\expandafter\expandafter\def\expandafter\expandafter\csname \acitem@companion armorid\arabic{\acitem@companion armoridcount}category\endcsname\expandafter{\acitem@category}
+	\global\expandafter\expandafter\expandafter\def\expandafter\expandafter\csname \acitem@companion armorid\arabic{\acitem@companion armoridcount}base\endcsname\expandafter{\acitem@base}
+	\global\expandafter\expandafter\expandafter\def\expandafter\expandafter\csname \acitem@companion armorid\arabic{\acitem@companion armoridcount}notes\endcsname\expandafter{\acitem@notes}
+	\global\expandafter\expandafter\expandafter\def\expandafter\expandafter\csname \acitem@companion armorid\arabic{\acitem@companion armoridcount}armorspeed\endcsname\expandafter{\acitem@armorspeed}
+
+	\addtocounter{\acitem@companion acitemsweight}{\value{\acitem@companion armorid\arabic{\acitem@companion armoridcount}weight}}
+	\addtocounter{\acitem@companion armoridcount}{1}
+
+ 	\resetkeys
 }
-{
-	\setcounter{\acitem@companion armorspeedcount}{\minof{\acitem@armorspeed}{\value{\acitem@companion armorspeedcount}}}
-}
- \expandafter\apptocmd\expandafter{\csname\acitem@companion acitemlist\endcsname}{\setkeys{addacitem}{#1}\tfont#2 \ifthenelse{\acitem@enhancement = 0}{}{+ \acitem@enhancement}& \setkeys{addacitem}{#1}\tfont \writevalue{#3+\acitem@enhancement} & \tfont#4 &\tfont #5 &\tfont #6\% & \tfont#7 & \tfont#8~lbs.\setkeys{addacitem}{#1}\ifthenelse{\equal{\acitem@notes}{}}{}{\tabularnewline[-0.9ex] \multicolumn{7}{l}{\setkeys{addacitem}{#1}\tfont\acitem@notes}}\tabularnewline\hline}{}{}
- \resetkeys
+
+\newcommand\initacitems[1][]{
+	\forloop{loopcount}{0}{\value{loopcount}<\value{#1armoridcount}}
+	{
+		\ifthenelse{\equal{\csname #1armorid\arabic{loopcount}armorspeed\endcsname}{}}
+		{
+			\ifthenelse{\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{medium}\OR\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{heavy}}
+			{
+				\calculatereducedspeed{\value{#1basespeedcount}}
+				\setcounter{#1armorspeedcount}{\minof{\value{result}}{\value{#1armorspeedcount}}}
+			}{}
+		}
+		{
+			\setcounter{#1armorspeedcount}{\minof{\csname #1armorid\arabic{loopcount}armorspeed\endcsname}{\value{#1armorspeedcount}}}
+		}
+
+		\setcounter{tmpcount2}{0}
+		\setcounter{tmpcount3}{0}
+		\setcounter{tmpcount4}{0}
+		\setcounter{tmpcount5}{0}
+
+		\ifx \csname #1armorid\arabic{loopcount}category\endcsname\empty
+			\else
+				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}category\endcsname ac bonuscategorybonuscount\endcsname
+					\addtocounter{#1armorid\arabic{loopcount}acbonus}{\value{\csname #1armorid\arabic{loopcount}category\endcsname ac bonuscategorybonuscount}}
+					\setcounter{#1armorid\arabic{loopcount}acbonus}{\maxof{\value{#1armorid\arabic{loopcount}acbonus}}{0}}
+				\fi
+				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}category\endcsname max dexcategorybonuscount\endcsname
+					\addtocounter{#1armorid\arabic{loopcount}maxdex}{\value{\csname #1armorid\arabic{loopcount}category\endcsname max dexcategorybonuscount}}
+					\setcounter{#1armorid\arabic{loopcount}maxdex}{\maxof{\value{#1armorid\arabic{loopcount}maxdex}}{0}}
+				\fi
+				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}category\endcsname penaltycategorybonuscount\endcsname
+					\addtocounter{#1armorid\arabic{loopcount}penalty}{\value{\csname #1armorid\arabic{loopcount}category\endcsname penaltycategorybonuscount}}
+					\setcounter{#1armorid\arabic{loopcount}penalty}{\minof{\value{#1armorid\arabic{loopcount}penalty}}{0}}
+				\fi
+				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}category\endcsname spell failurecategorybonuscount\endcsname
+					\addtocounter{#1armorid\arabic{loopcount}spellfailure}{\value{\csname #1armorid\arabic{loopcount}category\endcsname spell failurecategorybonuscount}}
+					\setcounter{#1armorid\arabic{loopcount}spellfailure}{\maxof{\value{#1armorid\arabic{loopcount}spellfailure}}{0}}
+				\fi
+		\fi
+		\ifx \csname #1armorid\arabic{loopcount}base\endcsname\empty
+			\else
+				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}base\endcsname ac bonuscategorybonuscount\endcsname
+					\addtocounter{#1armorid\arabic{loopcount}acbonus}{\value{\csname #1armorid\arabic{loopcount}base\endcsname ac bonuscategorybonuscount}}
+					\setcounter{#1armorid\arabic{loopcount}acbonus}{\maxof{\value{#1armorid\arabic{loopcount}acbonus}}{0}}
+				\fi
+				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}base\endcsname max dexcategorybonuscount\endcsname
+					\addtocounter{#1armorid\arabic{loopcount}maxdex}{\value{\csname #1armorid\arabic{loopcount}base\endcsname max dexcategorybonuscount}}
+					\setcounter{#1armorid\arabic{loopcount}maxdex}{\maxof{\value{#1armorid\arabic{loopcount}maxdex}}{0}}
+				\fi
+				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}base\endcsname penaltycategorybonuscount\endcsname
+					\addtocounter{#1armorid\arabic{loopcount}penalty}{\value{\csname #1armorid\arabic{loopcount}base\endcsname penaltycategorybonuscount}}
+					\setcounter{#1armorid\arabic{loopcount}penalty}{\minof{\value{#1armorid\arabic{loopcount}penalty}}{0}}
+				\fi
+				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}base\endcsname spell failurecategorybonuscount\endcsname
+					\addtocounter{#1armorid\arabic{loopcount}spellfailure}{\value{\csname #1armorid\arabic{loopcount}base\endcsname spell failurecategorybonuscount}}
+					\setcounter{#1armorid\arabic{loopcount}spellfailure}{\maxof{\value{#1armorid\arabic{loopcount}spellfailure}}{0}}
+				\fi
+		\fi
+
+		\ifthenelse{\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{light}\OR\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{medium}\OR\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{heavy}\OR\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{armor}}
+		{
+			\addtypedbonus[companion = #1]{ac}{armor}{\value{#1armorid\arabic{loopcount}acbonus}}
+		}
+		{
+			\ifcsname c@#1ac\csname #1armorid\arabic{loopcount}type\endcsname bonuscount\endcsname
+				\addtypedbonus[companion = #1]{ac}{\csname #1armorid\arabic{loopcount}type\endcsname}{\value{#1armorid\arabic{loopcount}acbonus}}
+			\else
+				\addtypedbonus[companion = #1]{ac}{misc}{\value{#1armorid\arabic{loopcount}acbonus}}
+			\fi
+		}
+		\ifthenelse{\value{#1armorid\arabic{loopcount}maxdex}<0}{}{\setcounter{#1maxdexbonuscount}{\minof{\value{#1maxdexbonuscount}}{\value{#1armorid\arabic{loopcount}maxdex}+\value{tmpcount3}}}}
+		\setcounter{#1acdexbonuscount}{\minof{\value{#1maxdexbonuscount}}{\value{\csname #1acmod\endcsname modcount}}}
+		\addtocounter{#1acitemsbonus}{\value{#1armorid\arabic{loopcount}acbonus}+\value{#1armorid\arabic{loopcount}enhancement}+\value{tmpcount2}}
+ 		\addtocounter{#1acitemscheckpenalty}{\value{#1armorid\arabic{loopcount}penalty}+\value{tmpcount4}}
+		\ifthenelse{\value{#1acitemscheckpenalty}>0}
+		{
+			\setcounter{#1acitemscheckpenalty}{0}
+		}{}
+		\addtocounter{#1acitemsspellfailure}{\value{#1armorid\arabic{loopcount}spellfailure}+\value{tmpcount5}}
+		\ifthenelse{\value{#1acitemsspellfailure}<0\OR\value{#1acitemsspellfailure}=0}
+		{
+			\setcounter{#1acitemsspellfailure}{0}
+		}{}
+	}
 }
 
 \newcommand\calculateflatfootedac[1][]{
@@ -1067,11 +1350,32 @@
 \newcommand\addweapon[8][]{
 	\setkeys{addweapon}{#1}
 	\addtocounter{\weapon@companion weaponweightcount}{#7}
-	\expandafter\apptocmd\expandafter{\csname\weapon@companion weaponlist\endcsname}{
+	\expandafter\appendcmd\expandafter{\csname\weapon@companion weaponlist\endcsname}{
 		\setkeys{addweapon}{#1}
-		\setcounter{tmpattackmodcount}{\value{\weapon@companion babcount}+\value{\weapon@companion \weapon@attackattribute}+\value{\weapon@companion sizemodcount}+\weapon@attackbonus+\weapon@enhancement}
-		\setcounter{tmpweapondamagecount}{\value{\weapon@companion \weapon@damageattribute}+\weapon@damagebonus+\weapon@enhancement}
-		\tfont#2 \ifthenelse{\weapon@enhancement = 0}{}{+\weapon@enhancement} & \setkeys{addweapon}{#1}\tfont \plusminus{tmpattackmodcount}\ifthenelse{\value{\weapon@companion babcount}>5}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>10}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>15}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}  & \tfont#3\ifthenelse{\value{tmpweapondamagecount} = 0}{}{\plusminus{tmpweapondamagecount}} &\tfont #4 &\tfont #5 & \tfont#6 & \tfont#7~lbs. & \tfont#8 \setkeys{addweapon}{#1}\ifthenelse{\equal{\weapon@notes}{}}{}{\tabularnewline[-0.9ex] \multicolumn{8}{l}{\setkeys{addweapon}{#1}\tfont\weapon@notes}}\tabularnewline\hline}{}{}
+		\setcounter{tmpcount}{0}
+		\setcounter{tmpcount2}{0}
+		\ifx \weapon@category\empty
+		\else
+			\ifcsname c@\weapon@companion\weapon@category attackcategorybonuscount\endcsname
+				\addtocounter{tmpcount}{\value{\weapon@companion\weapon@category attackcategorybonuscount}}
+			\fi
+			\ifcsname c@\weapon@companion\weapon@category damagecategorybonuscount\endcsname
+				\addtocounter{tmpcount2}{\value{\weapon@companion\weapon@category damagecategorybonuscount}}
+			\fi
+		\fi
+		\ifx \weapon@base\empty
+		\else
+			\ifcsname c@\weapon@companion\weapon@base attackcategorybonuscount\endcsname
+				\addtocounter{tmpcount}{\value{\weapon@companion\weapon@base attackcategorybonuscount}}
+			\fi
+			\ifcsname c@\weapon@companion\weapon@base damagecategorybonuscount\endcsname
+				\addtocounter{tmpcount2}{\value{\weapon@companion\weapon@base damagecategorybonuscount}}
+			\fi
+		\fi
+		\setcounter{tmpattackmodcount}{\value{\weapon@companion babcount}+\value{\weapon@companion \weapon@attackattribute}+\value{\weapon@companion sizemodcount}+\weapon@attackbonus+\weapon@enhancement+\value{tmpcount}}
+		\setcounter{tmpweapondamagecount}{\value{\weapon@companion \weapon@damageattribute}+\weapon@damagebonus+\weapon@enhancement+\value{tmpcount2}}
+		\tfont#2 \ifthenelse{\weapon@enhancement = 0}{}{+\weapon@enhancement} &\setkeys{addweapon}{#1} \tfont\ifx \weapon@attack\empty  \plusminus{tmpattackmodcount}\ifthenelse{\value{\weapon@companion babcount}>5}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>10}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>15}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\else \setcounter{boolcount}{0}\foreach\member in \weapon@attack {
+			\ifnum \value{boolcount} = 1/\else \setcounter{boolcount}{1}\fi\setcounter{tmpcount3}{\member + \value{tmpattackmodcount}-\value{\weapon@companion babcount}}\plusminus{tmpcount3}}\fi  & \tfont#3\ifthenelse{\value{tmpweapondamagecount} = 0}{}{\plusminus{tmpweapondamagecount}} &\tfont #4 &\tfont #5 & \tfont#6 & \tfont#7~lbs. & \tfont#8 \setkeys{addweapon}{#1}\ifthenelse{\equal{\weapon@notes}{}}{}{\tabularnewline[-0.9ex] \multicolumn{8}{l}{\setkeys{addweapon}{#1}\tfont\weapon@notes}}\tabularnewline\hline}
 	\resetkeys
 }
 
@@ -1083,9 +1387,10 @@
 
 \newcommand\printskills[1][]{	
 	 \begin{tabular}[t]{A{2}A{10}B{80}A{21}B{7}A{21}A{7}A{21}A{7}A{21}}
-    	\rowcolor{\setting@defaultboxcolor}& &\leavevmode\color{\setting@defaultfontcolor}\footnotesize \scshape Skill Names&\leavevmode\color{\setting@defaultfontcolor}\lfont Total\\ Bonus&&\leavevmode\color{\setting@defaultfontcolor}\lfont Ability\\ Mod.&&\leavevmode\color{\setting@defaultfontcolor}\lfont Ranks\\&&\leavevmode\color{\setting@defaultfontcolor}\lfont Misc.\\ Mod.\ \tabularnewline 
- 	\csname #1skilllist\endcsname 
-	&\lfont\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}&\lfont Class Skill\hspace{2ex}  * trained only & & &\lfont Total & & \arabic{#1skillranks}&&
+	
+    	\rowcolor{\setting@defaultboxcolor}& &{\color{\setting@defaultfontcolor}\footnotesize \scshape Skill Names}&{\color{\setting@defaultfontcolor}\lfont Total\\ Bonus}&&{\color{\setting@defaultfontcolor}\lfont Ability\newline Mod.}&&{\color{\setting@defaultfontcolor}\lfont Ranks\\}&&{\color{\setting@defaultfontcolor}\lfont Misc.\\ Mod.}\tabularnewline%\hline
+ 	\csname #1skilllist\endcsname%
+	&\lfont\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}&\lfont Class Skill\hspace{2ex}  * trained only & & &\lfont Total & & \arabic{#1skillranks}&&%
 	\end{tabular}
 }
 
@@ -1102,13 +1407,32 @@
  \addtocounter{#1#2skilltrainedonly}{1}
  \addtocounter{#1#2skillrankcount}{#6}
  \addtocounter{#1#2bonuscount}{#7}
- \expandafter\apptocmd\expandafter{\csname #1skilllist\endcsname}{
- \ifthenelse{\equal{\csname #1#2mod\endcsname}{str}\OR\equal{\csname #1#2mod\endcsname}{dex}}{\setcounter{#1tmpArmorPenalty}{\value{#1acitemscheckpenalty}}}{\setcounter{#1tmpArmorPenalty}{0}}
- \ifthenelse{\equal{#4}{}\OR\equal{#4}{0}}{\setcounter{#1tmpClassRanks}{0}}{\ifthenelse{\value{#1#2skillrankcount}>0}{\setcounter{#1tmpClassRanks}{3}}{\setcounter{#1tmpClassRanks}{0}}}
- \setcounter{#1#2skillcount}{\value{#1#2skillrankcount}+\value{#1#2bonuscount}+\value{#1\csname #1#2mod\endcsname modcount}+\value{#1tmpClassRanks}+\value{#1tmpArmorPenalty}}
-\ifthenelse{\equal{#3}{}\OR\equal{#3}{0}}{}{*}&\classskillbox{#4}&\tfont{#2}&\ifthenelse{\equal{#3}{}\OR\equal{#3}{0} \OR \value{#1#2skillrankcount}>0}{\plusminus{#1#2skillcount}}{-}  & $=$ &\tabto*{1mm}\color{black! 35}\MakeUppercase{\csname #1#2mod\endcsname}\tabto*{0mm}\color{black}\noindent\llap{\arabic{#1\csname #1#2mod\endcsname modcount}} & $+$ & $\arabic{#1#2skillrankcount}$ &  $+$ & $\arabic{#1#2bonuscount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}{}{}
+ \expandafter\appendcmd\expandafter{\csname #1skilllist\endcsname}
+{
+	 \ifthenelse{\equal{\csname #1#2mod\endcsname}{str}\OR\equal{\csname #1#2mod\endcsname}{dex}}
+	{
+		\setcounter{#1tmpArmorPenalty}{\value{#1acitemscheckpenalty}}
+	}
+	{
+		\setcounter{#1tmpArmorPenalty}{0}
+	}
+  	\addtocounter{#1#2bonuscount}{\value{#1tmpArmorPenalty}}
+ 	\ifthenelse{\equal{#4}{}\OR\equal{#4}{0}}
+	{
+		\setcounter{#1tmpClassRanks}{0}
+	}
+	{
+		\ifthenelse{\value{#1#2skillrankcount}>0}
+		{
+			\setcounter{#1tmpClassRanks}{3}
+		}
+		{
+			\setcounter{#1tmpClassRanks}{0}
+		}
+	}
+ 	\setcounter{#1#2skillcount}{\value{#1#2skillrankcount}+\value{#1#2bonuscount}+\value{#1\csname #1#2mod\endcsname modcount}+\value{#1tmpClassRanks}}
+	\ifthenelse{\equal{#3}{}\OR\equal{#3}{0}}{}{*}&\classskillbox{#4}&\tfont{#2}&\ifthenelse{\equal{#3}{}\OR\equal{#3}{0} \OR \value{#1#2skillrankcount}>0}{\plusminus{#1#2skillcount}}{-}  & $=$ &\tabto*{1mm}\color{black! 35}\MakeUppercase{\csname #1#2mod\endcsname}\tabto*{0mm}\color{black}\noindent\llap{\arabic{#1\csname #1#2mod\endcsname modcount}} & $+$ & $\arabic{#1#2skillrankcount}$ &  $+$ & $\arabic{#1#2bonuscount}$ \tabularnewline\cline{4-4}\cline{6-6}\cline{8-8}\cline{10-10}}
 }
-
 \newcommand\classskillbox[1]{
   \ifthenelse{\equal{#1}{}\OR\equal{#1}{0}}{$\square$}{\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}}
 }
@@ -1117,14 +1441,14 @@
 %Text, additional commands
 \newcommand\addcondition[2][]{
 	\setkeys{addcondition}{#1}%
-	\expandafter\apptocmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{\tfont#2}{}{}
+	\expandafter\appendcmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{\tfont#2}
 	\ifthenelse{\equal{\condition@comma}{}\OR\equal{\condition@comma}{no}\OR\equal{\condition@comma}{false}\OR\equal{\condition@comma}{0}}{}
 	{
-		\expandafter\apptocmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{, }{}{}
+		\expandafter\appendcmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{, }
 	}
 	\ifthenelse{\equal{\condition@linebreak}{}\OR\equal{\condition@linebreak}{no}\OR\equal{\condition@linebreak}{false}\OR\equal{\condition@linebreak}{0}}{}
 	{
-		\expandafter\apptocmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{\\}{}{}
+		\expandafter\appendcmd\expandafter{\csname \condition@companion conditionalmodlist\endcsname}{\\}
 	}
 	\resetkeys
 }
@@ -1143,8 +1467,8 @@
 %[], Name, level, BAB, Fort, Ref, Will
 \newcommand\addclass[7][]{
 	\setkeys{addclass}{#1}
-	\ifthenelse{\equal{\csname \class@companion classlist\endcsname}{}}{\expandafter\apptocmd\expandafter{\csname \class@companion classlist\endcsname}{\fontsize{7}{7}\selectfont}{}{}}{\expandafter\apptocmd\expandafter{\csname \class@companion classlist\endcsname}{, }{}{}}
-	\expandafter\apptocmd\expandafter{\csname \class@companion classlist\endcsname}{Lvl #3 #2}{}{}
+	\ifthenelse{\equal{\csname \class@companion classlist\endcsname}{}}{\expandafter\appendcmd\expandafter{\csname \class@companion classlist\endcsname}{\fontsize{7}{7}\selectfont}}{\expandafter\appendcmd\expandafter{\csname \class@companion classlist\endcsname}{, }}
+	\expandafter\appendcmd\expandafter{\csname \class@companion classlist\endcsname}{Lvl #3 #2}
 	\newcounter{\class@companion #2casterlevelcount}
 	\addtocounter{\class@companion #2casterlevelcount}{#3}
 	\addtocounter{\class@companion casterlevelcount}{#3}
@@ -1183,7 +1507,7 @@
 \newcommand\name[2][]{\expandafter\renewcommand\csname #1charname\endcsname{#2}}
 \newcommand\playername[2][]{\expandafter\renewcommand\csname #1charplayername\endcsname{#2}}
 \newcommand\alignment[2][]{\expandafter\renewcommand\csname #1charalignment\endcsname{#2}}
-\newcommand\diety[2][]{\expandafter\renewcommand\csname #1chardiety\endcsname{#2}}
+\newcommand\deity[2][]{\expandafter\renewcommand\csname #1chardeity\endcsname{#2}}
 \newcommand\race[3][]{
 	\expandafter\renewcommand\csname #1charrace\endcsname{#2}
 	\setcounter{#1racebasespeedcount}{#3}
@@ -1274,8 +1598,8 @@
 
 %Languages
 \newcommand\addlanguages[1]{
-	\ifthenelse{\equal{\languagelist}{}}{}{\apptocmd{\languagelist}{, }{}{}}
-	\apptocmd{\languagelist}{#1}{}{}
+	\ifthenelse{\equal{\languagelist}{}}{}{\appendcmd{\languagelist}{, }}
+	\appendcmd{\languagelist}{#1}
 	}
 \newcommand\charlanguagesspoken[1]{#1}
 \newcommand\favouredclass[1]{
@@ -1298,7 +1622,7 @@
 \setcounter{#1currencyweightcount}{#2*\real{#3}}
 \setcounter{#1currencystoredcount}{#4}
 \addtocounter{currencyweightcount}{\value{#1currencyweightcount}}
- \apptocmd{\currencylist}{\tfont#1 &\tfont \arabic{#1currencycarriedcount}&\tfont \arabic{#1currencyweightcount} &\tfont \arabic{#1currencystoredcount}\tabularnewline}{}{}
+ \appendcmd{\currencylist}{\tfont#1 &\tfont \arabic{#1currencycarriedcount}&\tfont \arabic{#1currencyweightcount} &\tfont \arabic{#1currencystoredcount}\tabularnewline}
 }
 
 %Weight
@@ -1383,7 +1707,7 @@
 }
 
 \newcommand\addnote[2]{
-	 \apptocmd{\notelist}{\MakeUppercase{#1}&\tfont#2\tabularnewline \hline}{}{}
+	 \appendcmd{\notelist}{\MakeUppercase{#1}&\tfont#2\tabularnewline \hline}
 }
 
 %%Lists
@@ -1394,7 +1718,7 @@
 	\newboolean{bool#1list}
 	\expandafter\newcommand\csname #1list\endcsname{}
 	\expandafter\newcommand\csname #1listhead\endcsname{}
-	\apptocmd{\printcustomlists}{
+	\appendcmd{\printcustomlists}{
 	\ifthenelse{\boolean{bool#1list}}
 	{
 		\newpage
@@ -1406,15 +1730,15 @@
 			\csname #1list\endcsname
 		\end{longtable}
 	}{}
-}{}{}
+}
 }
 %List name, row content
 \newcommand\addtocustomlist[2]{
 	\setboolean{bool#1list}{true}
-	\expandafter\apptocmd\expandafter{\csname #1list\endcsname}{#2\\\hline}{}{}
+	\expandafter\appendcmd\expandafter{\csname #1list\endcsname}{#2\\\hline}
 }
 \newcommand\addheadtocustomlist[2]{
-	\expandafter\apptocmd\expandafter{\csname #1listhead\endcsname}{#2 \tabularnewline}{}{}
+	\expandafter\appendcmd\expandafter{\csname #1listhead\endcsname}{#2 \tabularnewline}
 }
 
 %%Caster
@@ -1427,6 +1751,8 @@
 		\expandafter\newcommand\csname \caster@companion #2\arabic{loopcount}spelllist\endcsname{}
 		\newboolean{\caster@companion #2\arabic{loopcount}spelllistbool}
 		\newboolean{\caster@companion #2\arabic{loopcount}isnumberbool}
+		\newboolean{\caster@companion #2\arabic{loopcount}dontshowspellperday}
+		\setboolean{\caster@companion #2\arabic{loopcount}dontshowspellperday}{true}
 		\setboolean{\caster@companion #2\arabic{loopcount}isnumberbool}{true}
 		\newcounter{\caster@companion #2known\arabic{loopcount}spells}
 		\newcounter{\caster@companion #2\arabic{loopcount}classspellslots}	
@@ -1436,6 +1762,18 @@
 		\newcounter{\caster@companion #2\arabic{loopcount}abillityspellslots}
 	}
 	
+	\ifthenelse{\equal{\csname caster@zeroth\endcsname}{false}}{\setboolean{\caster@companion #20dontshowspellperday}{false}}{}
+	\ifthenelse{\equal{\csname caster@first\endcsname}{false}}{\setboolean{\caster@companion #21dontshowspellperday}{false}}{	}
+	\ifthenelse{\equal{\csname caster@second\endcsname}{false}}{\setboolean{\caster@companion #22dontshowspellperday}{false}}{}
+	\ifthenelse{\equal{\csname caster@third\endcsname}{false}}{\setboolean{\caster@companion #23dontshowspellperday}{false}}{}
+	\ifthenelse{\equal{\csname caster@fourth\endcsname}{false}}{\setboolean{\caster@companion #24dontshowspellperday}{false}}{}
+	\ifthenelse{\equal{\csname caster@fifth\endcsname}{false}}{\setboolean{\caster@companion #25dontshowspellperday}{false}}{}
+	\ifthenelse{\equal{\csname caster@sixth\endcsname}{false}}{\setboolean{\caster@companion #26dontshowspellperday}{false}}{}
+	\ifthenelse{\equal{\csname caster@seventh\endcsname}{false}}{\setboolean{\caster@companion #27dontshowspellperday}{false}}{}
+	\ifthenelse{\equal{\csname caster@eighth\endcsname}{false}}{\setboolean{\caster@companion #28dontshowspellperday}{false}}{}
+	\ifthenelse{\equal{\csname caster@ninth\endcsname}{false}}{\setboolean{\caster@companion #29dontshowspellperday}{false}}{}
+
+
 	\IsInteger{\csname caster@zeroth\endcsname}{\setcounter{\caster@companion #20classspellslots}{\csname caster@zeroth\endcsname}}{\setboolean{\caster@companion #20isnumberbool}{false}}
 	\IsInteger{\csname caster@first\endcsname}{\setcounter{\caster@companion #21classspellslots}{\csname caster@first\endcsname}}{\setboolean{\caster@companion #21isnumberbool}{false}}
 	\IsInteger{\csname caster@second\endcsname}{\setcounter{\caster@companion #22classspellslots}{\csname caster@second\endcsname}}{\setboolean{\caster@companion #22isnumberbool}{false}}
@@ -1455,7 +1793,7 @@
 	\addtocounter{\caster@companion #2casterlevelcount}{\caster@offset}
 	\newcounter{\caster@companion #2spelldc}
 	
-	\expandafter\apptocmd\expandafter{\csname \caster@companion printcasters\endcsname}{
+	\expandafter\appendcmd\expandafter{\csname \caster@companion printcasters\endcsname}{
 		\setkeys{addcaster}{#1}
 		 \newpagetitlebox[\caster@companion]					
 		\forloop{loopcount}{0}{\value{loopcount}<10}
@@ -1482,6 +1820,7 @@
 		\setcounter{tmpcount}{155}
 		\forloop{loopcount}{0}{\value{loopcount}<10}
 		{
+			\ifthenelse{\boolean{\caster@companion #2\arabic{loopcount}dontshowspellperday}}{
 			\ifthenelse{\boolean{\caster@companion #2\arabic{loopcount}isnumberbool}}
 			{
 				\stretchequalattributes{85}{\arabic{tmpcount}}{180}{\arabic{\caster@companion #2\arabic{loopcount}classspellslots},\arabic{\caster@companion #2\arabic{loopcount}abillityspellslots},\arabic{\caster@companion #2\arabic{loopcount}miscspellslots}}
@@ -1492,6 +1831,7 @@
 				\put(82.5,\arabic{tmpcount}){\parbox[b][3\unitlength][b]{20\unitlength}{\centering $\infty$}}
 				\addtocounter{tmpcount}{-2}
 			}
+			}{}
 			\addtocounter{tmpcount}{-15}
 		}
 		%Spell level
@@ -1574,15 +1914,18 @@
 		}
 
 		\end{picture}
-		\begin{longtable}{| p{.015\textwidth}| p{.483\textwidth+.038\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.07\textwidth} | p{.0427\textwidth}| p{.02\textwidth} |} 
+		\begin{longtable}{| p{.015\textwidth}| p{.47\textwidth}| p{.1\textwidth} | p{.07\textwidth} | p{.065\textwidth} | p{.07\textwidth}| p{.05\textwidth} |} 
 			\multicolumn{7}{c}{\drawbox[family = caster, special family = caster spells]{-210}{-2.8}{420}{10}{#2 \caster@spellname}}\tabularnewline
-			\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Prep.}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering\color{white}\lfont\MakeUppercase{School}&\centering\color{white}\lfont\MakeUppercase{Duration}&\centering\color{white}\lfont\MakeUppercase{Range}&\centering\color{white}\lfont\MakeUppercase{Save}&\centering\color{white}\lfont\MakeUppercase{SR}\tabularnewline
-			\endfirsthead 
-			\multicolumn{7}{c}{\drawbox[family = caster, special family = caster spells]{-210}{-2.8}{420}{10}{#2 spells}}\tabularnewline
-			\rowcolor{black}\centering\color{white}\lfont\MakeUppercase{Prep.}&\centering \color{white}\lfont\MakeUppercase{Text}&\centering\color{white}\lfont\MakeUppercase{School}&\centering\color{white}\lfont\MakeUppercase{Duration}&\centering\color{white}\lfont\MakeUppercase{Range}&\centering\color{white}\lfont\MakeUppercase{Save}&\centering\color{white}\lfont\MakeUppercase{SR}\tabularnewline\hline
-			\multicolumn{7}{c}{}\tabularnewline
-			\endhead 
 			\hline
+			\rowcolor{\setting@defaultboxcolor}\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Prep.}&\centering \color{\setting@defaultfontcolor}\lfont\MakeUppercase{Text}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{School}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Duration}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Range}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Save}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{SR}\tabularnewline
+			\hline
+			\endfirsthead 
+			\hline
+			\multicolumn{7}{c}{\drawbox[family = caster, special family = caster spells]{-210}{-2.8}{420}{10}{#2 spells}}\tabularnewline
+			\rowcolor{\setting@defaultboxcolor}\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Prep.}&\centering \color{\setting@defaultfontcolor}\lfont\MakeUppercase{Text}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{School}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Duration}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Range}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{Save}&\centering\color{\setting@defaultfontcolor}\lfont\MakeUppercase{SR}\tabularnewline\hline
+			\multicolumn{7}{c}{}\tabularnewline
+			\hline
+			\endhead 
 			\csname \caster@companion #20spelllist\endcsname
 			\csname \caster@companion #21spelllist\endcsname
 			\csname \caster@companion #22spelllist\endcsname
@@ -1593,7 +1936,7 @@
 			\csname \caster@companion #27spelllist\endcsname
 			\csname \caster@companion #28spelllist\endcsname
 			\csname \caster@companion #29spelllist\endcsname
-		\end{longtable}}{}{}
+		\end{longtable}}
 	\resetkeys
 }
 %Caster, Level, Value
@@ -1608,20 +1951,20 @@
 	\setkeys{addpower}{#1}%
 	\ifcsdef{\power@companion #3#2list}{}{%
 		\expandafter\newcommand\csname \power@companion #3#2list\endcsname{}%
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\tabularnewline\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor}\centering\MakeUppercase{#2}\tabularnewline}{}{} %\rowcolor{black} \leavevmode\color{white}\centering\MakeUppercase{#2}\tabularnewline
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3powerlist\endcsname}{\setkeys{addpower}{#1} \csname \power@companion #3#2list\endcsname}{}{}%
+		\expandafter\appendcmd\expandafter{\csname \power@companion #3#2list\endcsname}{\tabularnewline\rowcolor{\setting@defaultboxcolor} \leavevmode\color{\setting@defaultfontcolor}\centering\MakeUppercase{#2}\tabularnewline} %\rowcolor{black} \leavevmode\color{white}\centering\MakeUppercase{#2}\tabularnewline
+		\expandafter\appendcmd\expandafter{\csname \power@companion #3powerlist\endcsname}{\setkeys{addpower}{#1} \csname \power@companion #3#2list\endcsname}%
 	}%
 	\ifthenelse{\equal{\power@parent}{}}{%		
 		\ifcsdef{\power@companion #3#2#4list}{}{%
 			\expandafter\newcommand\csname \power@companion #3#2#4sublist\endcsname{}%
 			\expandafter\newcommand\csname \power@companion #3#2#4list\endcsname{}%
 		}%
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2#4list\endcsname}{\setkeys{addpower}{#1}#4 \\\csname \power@companion #3#2#4sublist\endcsname}{}{}%
+		\expandafter\appendcmd\expandafter{\csname \power@companion #3#2#4list\endcsname}{\setkeys{addpower}{#1}#4 \\\csname \power@companion #3#2#4sublist\endcsname}%
 	}{%
-		\expandafter\apptocmd\expandafter{\csname \power@companion #3#2\power@parent sublist\endcsname}{\hspace{20pt}\textbullet\, #4\\}{}{}%
+		\expandafter\appendcmd\expandafter{\csname \power@companion #3#2\power@parent sublist\endcsname}{\hspace{20pt}\textbullet\, #4\\}%
 	}%
 	\power@commands%
-	\expandafter\apptocmd\expandafter{\csname \power@companion #3#2list\endcsname}{\setkeys{addpower}{#1}\csname \power@companion #3#2#4list\endcsname}{}{}%
+	\expandafter\appendcmd\expandafter{\csname \power@companion #3#2list\endcsname}{\setkeys{addpower}{#1}\csname \power@companion #3#2#4list\endcsname}%
 	\resetkeys%
 }
 
@@ -1657,11 +2000,11 @@
 	{
 		\input{Companions/\companion@loadfile}
 	}
-	\apptocmd{\printcompanions}{
+	\appendcmd{\printcompanions}{
 		\renewcommand\currcompanion{#2}
 		\newpagetitlebox[#2]
 		\printsheet[#2]
-	}{}{}
+	}
 	\resetkeys
 }
 \newcommand\printsheet[1][]
@@ -1671,13 +2014,178 @@
 \newcommand\newpagetitlebox[1][]
 {
 	\newpage
-	\ifthenelse{\equal{#1}{}}{}{
-		\begin{picture}(420,0)
-		%\singletitlebox{\setting@ctbx}{\setting@ctby}{\setting@ctbwidth}{\setting@ctbheight}{#1}
-		\drawbox[family = companion]{\setting@ctbx}{\setting@ctby}{\setting@ctbwidth}{\setting@ctbheight}{#1}
-		\end{picture}
+	\ifthenelse{\equal{#1}{}}{}{%
+		\begin{picture}(420, 0)
+		\put(0,-8){\drawbox[family = companion]{\setting@ctbx}{\setting@ctby}{\setting@ctbwidth}{\setting@ctbheight}{#1}}
+		\end{picture}%
 	}
 }
+
+%%Enviroments
+
+\ExplSyntaxOn
+\NewDocumentCommand{\parse}{ m  o }
+ {
+  \egreg_string:n { #1 }
+  %\IfNoValueTF { #3 } { \tl_use:N } { \tl_set_eq:NN #3 } \l_tarass_string_tl
+ }
+
+\tl_new:N \l_parse_string_tl
+\cs_new_protected:Npn \egreg_string:n #1 
+{
+	\tl_set:Nn \l_parse_string_tl { #1 }
+	\regex_replace_all:nnN {\;} {\;\;} \l_parse_string_tl
+	\regex_replace_all:nnN {\,} {\;} \l_parse_string_tl
+	\regex_replace_all:nnN {\;\;} {\;\;\,} \l_parse_string_tl
+	\tl_reverse:N \l_parse_string_tl
+	\regex_replace_once:nnN { \, } { } \l_parse_string_tl
+	\tl_reverse:N \l_parse_string_tl  
+ }
+
+\NewDocumentCommand{\parseOPTIONAL}{ m }
+ {
+  \egreg_string_optional:n { #1 }
+ }
+\tl_new:N \l_optional_string_tl
+\tl_new:N \l_optional_parameter_string_tl
+\seq_new:N \l_optional_string_seq
+\cs_new_protected:Npn \egreg_string_optional:n #1 
+ {
+	\tl_set:Nn \l_optional_string_tl { #1 }
+	\tl_set:Nn \l_optional_parameter_string_tl { #1 }
+ 	\regex_match:nnTF{\[ [ \w|\W ]* \]}{#1}
+	{
+		\regex_replace_once:nnN { \[ [\w|\W ]* \] } { } \l_optional_string_tl
+		\regex_extract_once:nnN { \[ [\w|\W ]* \] } {#1}  \l_optional_string_seq
+		\seq_get_left:NN  \l_optional_string_seq \l_optional_parameter_string_tl
+		\regex_replace_all:nnN {\;} {\,}  \l_optional_parameter_string_tl
+		\expandafter\tl_put_left:Nn\expandafter \l_optional_string_tl\expandafter{\l_optional_parameter_string_tl}
+	}
+	{
+		\tl_put_left:Nn \l_optional_string_tl {[]}
+	}
+ }
+
+%------------------------------------------------------------------------------------------------------------
+\NewEnviron{Weapon}
+{
+	\expandafter\expandafter\expandafter\parse\expandafter{\BODY}
+	\foreach \x in \l_parse_string_tl
+	{
+		\expandafter\expandafter\expandafter\parseOPTIONAL\expandafter{\x}
+		\expandafter\envaddweapon \l_optional_string_tl 
+	}
+}
+
+\NewEnviron{ACitem}
+{
+	\expandafter\expandafter\expandafter\parse\expandafter{\BODY}
+	\foreach \x in \l_parse_string_tl
+	{
+		\expandafter\expandafter\expandafter\parseOPTIONAL\expandafter{\x}
+		\expandafter\envaddacitem \l_optional_string_tl 
+	}
+}
+
+\NewEnviron{Gear}
+{
+	\expandafter\expandafter\expandafter\parse\expandafter{\BODY}
+	\foreach \x in \l_parse_string_tl
+	{
+		\expandafter\expandafter\expandafter\parseOPTIONAL\expandafter{\x}
+		\expandafter\envaddgear \l_optional_string_tl 
+	}
+}
+
+\NewEnviron{Feature}
+{
+	\expandafter\expandafter\expandafter\parse\expandafter{\BODY}
+	\foreach \x in \l_parse_string_tl
+	{
+		\expandafter\expandafter\expandafter\parseOPTIONAL\expandafter{\x}
+		\expandafter\envaddfeature \l_optional_string_tl 
+	}
+}
+
+\newcounter{containerenvcount}
+\NewEnviron{Container}[4][]
+{
+	\setkeys{containerenv}{#1}
+	\addtocounter{containerenvcount}{1}
+	\newcounter{containerenv#2volume}
+	\newcounter{containerenv#2volumelimit}
+	\setcounter{containerenv#2volumelimit}{#3}
+	\newcounter{containerenv#2remainingvolume}
+	\setcounter{containerenv#2remainingvolume}{\value{containerenv#2volumelimit}}
+	\global\expandafter\edef\csname containerenv#2symbol\endcsname{\csname containerenv@symbol\endcsname}
+	\expandafter\expandafter\expandafter\parse\expandafter{\BODY}
+	\foreach \x in \l_parse_string_tl
+	{
+		\expandafter\expandafter\expandafter\parseOPTIONAL\expandafter{\x}
+		\expandafter\envcontainer\l_optional_string_tl {#2}
+	}
+	\ifthenelse{\equal{}{}}
+	{
+		\addgear [type = container, symbol = \csname containerenv#2symbol\endcsname] {#2}{\arabic{containerenv#2volume}/#3 $\;$lbs.}{#4}
+	}
+	{
+		\addgear[type = container, #1, symbol = \csname containerenv#2symbol\endcsname]{#2}{\arabic{containerenv#2volume}/#3 $\;$lbs.}{#4}
+	}
+	\resetkeys
+}
+
+\NewEnviron{Condition}
+{
+	\expandafter\expandafter\expandafter\parse\expandafter{\BODY}
+	\foreach \x in \l_parse_string_tl
+	{
+		\expandafter\expandafter\expandafter\parseOPTIONAL\expandafter{\x}
+		\expandafter\envaddcondition \l_optional_string_tl 
+	}
+}
+
+\global\def\envaddacitem[#1]#2;#3;#4;#5;#6;#7;#8;;{\addacitem[#1] {#2} {#3} {#4} {#5} {#6} {\tl_trim_spaces:n{#7}} {#8}}
+\def\envaddfeature[#1]#2;#3;#4;#5;#6;;{\addfeature[#1] {#2} {\tl_trim_spaces:n{#3}} {#4} {#5} {#6}}
+\ExplSyntaxOff
+
+\def\envaddweapon[#1]#2;#3;#4;#5;#6;#7;#8;;{\addweapon[#1] {#2} {#3} {#4} {#5} {#6} {#7} {#8}}
+\def\envaddgear[#1]#2;#3;#4;;{\addgear[#1] {#2} {#3} {#4}}
+\def\envcontainer[#1]#2;#3;#4;;#5{
+	\setcounter{tmpcount}{#3*#4}
+	\newcounter{containerenv#5#2weight}
+	\newcounter{containerenv#5#2number}
+	
+	\setcounter{containerenv#5#2weight}{\value{containerenv#5remainingvolume}/#4}
+	\ifnum #3 > \value{containerenv#5#2weight}
+		\setcounter{containerenv#5#2number}{#3-\value{containerenv#5#2weight}}
+	\else
+		\setcounter{containerenv#5#2number}{0}
+		\setcounter{containerenv#5#2weight}{#3}
+	\fi 
+	\ifthenelse{\value{containerenv#5#2number} = #3}
+	{
+		\ifthenelse{\boolean{\csname containerenv@weightless\endcsname}}
+		{
+			\expandafter\addgear\expandafter[#1, overwrite weight = true] {#2} {#3} {\value{containerenv#5#2number}*#4}
+		}
+		{
+			\addgear[#1] {#2} {#3} {#4}
+		}
+	}
+	{
+		\ifthenelse{\boolean{\csname containerenv@weightless\endcsname}}
+		{
+			\expandafter\addgear\expandafter[#1, symbol = \csname containerenv#5symbol\endcsname, overwrite weight = true] {#2} {#3} {\value{containerenv#5#2number}*#4}
+		}
+		{
+			\addgear[#1,  symbol = \csname containerenv#5symbol\endcsname] {#2} {#3} {#4}
+		}
+	}
+	\addtocounter{containerenv#5remainingvolume}{-\value{containerenv#5#2weight}*#4}
+	\addtocounter{containerenv#5volume}{\value{containerenv#5#2weight}*#4}
+}
+\def\envaddcondition[#1]#2;;{\addcondition[#1]{#2}}
+
 %----------------------------------------------------------------------Settings----------------------------------------------------------------------
 \newcommand\currsetting{default}
 \newcommand\setting[1]{\renewcommand{\currsetting}{#1}}
