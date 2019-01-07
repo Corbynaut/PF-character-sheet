@@ -11,7 +11,7 @@
 \noindent\begin{picture}(420,579)
 
 \begin{picture}(0,0)
-	\put(38.5,520){\hbox{\myincludegraphics[scale=0.043]{Logo.jpg}}}
+	%\put(38.5,520){\hbox{\myincludegraphics[scale=0.043]{Logo.jpg}}}
 \end{picture}
   \put(140,530){\renewcommand{\arraystretch}{1.5}
     \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
@@ -60,7 +60,7 @@
   \stretchattributes{33}{440}{102}{\arabic{#1chacount},\plusminus{#1chamodcount},\plusminus{#1chatmpcount},\plusminus{#1chatmpmodcount}}
 
   %% HP
-  \drawbox[family = info, special family = hp]{107}{505}{26}{12}{HP}
+  \drawbox[family = info, special family = hp, subtext =  (\csname #1hpmod\endcsname)]{107}{505}{26}{12}{HP}
   \put(137,505){\framebox(38,12){}}
   \put(137,512){\makebox(14,4){\tiny\scshape Total}}
   \put(137,505){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \chartotalhp[#1]}}
@@ -114,7 +114,7 @@
   \drawbox[family = info, special family = cmd]{0}{289}{21}{11}{cmd}
   \stretchequalattributes{25}{290}{130}{\arabic{#1babcount},\arabic{#1\csname #1cmdstrmod\endcsname modcount},\arabic{#1\csname #1cmddexmod\endcsname modcount},\arabic{#1specialsizemodcount} ,10}
   \stretchlabels{25}{284}{130}{TOTAL, BAB,\csname #1cmdstrmod\endcsname\, mod.,\csname #1cmddexmod\endcsname\, mod., size mod.,default}
-
+%%Speed
   \drawbox[family = info, special family = speed]{135}{284}{25}{35}{speed}
   % \put(135,284){\framebox(25,35){\MakeUppercase{Speed}}}
   \put(165,310){\framebox(40,\boxheight){}}
@@ -125,7 +125,7 @@
   \put(165,294){\parbox[b][3\unitlength][b]{40\unitlength}{\centering\lfont with armour}}
   \put(165,284){\framebox(40,\boxheight){}}
   \put(164,285){\begin{tabular}[b]{F{17}E{2}@{\hspace{1ex}/\hspace{-1.6ex}}F{16}E{2}}\arabic{#1fly speedcount} &ft. & 0& \end{tabular}}
-  \put(165,281){\parbox[b][3\unitlength][b]{40\unitlength}{\lfont\centering fly/manoeuvrability}}
+  \put(165,281){\parbox[b][3\unitlength][b]{40\unitlength}{\lfont\centering fly/manoeuvrability}}	
   \put(135,271){\framebox(20,\boxheight){}}
   \put(134,272){\begin{tabular}[b]{F{16}E{2}}\arabic{#1swim speedcount} &ft.\end{tabular}}
   \put(135,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont swim}}
@@ -147,12 +147,12 @@
   \put(215,508.89){\printskills[#1]}
 
   \drawbox[family = info, special family = conditional modifiers]{-2}{255}{205.4}{10}{Conditional Modifiers}
-  \put(-1.7,170){\framebox(204.78,85){}}
+  \put(-1.7,140){\framebox(204.78,115){}}
   \put(0,210){\parbox[b][43\unitlength][t]{200\unitlength}{\itshape \csname #1conditionalmodlist\endcsname}}
 
-   \drawbox[family = info, special family = languages]{-2}{150}{205.4}{10}{Languages}
-  \put(-1.7,85){\framebox(204.78,65){}}
-  \put(0,110){\parbox[b][38\unitlength][t]{200\unitlength}{\itshape \tfont \csname #1languagelist\endcsname }}
+   \drawbox[family = info, special family = languages]{-2}{120}{205.4}{10}{Languages}
+  \put(-1.7,85){\framebox(204.78,35){}}
+  \put(0,80){\parbox[b][38\unitlength][t]{200\unitlength}{\itshape \tfont \csname #1languagelist\endcsname }}
 
 \end{picture}
 
@@ -228,6 +228,11 @@
 \newpagetitlebox[#1]
 \printspells[#1]
 }
+\ifthenelse{\value{#1undeadcount} >0}
+{
+	\newpagetitlebox[#1]
+	\printanimatedead[#1]
+}{}
 }
 \printsheet
 \printcustomlists

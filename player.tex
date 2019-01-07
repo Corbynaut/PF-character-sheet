@@ -77,69 +77,6 @@
 \addlanguages{Common}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-%% items/ Containers
-%\addgear{Name}{Quantity/Volume}{Weight}
-\addgear{Test}{10}{1}
-\addgear[type = container]{Container}{10 lbs.}{1}
-
-%Gear environment, adds gear to the item list.
-%Content must be of the form: Name, Quantity, Weight; ...
-\begin{Gear}
-	ENV-Test, 10, 1;
-\end{Gear}
-
-%Container environment, adds container to the container list.
-%The "weightless" parameter sets the weight of all items inside of the container to zero
-%The "symbol" parameter adds a symbol to the container and its items
-%Content must be of the form: Name, Volume, Weight; ...
-\begin{Container}[weightless = true, symbol = 1]{Bag of holding}{100}{12}
-	ENV-Container-Test-1, 60, 2;
-	ENV-Container-Test-2, 1, 2;
-	ENV-Container-Test-3, 1, 2;
-	ENV-Container-Test-4, 1, 2;
-	ENV-Container-Test-5, 100, 2;
-	ENV-Container-Test-6, 1, 2;
-\end{Container}
-\begin{Container}[symbol = 2]{Env-Container2}{500}{12}
-	ENV-Container2-Test-1, 1, 2;
-	ENV-Container2-Test-2, 1, 2;
-	ENV-Container2-Test-3, 1, 2;
-	ENV-Container2-Test-4, 1, 2;
-	ENV-Container2-Test-5, 0, 2;
-	ENV-Container2-Test-6, 1, 2;
-\end{Container}
-%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-%%AC-Items
-%\addacitem{Name}{AC bonus}{Max dex}{Armor check penalty}{Spell failure}{Type (light, medium, heavy, shield, natural, misc)}{Weight}
-\addacitem[enhancement = 5, notes = benevolent, base = Fullplate, category = heavy]{Test armor}{8}{5}{-6}{0}{heavy}{100}
-\addacitem[category = shield]{Test shield}{1}{-}{-1}{35}{shield}{70}
-
-%ACitem environment.
-%Content must be of the form: [optional parameter] Name, AC bonus, Max dex, Armor check penalty, Spell failure, Type (light, medium, heavy, shield, natural, misc), Weight; ...
-\begin{ACitem}
-	Test natural, 5, -, 0, 0, natural, 70;
-\end{ACitem}
-
-%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-%%Weapons
-%\addweapon{Name}{Damage}{Critical}{Range}{Type}{Weight}{Ammo}
-\addweapon[attack attribute = int, notes = note, base = Longsword, category = Heavy Blades]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[damage attribute = none]{Weapon str - none}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[attack attribute = dex, damage attribute = dex]{Weapon dex-dex}{2d6}{18-20/x2}{-}{S}{12}{-}
-
-
-%Weapon environment
-%Content must be of the form: [optional parameter] Name, Damage, Critical, Range, Weight, Ammo; ...
-\begin{Weapon}
-	[attack attribute = int, notes = {flaming, hamster bane}, base = Longsword, category = Heavy Blades] Weapon int - str, 2d6, 18-20/x2, -, S, 12, -;
-\end{Weapon}
-
-%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-%%Worn magic items
-%\addmagicitem{Name}{Type  (belt, body, chest, eyes, feet, hands, head, headband, neck, ring, shoulders, wrist)}{Additional commands}
-\addmagicitem{Ring of protection}{ring}{\addacitem{Ring of protection}{1}{-}{0}{0}{deflection}{0}}
-
-%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Skills
 %		Name, 				trained only	 classskill	 Abillity mod  ranks	misc
 \addskill	{acrobatics}				{0}		{1}		{dex}		{0}	{0}
@@ -182,6 +119,71 @@
 
 \addtypedbonus{stealth}{untyped}{\value{stealthsizemodcount}}
 \addtypedbonus{fly}{untyped}{\value{flysizemodcount}}
+
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+%% items/ Containers
+%\addgear{Name}{Quantity/Volume}{Weight}
+\addgear{Test}{10}{1}
+\addgear[type = container]{Container}{10 lbs.}{1}
+
+%Gear environment, adds gear to the item list.
+%Content must be of the form: Name, Quantity, Weight; ...
+\begin{Gear}
+	ENV-Test, 10, 1;
+\end{Gear}
+
+%Container environment, adds container to the container list.
+%The "weightless" parameter sets the weight of all items inside of the container to zero
+%The "symbol" parameter adds a symbol to the container and its items
+%Content must be of the form: Name, Volume/Quantity, Weight; ...
+\begin{Container}[weightless = true, symbol = 1]{Bag of holding}{100}{12}
+	ENV-Container-Test-1, 60, 2;
+	ENV-Container-Test-2, 1, 2;
+	ENV-Container-Test-3, 1, 2;
+	ENV-Container-Test-4, 1, 2;
+	ENV-Container-Test-5, 100, 2;
+	ENV-Container-Test-6, 1, 2;
+\end{Container}
+\begin{Container}[symbol = 2]{Env-Container2}{500}{12}
+	ENV-Container2-Test-1, 1, 2;
+	ENV-Container2-Test-2, 1, 2;
+	ENV-Container2-Test-3, 1, 2;
+	ENV-Container2-Test-4, 1, 2;
+	ENV-Container2-Test-5, 0, 2;
+	ENV-Container2-Test-6, 1, 2;
+\end{Container}
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%%AC-Items
+%\addacitem{Name}{AC bonus}{Max dex}{Armor check penalty}{Spell failure}{Type (light, medium, heavy, shield, natural, misc)}{Weight}
+\addacitem[enhancement = 5, notes = benevolent, base = Fullplate, category = heavy]{Test armor}{8}{5}{-6}{0}{heavy}{100}
+\addacitem[category = shield]{Test shield}{1}{-}{-1}{35}{shield}{70}
+
+%ACitem environment.
+%Content must be of the form: [optional parameter] Name, AC bonus, Max dex, Armor check penalty, Spell failure, Type (light, medium, heavy, shield, natural, misc), Weight; ...
+\begin{ACitem}
+	Test natural, 5, -, 0, 0, natural, 70;
+\end{ACitem}
+
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%%Weapons
+%\addweapon{Name}{Damage}{Critical}{Range}{Type}{Weight}{Ammo}
+\addweapon[attack attribute = int, notes = note, base = Longsword, category = Heavy Blades]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[damage attribute = none]{Weapon str - none}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[attack attribute = dex, damage attribute = dex]{Weapon dex-dex}{2d6}{18-20/x2}{-}{S}{12}{-}
+
+
+%Weapon environment
+%Content must be of the form: [optional parameter] Name, Damage, Critical, Range, Type, Weight, Ammo; ...
+\begin{Weapon}
+	[attack attribute = int, notes = {flaming, hamster bane}, base = Longsword, category = Heavy Blades] Weapon int - str, 2d6, 18-20/x2, -, S, 12, -;
+\end{Weapon}
+
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%%Worn magic items
+%\addmagicitem{Name}{Type  (belt, body, chest, eyes, feet, hands, head, headband, neck, ring, shoulders, wrist)}{Additional commands}
+\addmagicitem{Ring of protection}{ring}{\addacitem{Ring of protection}{1}{-}{0}{0}{deflection}{0}}
+\addmagicitem{Masterwork tool (UMD)}{none}{\addtypedbonus{use magic device}{untyped}{2} \addgear{Masterwork tool (UMD)}{0}{1}}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Conditional Modifiers
@@ -233,13 +235,13 @@
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Spells
-%\addspell[Caster]{Level}{Name}{Text}{School}{Duration}{Range}{Save}{SR}
+%\addspell[Caster]{Level}{Name}{Text}{School}{Duration}{Range}{Save}{Target}
 %Use \spellrange{Range (close, medium, long)} {Caster (Must be a class name that was added via \addclass)} {Caster level adjustment (e.g. +3 or leave empty for 0)} to calculate the range per caster level
 
-\addspell[caster = ClassC, caster level bonus = 0, prepared = true]{2}{Test1 +3 caster level}{Text}{School}{Instantaneous}{personal}{Reflex negates}{No}
-\addspell[caster = ClassC, caster level bonus = 1]{6}{Test2 +1 caster level}{Text}{School}{Duration}{medium}{Reflex negates}{No}
-\addspell[caster = ClassC, caster level bonus = 2, known = false]{2}{Test3 +2 caster level, known = false}{Text}{School}{Duration}{long}{Reflex negates}{No}
-\addspell{5}{Test1 +3 caster level}{Text}{School}{Duration}{close}{Reflex negates}{No}
+\addspell[caster = ClassC, caster level bonus = 0, prepared = true]{2}{Test1 +3 caster level}{Text}{School}{Instantaneous}{personal}{Reflex negates}{you}
+\addspell[caster = ClassC, caster level bonus = 1]{6}{Test2 +1 caster level}{Text}{School}{Duration}{medium}{Reflex negates}{-}
+\addspell[caster = ClassC, caster level bonus = 2, known = false]{2}{Test3 +2 caster level, known = false}{Text}{School}{Duration}{long}{Reflex negates}{45 ft. cone}
+\addspell{5}{Test1 +3 caster level}{Text}{School}{Duration}{close}{Reflex negates}{-}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Notes
