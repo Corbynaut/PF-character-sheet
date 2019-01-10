@@ -2352,9 +2352,9 @@
 	\setkeys{animatedead}{#1}
 	\foreach \x in \animatedead@template
 	{
-		\expandafter\csname template\x\endcsname
+		\expandafter\loadtemplate{\x}
 	}
-	\expandafter\csname template#8\endcsname
+	\loadtemplate{#8}
 	#9
 	\resetkeys
 }
@@ -2364,6 +2364,12 @@
 %#2: Content like feats, attribute increase, etc.
 \newcommand\addtemplate[2]{
 	\expandafter\newcommand\csname template#1\endcsname{#2}
+}
+%Loads a template
+%#1: Companion (not yet relevant)
+%#2: Name
+\newcommand\loadtemplate[2][]{
+	\expandafter\csname template#2\endcsname
 }
 
 \newcounter{animatedeadloop}
@@ -2461,7 +2467,7 @@
   		\put(189,58){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont burrow}}
 		 %% INIT
   		\drawbox[subtext = modifier]{134}{45}{20}{11}{INIT.}
-  		\stretchequalattributes{156}{46}{210}{\arabic{\ID \csname \ID initiativemod\endcsname modcount},\arabic{#1initiativebonuscount}}
+  		\stretchequalattributes{156}{46}{210}{\arabic{\ID \csname \ID initiativemod\endcsname modcount},\arabic{\ID initiativebonuscount}}
   		\stretchlabels{156}{40}{210}{TOTAL, \csname \ID initiativemod\endcsname\, modifier, misc modifier}		
 		%%Weapons
  		\put(-2,30){\printweapons[\ID]}
