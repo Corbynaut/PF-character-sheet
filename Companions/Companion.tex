@@ -1,66 +1,66 @@
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Companions (UNDER CONSTRUCTION)
+\begin{Companion}{TestCompanion}
+\addclass[calculate bab = true, calculate fort = true, calculate ref = true, calculate will = true]	{Class}	{10}	{1}	{1/2+2}	{1/3}	{1/2+2}
 
-\addclass	[companion = \currcompanion, calculate bab = true, calculate fort = true, calculate ref = true, calculate will = true]	{Class}	{16}	{1}	{1/2+2}	{1/3}	{1/2+2}
+\addcaster[offset = 0, zeroth = 1, first = 1, second = 1, third = 1, fourth = 1, fifth = 1, sixth = 1, seventh = 1, eighth = 1, ninth = 1]	{Class}	{int}
 
-\addcaster	[companion = \currcompanion, offset = 0, zeroth = 1, first = 1, second = 1, third = 1, fourth = 1, fifth = 1, sixth = 1, seventh = 1, eighth = 1, ninth = 1]	{Class}	{int}
+\addpower{domain}{Class}{test}
+\addpower[parent = test]{domain}{Class}{subtest1}
+\addpower[parent = test]{domain}{Class}{subtest2}
 
-\addpower[companion = \currcompanion]{domain}{Class}{test}
-\addpower[companion = \currcompanion, parent = test]{domain}{Class}{subtest1}
-\addpower[companion = \currcompanion, parent = test]{domain}{Class}{subtest2}
+\name{Companion name}
+\playername{Player}
+\alignment{Alignment}
+\deity{Deity}
+%%Race name, race base speed
+\race{Race}{30}
+\homeland{Homeland}
+\size{Large}
+\gender{Gender}
+\age{Age}
+\height{Height}
+\weight{Weight}
+\hair{Hair}
+\eyes{Eyes}
 
-\name[\currcompanion]{Companion name}
-\playername[\currcompanion]{Player}
-\alignment[\currcompanion]{Alignment}
-\deity[\currcompanion]{Diety}
-%Race name, race base speed
-\race[\currcompanion]{Race}{30}
-\homeland[\currcompanion]{Homeland}
-\size[\currcompanion]{Size}
-\gender[\currcompanion]{Gender}
-\age[\currcompanion]{Age}
-\height[\currcompanion]{Height}
-\weight[\currcompanion]{Weight}
-\hair[\currcompanion]{Hair}
-\eyes[\currcompanion]{Eyes}
+\setattribute{str}{28}
+\setattribute{dex}{12}
+\setattribute{con}{12}
+\setattribute{int}{20}
+\setattribute{wis}{12}
+\setattribute{cha}{12}
 
-\setattribute[\currcompanion]{str}{28}
-\setattribute[\currcompanion]{dex}{12}
-\setattribute[\currcompanion]{con}{12}
-\setattribute[\currcompanion]{int}{20}
-\setattribute[\currcompanion]{wis}{12}
-\setattribute[\currcompanion]{cha}{12}
+\setspeed{swim}{50}
+\addacitem{Companion misc}{10}{-}{0}{0}{natural}{70}
 
-\setspeed[\currcompanion]{swim}{50}
+\addweapon[attack attribute = int]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
 
-\addacitem[companion = \currcompanion]{Companion misc}{10}{-}{0}{0}{natural}{70}
-
-\addweapon[companion = \currcompanion, attack attribute = int]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
-
-\addtypedbonus[companion = \currcompanion]{ac}{dodge}{-2}
+\addtypedbonus{ac}{dodge}{-2}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %% items/ Containers
 %\addgear{Name (no duplicates)}{Quantity/Volume}{Weight}
-\addgear[companion = \currcompanion]{Test}{10}{1}
-\addgear[type = container, companion = \currcompanion]{Container}{10}{1}
+\addgear{Test}{10}{1}
+\addgear[type = container]{Container}{10}{1}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Skills
 %						Name, 				trained only	 classskill	 Abillity mod  ranks	misc
-\addskill	[\currcompanion]		{acrobatics}				{0}		{0}		{dex}		{0}	{0}
-\addskill	[\currcompanion]		{appraise}				{0}		{0}		{int}		{0}	{0}
-\addskill	[\currcompanion]		{bluff}				{0}		{1}		{cha}		{0}	{0}
-\addskill	[\currcompanion]		{climb}				{0}		{1}		{str}		{2}	{0}
-\addskill	[\currcompanion]		{craft (armor)}			{0}		{1}		{int}		{0}	{0}
-\addskill	[\currcompanion]		{craft (bows)}			{0}		{1}		{int}		{0}	{0}
-\addskill	[\currcompanion]		{craft (weapons)}			{0}		{1}		{int}		{0}	{0}
-\addskill	[\currcompanion]		{diplomacy}				{0}		{1}		{cha}		{0}	{0}
-\addskill	[\currcompanion]		{disable device}			{1}		{0}		{dex}		{0}	{0}
-\addskill	[\currcompanion]		{disguise}				{0}		{0}		{cha}		{0}	{0}
-\addskill	[\currcompanion]		{escape artist}			{0}		{0}		{dex}		{0}	{0}
-\addskill	[\currcompanion]		{fly}					{0}		{0}		{dex}		{0}	{0}
-\addskill	[\currcompanion]		{handle animal}			{1}		{1}		{cha}		{0}	{0}
-\addskill	[\currcompanion]		{heal}					{0}		{0}		{wis}		{10}	{0}
+\addskill					{acrobatics}				{0}		{0}		{str}		{0}	{0}
+\addskill					{appraise}				{0}		{0}		{int}		{0}	{0}
+\addskill					{bluff}				{0}		{1}		{cha}		{0}	{0}
+\addskill					{climb}				{0}		{1}		{str}		{2}	{0}
+\addskill					{craft (armor)}			{0}		{1}		{int}		{0}	{0}
+\addskill					{craft (bows)}			{0}		{1}		{int}		{0}	{0}
+\addskill					{craft (weapons)}			{0}		{1}		{int}		{0}	{0}
+\addskill					{diplomacy}				{0}		{1}		{cha}		{0}	{0}
+\addskill					{disable device}			{1}		{0}		{dex}		{0}	{0}
+\addskill					{disguise}				{0}		{0}		{cha}		{0}	{0}
+\addskill					{escape artist}			{0}		{0}		{dex}		{0}	{0}
+\addskill					{fly}					{0}		{0}		{dex}		{0}	{0}
+\addskill					{handle animal}			{1}		{1}		{cha}		{0}	{0}
+\addskill					{heal}					{0}		{0}		{wis}		{10}	{0}
 
-\addspell[companion = \currcompanion, caster = Class, caster level bonus = 0]{2}{Test1 +3 caster level}{Text}{School}{Duration}{medium}{Reflex negates}{No}
+\addspell[caster = Class, caster level bonus = 0]{2}{Test1 +3 caster level}{Text}{School}{Duration}{medium}{Reflex negates}{No}
+\end{Companion}

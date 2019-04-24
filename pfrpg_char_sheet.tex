@@ -3,8 +3,10 @@
 \input{player.tex}
 \unitlength\textwidth
 \divide\unitlength 420
+%\setlength{\tabcolsep}{0pt}
 
 \renewcommand\printsheet[1][]{
+\initsize[#1]
 \calculateweight[#1]
 \calculateloadsandlift[#1]
 \initacitems[#1]
@@ -27,7 +29,7 @@
     \end{tabular}}
 
 %  \put(-0.8,438.5){%
-%    \setlength\fboxsep{0pt}\colorbox{black! 35}{%
+%    \setlength\fboxsep{0pt}\colorbox{black! 35}{%u
 %      \makebox(68,80){
 %      }%
 %    }%
@@ -249,10 +251,3 @@
 
 \printcompanions
 \end{document}
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: t
-%%% End: 
-
-
-
