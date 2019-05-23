@@ -322,7 +322,11 @@
 \define@key{addcaster}{companion}{\def\caster@companion{#1}}
 \define@key{addcaster}{offset}{\def\caster@offset{#1}}
 \define@key{addcaster}{level name}{\def\caster@levelname{#1}}
-\define@key{addcaster}{spell name}{\def\caster@spellname{#1}}
+\define@key{addcaster}{spell name}{
+	\def\caster@spellname{#1}
+	\ifthenelse{\equal{#1}{spells}}{}{\def\caster@spelloverviewname{#1}}
+}
+\define@key{addcaster}{spell-overview name}{\def\caster@spelloverviewname{#1}}
 \define@key{addcaster}{calculate bonus spells}{\def\caster@calculatebonusspells{#1}}
 \define@key{addcaster}{show dcs}{\def\caster@showdcs{#1}}
 \define@key{addcaster}{show spell overview}{\def\caster@showspelloverview{#1}}
@@ -446,10 +450,14 @@
 
 \define@key{addcurrency}{companion}{\def\addcurrency@companion{#1}}
 
+\define@key{addlanguages}{companion}{\def\addlanguages@companion{#1}}
+
+\define@key{favouredclass}{companion}{\def\favouredclass@companion{#1}}
+
 
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
-	\setkeys{addcaster}{level name = caster, spell name = spells,calculate bonus spells = true, show dcs = true, show spell overview = true, companion = \currcompanion, offset=0, show buckets = false, animate dead multiplier = 1, animate dead bonus = 0,zeroth=infinity,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
+	\setkeys{addcaster}{level name = caster, spell name = spells, spell-overview name = spell, calculate bonus spells = true, show dcs = true, show spell overview = true, companion = \currcompanion, offset=0, show buckets = false, animate dead multiplier = 1, animate dead bonus = 0,zeroth=infinity,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
 	\setkeys{addweapon}{notes =, enhancement = 0, attack attribute = str, attack bonus = 0, attack =, damage attribute = str, damage bonus = 0, companion = \currcompanion, category =, base =, calculate size = false}%
 	\setkeys{addspell}{companion = \currcompanion, caster level bonus = 0, caster =, prepared =, known = true}%
 	\setkeys{addgear}{type = item, companion = \currcompanion, overwrite weight = false, symbol =}%
@@ -485,6 +493,8 @@
 	\setkeys{hair}{companion = \currcompanion}%
 	\setkeys{eyes}{companion = \currcompanion}%
 	\setkeys{addcurrency}{companion = \currcompanion}%
+	\setkeys{addlanguages}{companion = \currcompanion}%
+	\setkeys{favouredclass}{companion = \currcompanion}%
 }
 \resetkeys
 
@@ -2116,13 +2126,20 @@
 }
 
 %Languages
-\newcommand\addlanguages[1]{
-	\ifthenelse{\equal{\languagelist}{}}{}{\appendcmd{\languagelist}{, }}
-	\appendcmd{\languagelist}{#1}
+\newcommand\addlanguages[2][]{
+	\setkeys{addlanguages}{#1}%
+	\ifthenelse{\equal{\csname\addlanguages@companion languagelist\endcsname}{}}{}
+	{
+		\expandafter\appendcmd\expandafter{\csname\addlanguages@companion languagelist\endcsname}
+	{, }}
+	\expandafter\appendcmd\expandafter{\csname\addlanguages@companion languagelist\endcsname}{#2}
+	\resetkeys
 	}
-\newcommand\charlanguagesspoken[1]{#1}
-\newcommand\favouredclass[1]{
-	\renewcommand{\charfavouredclass}{#1}
+
+\newcommand\favouredclass[2][]{
+	\setkeys{favouredclass}{#1}%
+	\global\expandafter\def\csname\favouredclass@companion charfavouredclass\endcsname{#2}
+	\resetkeys
 }
 
 %Currency
@@ -2473,7 +2490,7 @@
 			\setcounter{overviewnextlevel}{0}		
 			\setlength{\tabcolsep}{0pt}
 			\begin{longtable}{>{}p{0.331\textwidth}>{}p{0.003\textwidth}>{}p{0.331\textwidth}>{}p{0.003\textwidth}>{}p{0.331\textwidth}}%
-					\multicolumn{5}{c}{\drawbox[family = caster, special family = caster spells]{-210}{0}{420}{10}{#2 \caster@spellname -Overview}}\tabularnewline%
+					\multicolumn{5}{c}{\drawbox[family = caster, special family = caster spells]{-210}{0}{420}{10}{#2 \caster@spelloverviewname -Overview}}\tabularnewline%
 					\hline\\[-7.5pt]
 					\endhead 
 					\forloop{loopcount}{0}{\value{l_overviewone_seq_bool} <1 \OR \value{l_overviewtwo_seq_bool} <1 \OR \value{l_overviewthree_seq_bool} <1}
@@ -2677,7 +2694,7 @@
 	\initvariables[\ID]	
 	\global\expandafter\renewcommand\csname\ID undeadtype\endcsname{#8}
 	\addtocounter{\animatedead@companion undeadcount}{1}	
-	\addtocounter{\animatedead@companion\animatedead@bucket bucket}{#3}
+	\addtocounter{\animatedead@companion\animatedead@bucket bucket}{#3*\csname animatedead@number\endcsname}
 	\newcounter{\animatedead@companion\ID numbercount}
 	\addtocounter{\animatedead@companion\ID numbercount}{\animatedead@number}
 	%\addclass														Class name, 		level,	 BAB,	 Fort,	 	REF, 		Will
