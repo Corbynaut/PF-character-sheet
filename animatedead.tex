@@ -55,44 +55,39 @@
 
 }
 
+\addtemplate{Incorporeal}
+{
+    \loadtemplate{Undead}
+    \addtypedbonus[companion = \ID]{ac}{deflection}{\maxof{1}{\value{\ID chamodcount}}}
+	\changeattribute[\ID]{cmb}{dex}
+}
+
 %%[optional parameter]{NAME}{HIT DICE}{HIT POINTS}{SIZE}{STR}{DEX}{TEMPLATE}{ADDITIONAL PARAMETERS}
-\animatedead[number = 7, bucket = spell]{Testecles}{12}{90}{Huge}{16}{10}{Bloody Skeleton}
+\animatedead[number = 7, bucket = none]{Testecles}{12}{90}{Huge}{16}{10}{Bloody Skeleton}
 {	
 	\race[companion = \ID]{Storm giant}{30}
+	\addtypedbonus[companion = \ID]{ac}{dodge}{1}
+	\addtypedbonus[companion = \ID]{ac}{deflection}{2}
 	\begin{Weapon}
 		[companion = \ID, enhancement= 0, calculate size = 0, notes = trip] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
 		[companion = \ID, enhancement= 0, calculate size = 0, notes = note] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
 		[companion = \ID, enhancement= 0, calculate size = 0] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
 	\end{Weapon}
 }
-\animatedead{Skeleton}{10}{80}{Medium}{20}{16}{Skeleton}
-{
+
+\animatedead[number = 1, bucket = spell]{Greater Shadow}{9}{40}{Medium}{-}{20}{Incorporeal}
+{	
+	\race[companion = \ID]{Greater Shadow}{0}
+	\setattribute[companion = \ID]{int}{6}
+	\setattribute[companion = \ID]{wis}{12}
+	\setattribute[companion = \ID]{cha}{15}
+	\setspeed[companion = \ID]{fly}{40}
+	\addfeat[companion = \ID]{Dodge}{}{\addtypedbonus[companion = \ID]{ac}{dodge}{1}}
+	\addfeat[companion = \ID]{Flyby Attack}{}{}
+	\addfeat[companion = \ID]{Mobility}{}{}
+	\addfeat[companion = \ID]{Skill Focus (Perception, Stealth)}{}{}
+	\addfeature[companion = \ID]{Strength Damage (Su)}{}{}{}{}
 	\begin{Weapon}
-		[companion = \ID, enhancement= 0, calculate size = 0] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-		[companion = \ID, enhancement= 0, calculate size = 0] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-		[companion = \ID, enhancement= 0, calculate size = 0] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-		[companion = \ID, enhancement= 0, calculate size = 0] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
+		[companion = \ID, notes = {negative strength score $\Rightarrow$ DEATH, create spawn}, attack = \value{\ID babcount} + \value{\ID dexmodcount}] Katana (Large), 1d8 Strength, 20/x2, -, touch, 0, -;
 	\end{Weapon}
-	\addfeat[companion = \ID]{test}{}{}
-	\addfeature[companion = \ID]{test}{}{}{}{}
-}
-\animatedead[number = 3, bucket = feat]{Skeleton}{10}{80}{Medium}{20}{16}{Skeleton}
-{
-	\begin{Weapon}
-		[companion = \ID, enhancement= 0, calculate size = 0, notes = trip] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-		[companion = \ID, enhancement= 0, calculate size = 0, notes = note] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-		[companion = \ID, enhancement= 0, calculate size = 0, notes = trip] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-		[companion = \ID, enhancement= 0, calculate size = 0] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-	\end{Weapon}
-	\addfeat[companion = \ID]{test}{}{}
-	\addfeature[companion = \ID]{test}{}{}{}{}
-}
-\animatedead[number = 7, bucket = corpse companion]{Skeleton}{10}{80}{Medium}{20}{16}{Skeleton}
-{
-	\begin{Weapon}
-		[companion = \ID, enhancement= 0, calculate size = 0] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-		[companion = \ID, enhancement= 0, calculate size = 0] Katana (Large), 1d8, 18-20/x2, -, S, 12, -;
-	\end{Weapon}
-	\addfeat[companion = \ID]{test}{}{}
-	\addfeature[companion = \ID]{test}{}{}{}{}
 }

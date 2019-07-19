@@ -39,27 +39,25 @@
   \stretchlabels{33}{512}{102}{ability score,  ability modifier, Temp Adjustment, Temp Modifier}
   %% STR
   \drawbox[subtext = strength]{0}{500}{28}{10}{STR}
-\stretchattributes{33}{500}{102}{\arabic{#1strcount},\plusminus{#1strmodcount},\plusminus{#1strtmpcount},\plusminus{#1strtmpmodcount}}
-
+  \stretchattributes{33}{500}{102}{\iftoggle{#1strcountnovaluebool}{-}{\arabic{#1strcount}} ,\plusminus{#1strmodcount},\plusminus{#1strtmpcount},\plusminus{#1strtmpmodcount}}
   %% DEX
   \drawbox[subtext = dexterity]{0}{488}{28}{10}{DEX}
-  \stretchattributes{33}{488}{102}{\arabic{#1dexcount},\plusminus{#1dexmodcount},\plusminus{#1dextmpcount},\plusminus{#1dextmpmodcount}}
+  \stretchattributes{33}{488}{102}{\iftoggle{#1dexcountnovaluebool}{-}{\arabic{#1dexcount}} ,\plusminus{#1dexmodcount},\plusminus{#1dextmpcount},\plusminus{#1dextmpmodcount}}
   
   %% CON
   \drawbox[subtext = constitution]{0}{476}{28}{10}{CON}
-  \stretchattributes{33}{476}{102}{\arabic{#1concount},\plusminus{#1conmodcount},\plusminus{#1contmpcount},\plusminus{#1contmpmodcount}}
+  \stretchattributes{33}{476}{102}{\iftoggle{#1concountnovaluebool}{-}{\arabic{#1concount}} ,\plusminus{#1conmodcount},\plusminus{#1contmpcount},\plusminus{#1contmpmodcount}}
   
   %% INT
   \drawbox[subtext = intelligence]{0}{464}{28}{10}{INT}
-  \stretchattributes{33}{464}{102}{\arabic{#1intcount},\plusminus{#1intmodcount},\plusminus{#1inttmpcount},\plusminus{#1inttmpmodcount}}
-
+  \stretchattributes{33}{464}{102}{\iftoggle{#1intcountnovaluebool}{-}{\arabic{#1intcount}} ,\plusminus{#1intmodcount},\plusminus{#1inttmpcount},\plusminus{#1inttmpmodcount}}
   %% WIS
   \drawbox[subtext = wisdom]{0}{452}{28}{10}{WIS}
-  \stretchattributes{33}{452}{102}{\arabic{#1wiscount},\plusminus{#1wismodcount},\plusminus{#1wistmpcount},\plusminus{#1wistmpmodcount}}
+  \stretchattributes{33}{452}{102}{\iftoggle{#1wiscountnovaluebool}{-}{\arabic{#1wiscount}} ,\plusminus{#1wismodcount},\plusminus{#1wistmpcount},\plusminus{#1wistmpmodcount}}
 
   %% CHA
   \drawbox[subtext = charisma]{0}{440}{28}{10}{CHA}
-  \stretchattributes{33}{440}{102}{\arabic{#1chacount},\plusminus{#1chamodcount},\plusminus{#1chatmpcount},\plusminus{#1chatmpmodcount}}
+  \stretchattributes{33}{440}{102}{\iftoggle{#1chacountnovaluebool}{-}{\arabic{#1chacount}} ,\plusminus{#1chamodcount},\plusminus{#1chatmpcount},\plusminus{#1chatmpmodcount}}
 
   %% HP
   \drawbox[family = info, special family = hp, subtext =  (\csname #1hpmod\endcsname)]{107}{505}{26}{12}{HP}
@@ -111,11 +109,12 @@
   
 %%CMB and CMD
   \drawbox[family = info, special family = cmb]{0}{309}{21}{11}{cmb}
-  \stretchequalattributes{25}{310}{130}{\arabic{#1babcount}, \arabic{#1\csname #1cmbmod\endcsname modcount},\arabic{#1specialsizemodcount}}
-  \stretchlabels{25}{304}{130}{TOTAL, BAB,\csname #1cmbmod\endcsname\, mod., size mod.}
+  \stretchequalattributes{25}{310}{131}{\arabic{#1babcount}, \arabic{#1\csname #1cmbmod\endcsname modcount},\arabic{#1specialsizemodcount}, \arabic{#1cmbmisccount}}
+  \stretchlabels{25}{304}{131}{TOTAL, BAB,\csname #1cmbmod\endcsname\, mod., size mod., misc}
   \drawbox[family = info, special family = cmd]{0}{289}{21}{11}{cmd}
-  \stretchequalattributes{25}{290}{130}{\arabic{#1babcount},\arabic{#1\csname #1cmdstrmod\endcsname modcount},\arabic{#1\csname #1cmddexmod\endcsname modcount},\arabic{#1specialsizemodcount} ,10}
-  \stretchlabels{25}{284}{130}{TOTAL, BAB,\csname #1cmdstrmod\endcsname\, mod.,\csname #1cmddexmod\endcsname\, mod., size mod.,default}
+  \setcounter{tmpcount}{10+\value{#1acmiscbonuscount}+\value{#1acdeflectionbonuscount}}
+  \stretchequalattributes{25}{290}{130}{\arabic{#1babcount},\arabic{#1\csname #1cmdstrmod\endcsname modcount},\arabic{#1\csname #1cmddexmod\endcsname modcount},\arabic{#1specialsizemodcount}, \arabic{tmpcount}}
+  \stretchlabels{25}{284}{130}{TOTAL, BAB,\csname #1cmdstrmod\endcsname\, mod.,\csname #1cmddexmod\endcsname\, mod., size mod., misc}
 %%Speed
   \drawbox[family = info, special family = speed]{135}{284}{25}{35}{speed}
   % \put(135,284){\framebox(25,35){\MakeUppercase{Speed}}}
@@ -138,7 +137,7 @@
   \put(184,272){\begin{tabular}[b]{F{16}E{2}}\arabic{#1burrow speedcount} &ft.\end{tabular}}
   \put(185,267){\parbox[b][3\unitlength][b]{20\unitlength}{\centering\lfont burrow}}
   \drawbox[subtext = Class]{0}{271}{50}{10}{favoured}
-  \put(55,271){\framebox(75,\boxheight){\footnotesize \charfavouredclass}}
+  \put(55,271){\framebox(75,\boxheight){\footnotesize \csname #1charfavouredclass\endcsname}}
  
 \noindent\begin{picture}(0,0)
 %%Weapons
@@ -237,7 +236,7 @@
 }{}
 }
 \printsheet
-\printcustomlists
+\printcustomlists   
 
 \ifx \notelist\emptylist
 	\else

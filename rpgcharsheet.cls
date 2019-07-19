@@ -108,6 +108,12 @@
 {
 	\newcounter{#1favouredclasshpbonus}
 	\newcounter{#1nonemodcount}
+	\global\newtoggle{#1strcountnovaluebool}
+	\global\newtoggle{#1dexcountnovaluebool}
+	\global\newtoggle{#1concountnovaluebool}
+	\global\newtoggle{#1intcountnovaluebool}
+	\global\newtoggle{#1wiscountnovaluebool}
+	\global\newtoggle{#1chacountnovaluebool}
 	\newcounter{#1strcount}
 	\newcounter{#1dexcount}
 	\newcounter{#1concount}
@@ -164,6 +170,7 @@
 	
 	\global\expandafter\def\csname#1acmod\endcsname{dex}
 	\global\expandafter\def\csname#1cmbmod\endcsname{str}
+	\newcounter{#1cmbmisccount}
 	\global\expandafter\def\csname#1cmdstrmod\endcsname{str}
 	\global\expandafter\def\csname#1cmddexmod\endcsname{dex}
 	\global\expandafter\def\csname#1initiativemod\endcsname{dex}
@@ -472,7 +479,7 @@
 	\setkeys{unlockatlevel}{companion = \currcompanion, class =}%
 	\setkeys{addtypedbonus}{companion = \currcompanion, stackablecategory =}%
 	\setkeys{containerenv}{weightless = false, symbol = }%
-	\setkeys{animatedead}{companion = \currcompanion, template = , bucket = animation, number = 1}%
+	\setkeys{animatedead}{companion = \currcompanion, template = , bucket = none, number = 1}%
 	\setkeys{addfeat}{companion = \currcompanion}%
 	\setkeys{addfeature}{companion = \currcompanion}%
 	\setkeys{setattribute}{companion = \currcompanion}%
@@ -652,7 +659,7 @@
 {
 	%check if command exists
 	\ifcsname #1#2mod\endcsname
-		\expandafter\renewcommand\csname #1#2mod\endcsname{#3}
+		\expandafter\def\csname #1#2mod\endcsname{#3}
 	\fi
 }
 
@@ -721,17 +728,28 @@
 %[Companion], attribute, value
 \newcommand\setattribute[3][]{
 	\setkeys{setattribute}{#1}
-	\setcounter{\setattribute@companion #2count}{#3}
+	\ifthenelse{\equal{#3}{-}}{
+	    \global\toggletrue{\setattribute@companion #2countnovaluebool}
+	}
+	{
+        \setcounter{\setattribute@companion #2count}{#3}  
+	}
 	\calculateattributemod{\setattribute@companion #2modcount}{\setattribute@companion #2count}
 	\resetkeys
 }
 \newcommand\calculateattributemod[2]{
-	\ifthenelse{\value{#2} < 10}
-	{
-		\setcounter{#1}{(\value{#2} -11)/\real{2}}
-	}
-	{
-		\setcounter{#1}{(\value{#2} -10)/\real{2}}
+    \iftoggle{#2novaluebool}
+    {
+        \setcounter{#1}{0}
+    }
+    {
+    	\ifthenelse{\value{#2} < 10}
+    	{
+            \setcounter{#1}{(\value{#2} -11)/\real{2}}
+    	}
+    	{
+    		\setcounter{#1}{(\value{#2} -10)/\real{2}}
+    	}
 	}
 }
 
@@ -2336,7 +2354,7 @@
 	\ifthenelse{\boolean{\csname caster@showbuckets\endcsname}}
 	{
 		\addtocounter{\caster@companion animationbucketcapacity}{4*\value{\caster@companion #2casterlevelcount}*\caster@animatedeadmultiplier+\caster@animatedeadbonus}
-		\addtocounter{\caster@companion featbucketcapacity}{\value{\caster@companion #2casterlevelcount}}
+		\addtocounter{\caster@companion featbucketcapacity}{\value{\caster@companion #2levelcount}}
 		\addtocounter{\caster@companion corpse companionbucketcapacity}{\value{\caster@companion #2casterlevelcount}}
 	}{}
 	
@@ -2693,8 +2711,10 @@
 	\edef\ID{\animatedead@companion\arabic{\animatedead@companion undeadcount}}
 	\initvariables[\ID]	
 	\global\expandafter\renewcommand\csname\ID undeadtype\endcsname{#8}
-	\addtocounter{\animatedead@companion undeadcount}{1}	
-	\addtocounter{\animatedead@companion\animatedead@bucket bucket}{#3*\csname animatedead@number\endcsname}
+	\addtocounter{\animatedead@companion undeadcount}{1}
+	\ifthenelse{\equal{\animatedead@bucket}{none}}{}{
+	    \addtocounter{\animatedead@companion\animatedead@bucket bucket}{#3*\csname animatedead@number\endcsname}
+	}
 	\newcounter{\animatedead@companion\ID numbercount}
 	\addtocounter{\animatedead@companion\ID numbercount}{\animatedead@number}
 	%\addclass														Class name, 		level,	 BAB,	 Fort,	 	REF, 		Will
@@ -2703,7 +2723,7 @@
 	\size[companion = \ID]{#5}
 	\setattribute[companion = \ID]{str}{#6}
 	\setattribute[companion = \ID]{dex}{#7}
-	\setattribute[companion = \ID]{con}{0}
+	\setattribute[companion = \ID]{con}{-}
 	\setattribute[companion = \ID]{int}{10}
 	\setattribute[companion = \ID]{wis}{10}
 	\setattribute[companion = \ID]{cha}{12}
@@ -2730,8 +2750,8 @@
 	{
 		\expandafter\loadtemplate{\x}
 	}
-	\loadtemplate{#8}
 	#9
+	\loadtemplate{#8}
 	\resetkeys
 }
 
@@ -2763,22 +2783,22 @@
 		\drawbox[subtext = HD]{400}{201}{20}{10}{\arabic{\ID levelcount}}
 		%%STR
 		\drawbox[subtext = strength]{0}{188}{28}{10}{STR}
-		\stretchattributes{33}{188}{66}{\arabic{\ID strcount},\plusminus{\ID strmodcount}}		
+		\stretchattributes{33}{188}{66}{\iftoggle{\ID strcountnovaluebool}{-}{\arabic{\ID strcount}} ,\plusminus{\ID strmodcount}}		
  	 	%% DEX
   		\drawbox[subtext = dexterity]{0}{176}{28}{10}{DEX}
-  		\stretchattributes{33}{176}{66}{\arabic{\ID dexcount},\plusminus{\ID dexmodcount}}  
+  		\stretchattributes{33}{176}{66}{\iftoggle{\ID dexcountnovaluebool}{-}{\arabic{\ID dexcount}} ,\plusminus{\ID dexmodcount}}	
   		%%% CON
   		%\drawbox[subtext = constitution]{0}{476}{28}{10}{CON}
   		%\stretchattributes{33}{476}{66}{\arabic{\ID concount},\plusminus{\ID conmodcount}}  
   		%% INT
   		\drawbox[subtext = intelligence]{0}{164}{28}{10}{INT}
-  		\stretchattributes{33}{164}{66}{\arabic{\ID intcount},\plusminus{\ID intmodcount}}
+  		\stretchattributes{33}{164}{66}{\iftoggle{\ID intcountnovaluebool}{-}{\arabic{\ID intcount}} ,\plusminus{\ID intmodcount}}	
   		%% WIS
   		\drawbox[subtext = wisdom]{0}{152}{28}{10}{WIS}
-  		\stretchattributes{33}{152}{66}{\arabic{\ID wiscount},\plusminus{\ID wismodcount}}
+  		\stretchattributes{33}{152}{66}{\iftoggle{\ID wiscountnovaluebool}{-}{\arabic{\ID wiscount}} ,\plusminus{\ID wismodcount}}	
   		%% CHA
   		\drawbox[subtext = charisma]{0}{140}{28}{10}{CHA}
-  		\stretchattributes{33}{140}{66}{\arabic{\ID chacount},\plusminus{\ID chamodcount}}
+  		\stretchattributes{33}{140}{66}{\iftoggle{\ID chacountnovaluebool}{-}{\arabic{\ID chacount}} ,\plusminus{\ID chamodcount}}	
 		 %% HP
   		\drawbox[family = info, special family = hp, subtext =  (\csname \ID hpmod\endcsname)]{72}{186}{26}{12}{HP}
   		\put(102,186){\framebox(38,12){}}
@@ -2839,11 +2859,12 @@
   		\attributes{404}{187}{\arabic{\ID babcount}}
 		%%CMB and CMD
   		\drawbox[family = info, special family = cmb]{0}{85}{21}{11}{cmb}
-  		\stretchequalattributes{25}{86}{135}{\arabic{\ID babcount}, \arabic{\ID \csname \ID cmbmod\endcsname modcount},\arabic{\ID specialsizemodcount}}
-  		\stretchlabels{25}{80}{135}{TOTAL, BAB,\csname \ID cmbmod\endcsname\, mod., size mod.}
+  		\stretchequalattributes{25}{86}{135}{\arabic{\ID babcount}, \arabic{\ID\csname\ID cmbmod\endcsname modcount},\arabic{\ID specialsizemodcount}, \arabic{\ID cmbmisccount}}
+  		\stretchlabels{25}{80}{135}{TOTAL, BAB,\csname \ID cmbmod\endcsname\, mod., size mod., misc}
   		\drawbox[family = info, special family = cmd]{0}{65}{21}{11}{cmd}
-  		\stretchequalattributes{25}{66}{135}{\arabic{\ID babcount},\arabic{\ID \csname \ID cmdstrmod\endcsname modcount},\arabic{\ID \csname \ID cmddexmod\endcsname modcount},\arabic{\ID specialsizemodcount} ,10}
-  		\stretchlabels{25}{60}{135}{TOTAL, BAB,\csname \ID cmdstrmod\endcsname\, mod.,\csname \ID cmddexmod\endcsname\, mod., size mod.,default}
+  		\setcounter{tmpcount}{10+\value{\ID acmiscbonuscount}+\value{\ID acdeflectionbonuscount}}
+  		\stretchequalattributes{25}{66}{135}{\arabic{\ID babcount},\arabic{\ID \csname \ID cmdstrmod\endcsname modcount},\arabic{\ID \csname \ID cmddexmod\endcsname modcount},\arabic{\ID specialsizemodcount} ,\arabic{tmpcount}}
+  		\stretchlabels{25}{60}{135}{TOTAL, BAB,\csname \ID cmdstrmod\endcsname\, mod.,\csname \ID cmddexmod\endcsname\, mod., size mod., misc}
 		%%Speed
 		\drawbox[family = info, special family = speed]{140}{77}{25}{35}{speed}
  		\put(170,104){\framebox(40,7){}}
