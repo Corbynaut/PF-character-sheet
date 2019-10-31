@@ -161,15 +161,16 @@
 
 %ACitem environment.
 %Content must be of the form: [optional parameter] Name, AC bonus, Max dex, Armor check penalty, Spell failure, Type (light, medium, heavy, shield, natural, misc), Weight; ...
-\begin{ACitem}
-	Test natural, 5, -, 0, 0, natural, 70;
-\end{ACitem}
+%Does not work
+%\begin{ACitem}
+%	Test natural, 5, -, 0, 0, natural, 70;
+%\end{ACitem}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Weapons
 %\addweapon{Name}{Damage}{Critical}{Range}{Type}{Weight}{Ammo}
-\addweapon[attack attribute = int, notes = note, base = Longsword, category = Heavy Blades]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
-\addweapon[damage attribute = none]{Weapon str - none}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[enhancement = 5, attack attribute = int, notes = note, base = Longsword, category = Heavy Blades]{Weapon int - str}{2d6}{18-20/x2}{-}{S}{12}{-}
+\addweapon[masterwork = true, damage attribute = none]{Weapon str - none}{2d6}{18-20/x2}{-}{S}{12}{-}
 \addweapon[attack attribute = dex, damage attribute = dex]{Weapon dex-dex}{2d6}{18-20/x2}{-}{S}{12}{-}
 
 

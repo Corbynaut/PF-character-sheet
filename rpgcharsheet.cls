@@ -362,6 +362,7 @@
 \define@key{addweapon}{companion}{\def\weapon@companion{#1}}
 \define@key{addweapon}{category}{\def\weapon@category{#1}}
 \define@key{addweapon}{base}{\def\weapon@base{#1}}
+\define@key{addweapon}{masterwork}{\def\weapon@masterwork{#1}}
 
 \define@key{addspell}{companion}{\def\spell@companion{#1}}
 \define@key{addspell}{caster level bonus}{\def\spell@clbonus{#1}}
@@ -465,7 +466,7 @@
 % ========= KEY DEFAULTS =========
 \newcommand\resetkeys{
 	\setkeys{addcaster}{level name = caster, spell name = spells, spell-overview name = spell, calculate bonus spells = true, show dcs = true, show spell overview = true, companion = \currcompanion, offset=0, show buckets = false, animate dead multiplier = 1, animate dead bonus = 0,zeroth=infinity,first=0,second=0,third=0,fourth=0,fifth=0,sixth=0,seventh=0,eighth=0,ninth=0}%
-	\setkeys{addweapon}{notes =, enhancement = 0, attack attribute = str, attack bonus = 0, attack =, damage attribute = str, damage bonus = 0, companion = \currcompanion, category =, base =, calculate size = false}%
+	\setkeys{addweapon}{notes =, enhancement = 0, attack attribute = str, attack bonus = 0, attack =, damage attribute = str, damage bonus = 0, companion = \currcompanion, category =, base =, calculate size = false, masterwork = false}%
 	\setkeys{addspell}{companion = \currcompanion, caster level bonus = 0, caster =, prepared =, known = true}%
 	\setkeys{addgear}{type = item, companion = \currcompanion, overwrite weight = false, symbol =}%
 	\setkeys{addacitem}{notes =,armorspeed =, companion = \currcompanion, enhancement = 0, category =, base =}%
@@ -1374,7 +1375,7 @@
 	{
 		\tfont\csname #1armorid\arabic{loopcount}name\endcsname \ifthenelse{\arabic{#1armorid\arabic{loopcount}enhancement} = 0}{}{+ \arabic{#1armorid\arabic{loopcount}enhancement}}
 		&\tfont \writevalue{\value{#1armorid\arabic{loopcount}acbonus}}%\value{#1armorid\arabic{loopcount}enhancement}+\value{tmpcount2}}
-		&\tfont\ifthenelse{\value{#1armorid\arabic{loopcount}maxdex} >0}{\writevalue{\value{#1armorid\arabic{loopcount}maxdex}}}{-}
+		&\tfont\ifthenelse{\boolean{#1armorid\arabic{loopcount}maxdexbool}}{-}{\writevalue{\value{#1armorid\arabic{loopcount}maxdex}}}
 		&\tfont \writevalue{\value{#1armorid\arabic{loopcount}penalty}}%+\value{tmpcount4}}
 		&\tfont \writevalue{\value{#1armorid\arabic{loopcount}spellfailure}}\%
 		&\tfont \csname #1armorid\arabic{loopcount}type\endcsname
@@ -1404,7 +1405,8 @@
 	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}acbonus}
 	\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}acbonus}{#3+\acitem@enhancement}
 	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdex}
-	\IsInteger{#4}{\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdex}{#4}}{\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdex}{-1}}
+	\newboolean{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdexbool}
+	\IsInteger{#4}{\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdex}{#4}}{\setboolean{\acitem@companion armorid\arabic{\acitem@companion armoridcount}maxdexbool}{true}}
 	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}penalty}
 	\setcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}penalty}{#5}
 	\newcounter{\acitem@companion armorid\arabic{\acitem@companion armoridcount}spellfailure}
@@ -1448,47 +1450,49 @@
 		\setcounter{tmpcount4}{0}%
 		\setcounter{tmpcount5}{0}%
 %
-		\ifx \csname #1armorid\arabic{loopcount}category\endcsname\empty%
-			\else%
-				\foreach\category in {\csname #1armorid\arabic{loopcount}category\endcsname} {%
-					\expandafter\expandafter\ifcsname\expandafter c@\category ac bonuscategorybonuscount\endcsname%
-						\addtocounter{#1armorid\arabic{loopcount}acbonus}{\value{\category ac bonuscategorybonuscount}}%
-						\setcounter{#1armorid\arabic{loopcount}acbonus}{\maxof{\value{#1armorid\arabic{loopcount}acbonus}}{0}}%
-					\fi%
-					\expandafter\expandafter\ifcsname\expandafter c@\category max dexcategorybonuscount\endcsname%
-						\addtocounter{#1armorid\arabic{loopcount}maxdex}{\value{\category max dexcategorybonuscount}}%
-						\setcounter{#1armorid\arabic{loopcount}maxdex}{\maxof{\value{#1armorid\arabic{loopcount}maxdex}}{0}}%
-					\fi%
-					\expandafter\expandafter\ifcsname\expandafter c@\category penaltycategorybonuscount\endcsname%
-						\addtocounter{#1armorid\arabic{loopcount}penalty}{\value{\category penaltycategorybonuscount}}%
-						\setcounter{#1armorid\arabic{loopcount}penalty}{\minof{\value{#1armorid\arabic{loopcount}penalty}}{0}}%
-					\fi%
-					\expandafter\expandafter\ifcsname\expandafter c@\category spell failurecategorybonuscount\endcsname%
-						\addtocounter{#1armorid\arabic{loopcount}spellfailure}{\value{\category spell failurecategorybonuscount}}%
-						\setcounter{#1armorid\arabic{loopcount}spellfailure}{\maxof{\value{#1armorid\arabic{loopcount}spellfailure}}{0}}%
-					\fi%
-				}%
-				
-		\fi%
-		\ifx \csname #1armorid\arabic{loopcount}base\endcsname\empty%
-			\else%
-				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}base\endcsname ac bonuscategorybonuscount\endcsname%
-					\addtocounter{#1armorid\arabic{loopcount}acbonus}{\value{\csname #1armorid\arabic{loopcount}base\endcsname ac bonuscategorybonuscount}}%
+        \edef\tmpcategory{\csname #1armorid\arabic{loopcount}category\endcsname}
+%        \ifx \csname #1armorid\arabic{loopcount}category\endcsname\empty%
+%            \appendcmd{\tmpcategory}{armor}
+%		\else%
+%			\appendcmd{\tmpcategory}{armor, }
+%        \fi%
+		\foreach\category in \tmpcategory {%
+				\expandafter\expandafter\ifcsname\expandafter c@\category ac bonuscategorybonuscount\endcsname%
+					\addtocounter{#1armorid\arabic{loopcount}acbonus}{\value{\category ac bonuscategorybonuscount}}%
 					\setcounter{#1armorid\arabic{loopcount}acbonus}{\maxof{\value{#1armorid\arabic{loopcount}acbonus}}{0}}%
 				\fi%
-				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}base\endcsname max dexcategorybonuscount\endcsname%
-					\addtocounter{#1armorid\arabic{loopcount}maxdex}{\value{\csname #1armorid\arabic{loopcount}base\endcsname max dexcategorybonuscount}}%
+				\expandafter\expandafter\ifcsname\expandafter c@\category max dexcategorybonuscount\endcsname%
+					\addtocounter{#1armorid\arabic{loopcount}maxdex}{\value{\category max dexcategorybonuscount}}%
 					\setcounter{#1armorid\arabic{loopcount}maxdex}{\maxof{\value{#1armorid\arabic{loopcount}maxdex}}{0}}%
 				\fi%
-				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}base\endcsname penaltycategorybonuscount\endcsname%
-					\addtocounter{#1armorid\arabic{loopcount}penalty}{\value{\csname #1armorid\arabic{loopcount}base\endcsname penaltycategorybonuscount}}%
+				\expandafter\expandafter\ifcsname\expandafter c@\category penaltycategorybonuscount\endcsname%
+					\addtocounter{#1armorid\arabic{loopcount}penalty}{\value{\category penaltycategorybonuscount}}%
 					\setcounter{#1armorid\arabic{loopcount}penalty}{\minof{\value{#1armorid\arabic{loopcount}penalty}}{0}}%
 				\fi%
-				\expandafter\expandafter\ifcsname\expandafter c@\csname #1armorid\arabic{loopcount}base\endcsname spell failurecategorybonuscount\endcsname%
-					\addtocounter{#1armorid\arabic{loopcount}spellfailure}{\value{\csname #1armorid\arabic{loopcount}base\endcsname spell failurecategorybonuscount}}%
+				\expandafter\expandafter\ifcsname\expandafter c@\category spell failurecategorybonuscount\endcsname%
+					\addtocounter{#1armorid\arabic{loopcount}spellfailure}{\value{\category spell failurecategorybonuscount}}%
 					\setcounter{#1armorid\arabic{loopcount}spellfailure}{\maxof{\value{#1armorid\arabic{loopcount}spellfailure}}{0}}%
 				\fi%
-		\fi%
+		}%
+        \edef\tmpbase{\csname #1armorid\arabic{loopcount}base\endcsname}				
+        \foreach\base in \tmpbase {%
+				\expandafter\expandafter\ifcsname\expandafter c@\base ac bonuscategorybonuscount\endcsname%
+					\addtocounter{#1armorid\arabic{loopcount}acbonus}{\value{\base ac bonuscategorybonuscount}}%
+					\setcounter{#1armorid\arabic{loopcount}acbonus}{\maxof{\value{#1armorid\arabic{loopcount}acbonus}}{0}}%
+				\fi%
+				\expandafter\expandafter\ifcsname\expandafter c@\base\endcsname max dexcategorybonuscount\endcsname%
+					\addtocounter{#1armorid\arabic{loopcount}maxdex}{\value{\base max dexcategorybonuscount}}%
+					\setcounter{#1armorid\arabic{loopcount}maxdex}{\maxof{\value{#1armorid\arabic{loopcount}maxdex}}{0}}%
+				\fi%
+				\expandafter\expandafter\ifcsname\expandafter c@\base\endcsname penaltycategorybonuscount\endcsname%
+					\addtocounter{#1armorid\arabic{loopcount}penalty}{\value{\base penaltycategorybonuscount}}%
+					\setcounter{#1armorid\arabic{loopcount}penalty}{\minof{\value{#1armorid\arabic{loopcount}penalty}}{0}}%
+				\fi%
+				\expandafter\expandafter\ifcsname\expandafter c@\base\endcsname spell failurecategorybonuscount\endcsname%
+					\addtocounter{#1armorid\arabic{loopcount}spellfailure}{\value{\base spell failurecategorybonuscount}}%
+					\setcounter{#1armorid\arabic{loopcount}spellfailure}{\maxof{\value{#1armorid\arabic{loopcount}spellfailure}}{0}}%
+				\fi%
+        }%
 %
 		\ifthenelse{\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{light}\OR\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{medium}\OR\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{heavy}\OR\equal{\csname #1armorid\arabic{loopcount}type\endcsname}{armor}}%
 		{%
@@ -1501,7 +1505,7 @@
 				\addtypedbonus[companion = #1]{ac}{misc}{\value{#1armorid\arabic{loopcount}acbonus}}%
 			\fi%
 		}%
-		\ifthenelse{\value{#1armorid\arabic{loopcount}maxdex}<0}{}{\setcounter{#1maxdexbonuscount}{\minof{\value{#1maxdexbonuscount}}{\value{#1armorid\arabic{loopcount}maxdex}+\value{tmpcount3}}}}%
+		\ifthenelse{\boolean{#1armorid\arabic{loopcount}maxdexbool}}{}{\setcounter{#1maxdexbonuscount}{\minof{\value{#1maxdexbonuscount}}{\value{#1armorid\arabic{loopcount}maxdex}+\value{tmpcount3}}}}%
 		%\setcounter{#1acdexbonuscount}{\minof{\value{#1maxdexbonuscount}}{\value{#1\csname #1acmod\endcsname modcount}}}%
 		\addtocounter{#1acitemsbonus}{\value{#1armorid\arabic{loopcount}acbonus}+\value{#1armorid\arabic{loopcount}enhancement}+\value{tmpcount2}}%
  		\addtocounter{#1acitemscheckpenalty}{\value{#1armorid\arabic{loopcount}penalty}+\value{tmpcount4}}%
@@ -1532,8 +1536,8 @@
 
 \newcommand\printweapons[1][]{
 	\rowcolors{2}{}{}
-	\begin{tabular}[t]{p{85\unitlength} >{\centering}p{55\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{20\unitlength} >{\centering}p{40\unitlength}>{\centering}p{25\unitlength} } 
-	\rowcolor{\setting@defaultboxcolor}\leavevmode\color{\setting@defaultfontcolor} \MakeUppercase{Weapons} & \leavevmode\color{\setting@defaultfontcolor}\lfont Attack modifiers & \leavevmode\color{\setting@defaultfontcolor}\lfont damage & \leavevmode\color{\setting@defaultfontcolor}\lfont critical &\leavevmode\color{\setting@defaultfontcolor} \lfont range & \leavevmode\color{\setting@defaultfontcolor}\lfont type &\leavevmode\color{\setting@defaultfontcolor} \lfont weight &\leavevmode\color{\setting@defaultfontcolor} \lfont ammo \tabularnewline\hline
+	\begin{tabular}[t]{p{5\unitlength} p{85\unitlength} >{\centering}p{55\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{40\unitlength} >{\centering}p{10\unitlength} >{\centering}p{40\unitlength}>{\centering}p{20\unitlength} } 
+	\rowcolor{\setting@defaultboxcolor} \multicolumn{2}{l}{\leavevmode\color{\setting@defaultfontcolor} \MakeUppercase{Weapons}} & \leavevmode\color{\setting@defaultfontcolor}\lfont Attack modifiers & \leavevmode\color{\setting@defaultfontcolor}\lfont damage & \leavevmode\color{\setting@defaultfontcolor}\lfont critical &\leavevmode\color{\setting@defaultfontcolor} \lfont range & \leavevmode\color{\setting@defaultfontcolor}\lfont type &\leavevmode\color{\setting@defaultfontcolor} \lfont weight &\leavevmode\color{\setting@defaultfontcolor} \lfont ammo \tabularnewline\hline
 	\csname #1weaponlist\endcsname
 	\end{tabular}
 }
@@ -1783,33 +1787,36 @@
 	\setkeys{addweapon}{#1}%
 	\addtocounter{\weapon@companion weaponweightcount}{#7}%
 	\expandafter\appendcmd\expandafter{\csname\weapon@companion weaponlist\endcsname}{%
+	    \resetkeys
 		\setkeys{addweapon}{#1}%
 		\setcounter{tmpcount}{0}%
 		\setcounter{tmpcount2}{0}%
 		\ifx \weapon@category\empty%
+            	\appendcmd{\weapon@category}{weapon}
 		\else%
-			\foreach\category in \weapon@category {%
-				\ifcsname c@\weapon@companion\category attackcategorybonuscount\endcsname%
-					\addtocounter{tmpcount}{\value{\weapon@companion\category attackcategorybonuscount}}%
-				\fi%
-				\ifcsname c@\weapon@companion\category damagecategorybonuscount\endcsname%
-					\addtocounter{tmpcount2}{\value{\weapon@companion\category damagecategorybonuscount}}%
-				\fi%
-			}%
-		\fi%
-		\ifx \weapon@base\empty%
-		\else%
-			\foreach\base in \weapon@base {%
-				\ifcsname c@\weapon@companion\base attackcategorybonuscount\endcsname%
-					\addtocounter{tmpcount}{\value{\weapon@companion\base attackcategorybonuscount}}%
-				\fi%
-				\ifcsname c@\weapon@companion\base damagecategorybonuscount\endcsname%
-					\addtocounter{tmpcount2}{\value{\weapon@companion\base damagecategorybonuscount}}%
-				\fi%
-			}%
-		\fi%
-		\setcounter{tmpattackmodcount}{\value{\weapon@companion babcount}+\value{\weapon@companion \weapon@attackattribute}+\value{\weapon@companion sizemodcount}+\weapon@attackbonus+\weapon@enhancement+\value{tmpcount}}%
+				\appendcmd{\weapon@category}{weapon, }
+        \fi%
+        
+		\foreach\category in \weapon@category {%
+			\ifcsname c@\weapon@companion\category attackcategorybonuscount\endcsname%
+				\addtocounter{tmpcount}{\value{\weapon@companion\category attackcategorybonuscount}}%
+			\fi%
+			\ifcsname c@\weapon@companion\category damagecategorybonuscount\endcsname%
+				\addtocounter{tmpcount2}{\value{\weapon@companion\category damagecategorybonuscount}}%
+			\fi%
+		}%
+	
+	    \foreach\base in \weapon@base {%
+			\ifcsname c@\weapon@companion\base attackcategorybonuscount\endcsname%
+				\addtocounter{tmpcount}{\value{\weapon@companion\base attackcategorybonuscount}}%
+			\fi%
+			\ifcsname c@\weapon@companion\base damagecategorybonuscount\endcsname%
+				\addtocounter{tmpcount2}{\value{\weapon@companion\base damagecategorybonuscount}}%
+			\fi%
+		}%
+		\setcounter{tmpattackmodcount}{\value{\weapon@companion babcount}+\value{\weapon@companion \weapon@attackattribute}+\value{\weapon@companion sizemodcount}+\weapon@attackbonus+\weapon@enhancement+\value{tmpcount}+\ifbool{\weapon@masterwork}{1}{0}}%
 		\setcounter{tmpweapondamagecount}{\value{\weapon@companion \weapon@damageattribute}+\weapon@damagebonus+\weapon@enhancement+\value{tmpcount2}}%
+		\fontsize{6}{6}\selectfont\bf\scshape \ifthenelse{\weapon@enhancement > 0}{MA}{\ifbool{\weapon@masterwork}{MW}{}} &
 		\tfont #2 \ifthenelse{\weapon@enhancement = 0}{}{+\weapon@enhancement} &\setkeys{addweapon}{#1} \tfont\ifx \weapon@attack\empty  \plusminus{tmpattackmodcount}\ifthenelse{\value{\weapon@companion babcount}>5}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>10}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\ifthenelse{\value{\weapon@companion babcount}>15}{/\addtocounter{tmpattackmodcount}{-5}\plusminus{tmpattackmodcount}}{}\else \setcounter{boolcount}{0}\foreach\member in \weapon@attack {%
 			\ifnum \value{boolcount} = 1/\else \setcounter{boolcount}{1}\fi\setcounter{tmpcount3}{\member + \value{tmpattackmodcount}-\value{\weapon@companion babcount}}\plusminus{tmpcount3}}\fi  & \setkeys{addweapon}{#1}%
 		\ifthenelse{\equal{\weapon@calculatesize}{false}}%
@@ -1822,7 +1829,7 @@
 				\calculatewweaponsize[\weapon@companion]{\tmpcmd}{\weapon@calculatesize}{#3}%
 			%}
 		}%
-		\tfont\tmpcmd\ifthenelse{\value{tmpweapondamagecount} = 0}{}{\plusminus{tmpweapondamagecount}} &\tfont #4 &\tfont #5 & \tfont#6 & \tfont#7~lbs. & \tfont#8 \setkeys{addweapon}{#1}\ifthenelse{\equal{\weapon@notes}{}}{}{\tabularnewline[-0.9ex] \multicolumn{8}{l}{\setkeys{addweapon}{#1}\tfont\weapon@notes}}\tabularnewline\hline}%
+	\tfont\tmpcmd\ifthenelse{\value{tmpweapondamagecount} = 0}{}{\plusminus{tmpweapondamagecount}} &\tfont #4 &\tfont #5 & \tfont#6 & \tfont#7~lbs. & \tfont#8 \setkeys{addweapon}{#1}\ifthenelse{\equal{\weapon@notes}{}}{}{\tabularnewline[-0.9ex] & \multicolumn{8}{l}{\setkeys{addweapon}{#1}\tfont\weapon@notes}}\tabularnewline\hline}%
 	\resetkeys%
 }
 
@@ -1857,6 +1864,12 @@
 			\setcounter{\addskill@companion tmpArmorPenalty}{0}
 		}
   		\addtocounter{\addskill@companion #2bonuscount}{\value{\addskill@companion tmpArmorPenalty}}
+  		\ifcsname c@\addskill@companion skill#5categorybonuscount\endcsname%
+  		    \addtocounter{\addskill@companion #2bonuscount}{\value{\addskill@companion skill#5categorybonuscount}}
+  		\fi
+  		\ifcsname c@\addskill@companion skillallcategorybonuscount\endcsname%
+  		    \addtocounter{\addskill@companion #2bonuscount}{\value{\addskill@companion skillallcategorybonuscount}}
+        \fi
  		\ifthenelse{\equal{#4}{}\OR\equal{#4}{0}}
 		{
 			\setcounter{\addskill@companion tmpClassRanks}{0}
@@ -2751,7 +2764,8 @@
 		\expandafter\loadtemplate{\x}
 	}
 	#9
-	\loadtemplate{#8}
+	\initsize[\ID]
+	\loadtemplate{#8}	
 	\resetkeys
 }
 

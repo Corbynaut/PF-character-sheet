@@ -63,7 +63,7 @@
 }
 
 %%[optional parameter]{NAME}{HIT DICE}{HIT POINTS}{SIZE}{STR}{DEX}{TEMPLATE}{ADDITIONAL PARAMETERS}
-\animatedead[number = 7, bucket = none]{Testecles}{12}{90}{Huge}{16}{10}{Bloody Skeleton}
+\animatedead[number = 7, bucket = none]{Testecles}{12}{10*\real{4.5}}{Huge}{16}{10}{Bloody Skeleton}
 {	
 	\race[companion = \ID]{Storm giant}{30}
 	\addtypedbonus[companion = \ID]{ac}{dodge}{1}
@@ -88,6 +88,6 @@
 	\addfeat[companion = \ID]{Skill Focus (Perception, Stealth)}{}{}
 	\addfeature[companion = \ID]{Strength Damage (Su)}{}{}{}{}
 	\begin{Weapon}
-		[companion = \ID, notes = {negative strength score $\Rightarrow$ DEATH, create spawn}, attack = \value{\ID babcount} + \value{\ID dexmodcount}] Katana (Large), 1d8 Strength, 20/x2, -, touch, 0, -;
+		[companion = \ID, notes = {incorporeal, negative strength score $\Rightarrow$ DEATH, create spawn}, attack = \value{\ID babcount} + \value{\ID dexmodcount}] Melee, 1d8 Strength, 20/x2, -, touch, 0, -;
 	\end{Weapon}
 }
