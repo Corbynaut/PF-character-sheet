@@ -177,7 +177,7 @@
 %Weapon environment
 %Content must be of the form: [optional parameter] Name, Damage, Critical, Range, Type, Weight, Ammo; ...
 \begin{Weapon}
-	[attack attribute = int, notes = {flaming, hamster bane}, base = Longsword, category = Heavy Blades] Weapon int - str, 2d6, 18-20/x2, -, S, 12, -;
+	[attack attribute = int, notes = {flaming, hamster bane}, base = Longsword, category =Heavy Blades] Weapon int - str, 2d6, 18-20/x2, -, S, 12, -;
 \end{Weapon}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -212,6 +212,7 @@
 }
 \addfeat{Weapon focus Longsword}{You gain a +1 bonus on all attack rolls you make using the selected weapon.}{\addcategorybonus{Longsword}{attack}{1}}
 \addfeat{Shield focus}{}{\addcategorybonus{shield}{ac bonus}{1}}
+\addfeat{Weapon focus heavy blades}{}{\addcategorybonus{Heavy Blades}{attack}{1}}
 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %%Features

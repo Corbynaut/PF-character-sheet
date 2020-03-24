@@ -83,6 +83,7 @@
 \newboolean{tmpbool}
 \newboolean{tmpbool2}
 \global\def\tmpcmd{}
+\global\def\tmpcmd2{}
 \newcommand\tmptwocmd{}
 \newcommand\stackabletypes{untyped, dodge, racial}
 \global\newcommand\companionlist{}
@@ -1454,7 +1455,7 @@
 %        \ifx \csname #1armorid\arabic{loopcount}category\endcsname\empty%
 %            \appendcmd{\tmpcategory}{armor}
 %		\else%
-%			\appendcmd{\tmpcategory}{armor, }
+%			\appendcmd{\tmpcategory}{,armor}
 %        \fi%
 		\foreach\category in \tmpcategory {%
 				\expandafter\expandafter\ifcsname\expandafter c@\category ac bonuscategorybonuscount\endcsname%
@@ -1791,10 +1792,11 @@
 		\setkeys{addweapon}{#1}%
 		\setcounter{tmpcount}{0}%
 		\setcounter{tmpcount2}{0}%
+		
 		\ifx \weapon@category\empty%
             	\appendcmd{\weapon@category}{weapon}
 		\else%
-				\appendcmd{\weapon@category}{weapon, }
+				\appendcmd{\weapon@category}{, weapon}
         \fi%
         
 		\foreach\category in \weapon@category {%
