@@ -13,7 +13,7 @@
 \noindent\begin{picture}(420,579)
 
 \begin{picture}(0,0)
-	%\put(38.5,520){\hbox{\myincludegraphics[scale=0.043]{Logo.jpg}}}
+	%\put(25,520){\hbox{\myincludegraphics[scale=0.095]{Images/samurai/Logo.png}}}
 \end{picture}
   \put(140,530){\renewcommand{\arraystretch}{1.5}
     \begin{tabular}[b]{D{46} D{23}  D{23}  D{23}  D{23}  D{23}  D{23}  D{23} }
@@ -64,7 +64,7 @@
   \put(137,505){\framebox(38,12){}}
   \put(137,512){\makebox(14,4){\tiny\scshape Total}}
   \put(137,505){\parbox[b][12\unitlength][c]{36\unitlength}{\raggedleft \chartotalhp[#1]}}
-  \put(177,505){\framebox(28,12){}}
+  \put(177,505){\framebox(28,12){\raggedleft{\csname #1damagereduction\endcsname}}}
   \put(177,512){\makebox(8,4){\tiny\scshape DR}}
 
   %% little boxes
